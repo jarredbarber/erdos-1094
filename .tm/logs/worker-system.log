@@ -1759,3 +1759,46 @@ $ cd /home/jarred/code/erdos-1094 && tm update erdos1094-a0e --status "Proof com
 📊 Task erdos1094-a0e completed:
 [2026-02-08T07:56:15.917Z]    Summary: Proved: For prime p > k ≥ 1 and n ≥ k, p | C(n,k) iff n mod p < k. Published to proofs/large-prime-criterion.md
 [2026-02-08T07:56:15.917Z]    Details: Confidence: Certain. Two independent proofs provided. The main proof uses Legendre's formula: since v_p(k!) = 0 when p > k, the valuation v_p(C(n,k)) equals the sum over i ≥ 1 of (⌊n/p^i⌋ - ⌊(n-k)/p^i⌋). Each term counts multiples of p^i in {n-k+1,...,n}, which is at most 1 since p^i > k. The i=1 term controls all others (multiples of p^2 are multiples of p), so p | C(n,k) iff ⌊n/p⌋ > ⌊(n-k)/p⌋. A case split on r = n mod p shows this holds iff r < k. A second proof via the digit-domination criterion (Kummer's theorem) gives the same result in three lines: since k < p, k is a single base-p digit, and digit domination reduces to n mod p ≥ k. Also proved two corollaries: (1) the geometric interpretation (p | C(n,k) iff a multiple of p lies in {n-k+1,...,n}), and (2) the sharpened valuation v_p(C(n,k)) ∈ {0,1} for p > k.
+[2026-02-08T07:56:16.051Z] ✅ Successfully merged task/erdos1094-a0e into main
+[2026-02-08T07:56:16.052Z] 🗑️  Deleting branch task/erdos1094-a0e...
+[2026-02-08T07:56:16.060Z] ✓ Deleted local branch task/erdos1094-a0e
+[2026-02-08T07:56:16.067Z] 🚀 Pushing main to remote...
+[2026-02-08T07:56:16.833Z] ✓ Pushed to remote
+[2026-02-08T07:56:17.835Z] 📌 Processing task: erdos1094-oil - Review proofs/large-prime-criterion.md
+[2026-02-08T07:56:17.835Z]    Role: verify | Priority: 2 | Size: medium
+[2026-02-08T07:56:17.835Z] 
+================================================================================
+[2026-02-08T07:56:17.835Z] ================================================================================
+
+[2026-02-08T07:56:17.838Z] ✓ Claimed task erdos1094-oil
+
+[2026-02-08T07:56:17.838Z] 🤖 Using agent: verify with models: anthropic/claude-sonnet-4-5:medium, google-antigravity/gemini-3-flash:medium
+
+[2026-02-08T07:56:17.838Z] 💭 Starting pi agent session with model: anthropic/claude-sonnet-4-5:medium...
+[2026-02-08T07:56:17.853Z] 📸 Capturing file state before agent execution...
+[2026-02-08T07:56:17.867Z] ✓ Captured state: 27 tracked, 1 untracked files
+
+[2026-02-08T07:56:17.867Z] 🌿 Creating branch: task/erdos1094-oil
+[2026-02-08T07:56:17.874Z] ✓ Working on branch task/erdos1094-oil
+
+[2026-02-08T07:56:22.319Z] 
+$ tm update erdos1094-oil --status "Reading and analyzing the proof"
+[2026-02-08T07:56:23.491Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:56:49.801Z] 
+$ tm update erdos1094-oil --status "Checking dependencies and verifying logical flow"
+[2026-02-08T07:56:51.009Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:57:08.127Z] 
+$ tm update erdos1094-oil --status "Completing verification - all checks passed"
+[2026-02-08T07:57:16.584Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T07:57:37.962Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T07:57:37.963Z] 📄 Log saved to .tm/logs/worker-erdos1094-oil.md
+[2026-02-08T07:57:37.963Z] 
+📊 Task erdos1094-oil completed:
+[2026-02-08T07:57:37.963Z]    Summary: Approved — proofs/large-prime-criterion.md verified ✅
+[2026-02-08T07:57:37.963Z]    Details: The proof is rigorous and complete. All steps follow logically, edge cases are handled, and dependencies are verified. The result establishes that for primes p > k, we have p | C(n,k) iff n mod p < k. Two independent proofs are provided (direct via Legendre's formula, and via Kummer's digit-domination). Updated file status to Verified ✅ with reviewer erdos1094-oil.

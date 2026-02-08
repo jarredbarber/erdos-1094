@@ -1,6 +1,7 @@
 # Large Prime Divisibility Criterion for Binomial Coefficients
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
+**Reviewed by:** erdos1094-oil
 **Statement:** Let $p$ be a prime with $p > k \geq 1$, and let $n \geq k$. Then $p \mid \binom{n}{k}$ if and only if $n \bmod p < k$.
 **Dependencies:** proofs/kummer-theorem.md (Legendre's formula; used in one step but re-derived inline for self-containment)
 **Confidence:** Certain
