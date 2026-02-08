@@ -357,3 +357,280 @@
 - After `u4e` completes (or fails): does worker pick up `lth`?
 - `lth` is the harder task (unbounded k range). May need framing escalation if it fails.
 - Strike count: CRT formalize (lth) = 0/3. Large-n formalize (u4e) = 0/3 (first attempt in progress).
+
+## Heartbeat — 2026-02-08T15:24:46Z (Heartbeat #18)
+
+**Metrics**: 2 sorry (KGe29.lean:66 crt_small_prime_divides, :137 prime_large_divisor_case) | 7 verified proofs | 1 open | 1 in_progress | 29 closed | 0 failed
+**Status**: ✅ Good progress. u4e completed, narrowed sorry. Created missing follow-up task.
+**Observations**:
+- `erdos1094-u4e` CLOSED successfully. Narrowed `large_n_minFac_bound` sorry into `prime_large_divisor_case` — a much smaller residual case (d = n/gcd(n,k) is prime AND d > n/k). Beautiful structural proof: Type A + composite-d + d≤n/k all handled. Only the prime-large-d edge case remains.
+- Sorry locations changed: :88 → :137 (the sorry moved deeper into a helper lemma). Count still 2.
+- `erdos1094-lth` (CRT formalize) IN PROGRESS: new session, 181 log lines. Agent planning `native_decide` approach with `hasCarry` boolean function. Analyzed computational costs: k≤200 safe, k≤1000 feasible (~33s). Noted KLe28.lean already uses `native_decide` as a pattern. Actively building the approach — not stale.
+- **DAG gap found**: No task existed for `prime_large_divisor_case` at KGe29.lean:137. Backlog would be empty after lth completes.
+**Actions**:
+1. Created `erdos1094-25t` (p0, formalize): Close `prime_large_divisor_case` sorry at KGe29.lean:137. Description includes structural approach hints (C(n,k) = d*q, show q has factor ≤ n/k) and reference to NL proof Section 7.3.
+**Watch next**:
+- Does `lth` produce compiling native_decide code for CRT? Agent's approach is sound but implementation is complex (hasCarry function + soundness proof + native_decide for finite range).
+- If `lth` succeeds: likely leaves a narrower sorry for k > B (some bound). May need additional task.
+- After `lth`: worker picks up `erdos1094-25t` (prime_large_divisor_case).
+- Strike count: CRT formalize (lth) = 0/3. Prime-large-divisor (25t) = 0/3.
+
+## Heartbeat — 2026-02-08T15:40:12Z (Heartbeat #19)
+
+**Metrics**: 2 sorry (KGe29.lean:66 crt_small_prime_divides, :137 prime_large_divisor_case) | 7 verified proofs | 1 open | 1 in_progress | 29 closed | 0 failed
+**Status**: ✅ System healthy. CRT formalize task actively implementing native_decide.
+**Observations**:
+- `erdos1094-lth` (CRT formalize) IN PROGRESS: 440 log lines (up from 181 at HB#18). Agent has:
+  - Implemented `hasCarry`, `smallPrimeDivCheck`, `crtRangeCheck` functions in Lean
+  - Tested `native_decide` compilation: B=500 took 1:41. Estimating B=1000 ~13 min (too long).
+  - Currently testing B=700 as middle ground.
+  - Strategy: prove `crtRangeCheck B = true` via `native_decide`, then prove soundness (hasCarry=true → prime divides C(n,k)), combine for the theorem statement for k∈[29,B].
+  - Will likely leave a sorry for k > B. This is acceptable — can be covered by a follow-up task or left as a citation sorry.
+- `erdos1094-25t` (prime_large_divisor_case) OPEN, queued after lth.
+- No new git commits — agent still in test/iteration phase.
+- Sorry count and verified proofs unchanged from HB#18.
+- Worker not stale.
+**Actions**: None — agent making strong forward progress on implementation.
+**Watch next**:
+- Does `lth` find a workable B and produce compiling code? The implementation is complex (function defs + soundness lemma + native_decide), but approach is sound.
+- If B=700 works timing-wise, agent should commit a partial result and potentially leave k>700 as sorry.
+- After `lth`: worker picks up `erdos1094-25t`.
+- **Stagnant sorry watch**: Sorry count unchanged since HB#16 (4 heartbeats). But this is expected — both remaining sorrys are formalize tasks in progress, not stalled. Reset stagnation counter if lth commits.
+- Strike count: CRT formalize (lth) = 0/3. Prime-large-divisor (25t) = 0/3.
+
+## Heartbeat — 2026-02-08T15:56:05Z (Heartbeat #20)
+
+**Metrics**: 2 sorry (KGe29.lean:166 crt_large_k, :255 prime_large_divisor_case) | 7 verified proofs | 1 open | 1 in_progress | 29 closed | 0 failed
+**Status**: ✅ Excellent progress. CRT task nearly complete — native_decide proof integrated.
+**Observations**:
+- `erdos1094-lth` (CRT formalize) IN PROGRESS: 587 log lines. Agent has:
+  - Successfully compiled `native_decide` proof for k ∈ [29, 500] in temp file
+  - Integrated into KGe29.lean (340 lines, up from ~130)
+  - `crt_small_prime_divides` is now PROVEN: splits into k≤500 (via `crtRangeCheck_sound` + `crt_verified_500` native_decide) and k>500 (via `crt_large_k` sorry)
+  - Running `lake build` to verify full integration (~2 min expected due to native_decide computation)
+  - KGe29.lean has uncommitted changes on task branch
+- Sorry locations shifted due to new code: :66→:166, :137→:255. Count still 2 but sorrys are NARROWER:
+  - :166 `crt_large_k`: k > 500 (was: all k ≥ 29) — major improvement
+  - :255 `prime_large_divisor_case`: unchanged scope
+- `erdos1094-25t` (prime_large_divisor_case) OPEN, queued. Task description references line 137 but sorry is now at line 255 — agent will find it by name, not line number.
+- Worker not stale. No git commits yet — waiting for lake build.
+**Actions**: None — agent in final compilation step, very close to committing.
+**Watch next**:
+- Does `lake build` succeed? If yes, agent will commit and close `lth`. 
+  - If it succeeds: sorry for crt_large_k (k>500) remains. May need a follow-up task to extend native_decide to k≤1000 or leave as citation sorry.
+  - If compilation fails: check error, may need debug iteration.
+- After `lth` closes: worker picks up `erdos1094-25t` (prime_large_divisor_case).
+- **Question for after lth**: should we create a task to extend native_decide from k≤500 to k≤1000+? Or leave crt_large_k as a citation sorry? The NL proof covers k≤10000 exhaustively, so k∈(500,10000] could potentially be verified computationally too (but may take too long in Lean).
+- Strike count: CRT formalize (lth) = 0/3 (about to succeed). Prime-large-divisor (25t) = 0/3.
+
+## Heartbeat — 2026-02-08T16:14:09Z (Heartbeat #21)
+
+**Metrics**: 2 sorry (KGe29.lean:166 crt_large_k k>700, :255 prime_large_divisor_case) | 7 verified proofs | 1 open | 1 in_progress | 30 closed | 0 failed
+**Status**: ✅ Progress. lth closed, 25t started. Created missing task for crt_large_k.
+**Observations**:
+- `erdos1094-lth` CLOSED successfully. CRT sorry narrowed from "all k ≥ 29" to "k > 700". The native_decide proof verified ~114M (n,k) pairs for k∈[29,700]. Excellent work.
+- **⚠️ Git concern**: lth's changes (144 lines added to KGe29.lean) were never committed to the `task/erdos1094-lth` branch. Changes are in the working directory on `task/erdos1094-25t` branch. When 25t commits, both sets of changes will be included. Not a critical issue but messy. Changes are NOT at risk of loss since 25t is actively working on the same branch.
+- `erdos1094-25t` (prime_large_divisor_case) IN PROGRESS: 37 log lines. Agent reading context, reasoning about factorization approach. Correctly identifying that d | C(n,k) and exploring how to show minFac(C(n,k)) ≤ n/k when d is prime and d > n/k. Early stages, not stuck.
+- **DAG gap found**: No task for `crt_large_k` sorry (k > 700). After 25t closes, backlog would be empty.
+**Actions**:
+1. Created `erdos1094-lwe` (p1, formalize): Close `crt_large_k` sorry for k > 700. Description includes three approaches: extend native_decide, split into chunks, or leave k>10000 as citation sorry.
+**Remaining sorrys**:
+- KGe29.lean:166 `crt_large_k` (k > 700) → task `erdos1094-lwe` (p1, open)
+- KGe29.lean:255 `prime_large_divisor_case` → task `erdos1094-25t` (p0, in_progress)
+**Watch next**:
+- Does `25t` find a valid proof for prime_large_divisor_case? The agent is reasoning through the factorization — the key insight needed is that C(n,k) ≥ d² when d > n/k (since C(n,k) > k² > (n/k)² and d > n/k means d < n so C(n,k)/d > k). If C(n,k)/d has a prime factor ≤ n/k, done.
+- After 25t: worker picks up lwe (crt_large_k).
+- Strike count: CRT large_k (lwe) = 0/3. Prime-large-divisor (25t) = 0/3.
+
+## Heartbeat — 2026-02-08T16:30:15Z (Heartbeat #22)
+
+**Metrics**: 2 sorry (KGe29.lean:166 crt_large_k k>700, :255 prime_large_divisor_case) | 7 verified proofs | 1 open | 1 in_progress | 30 closed | 0 failed
+**Status**: ✅ System healthy. 25t actively working on residual case.
+**Observations**:
+- `erdos1094-25t` (prime_large_divisor_case) IN PROGRESS: 676 log lines. Agent taking creative approach:
+  - Built computational tools: isKSmooth, isResidualCaseCorrect, findResidualFailureCorrect
+  - Running empirical verification: no counterexamples found up to n=1000, k=50
+  - Likely heading toward native_decide approach (same pattern as lth succeeded with)
+  - Status: "Exploring API and proof strategy for residual case"
+- `erdos1094-lwe` (crt_large_k k>700) OPEN, queued after 25t.
+- Git concern from HB#21 persists: KGe29.lean has 131 uncommitted insertions from lth. When 25t commits, both sets of changes will be included. Not blocking anything.
+- No new git commits. Sorry count unchanged.
+- Worker not stale.
+**Actions**: None — agent actively working, creative approach promising.
+**Watch next**:
+- Does 25t produce a native_decide proof for the residual case? Or does it find a structural argument?
+- If 25t commits: the lth changes (native_decide for k∈[29,700]) will finally be persisted to git. Critical to watch for.
+- If 25t fails: may need to rethink the approach. The residual case (d prime, d > n/k) may be resolvable by showing C(n,k) > d² and thus minFac(C(n,k)) < d ≤ n/gcd(n,k). Since d > n/k and gcd(n,k) < k, we have d < n/1 = n, so C(n,k)/d > 1. Need to show the quotient has a small prime factor.
+- After 25t: worker picks up lwe.
+- Strike count: Prime-large-divisor (25t) = 0/3. CRT large_k (lwe) = 0/3.
+
+## Heartbeat — 2026-02-08T16:45:26Z (Heartbeat #23)
+
+**Metrics**: 2 sorry (KGe29.lean:166 crt_large_k k>700, :273 prime_large_divisor_case) | 7 verified proofs | 1 open | 1 in_progress | 30 closed | 0 failed
+**Status**: ✅ Excellent progress. Agent found key insight and is restructuring proof.
+**Observations**:
+- `erdos1094-25t` (prime_large_divisor_case) IN PROGRESS: 1767 log lines (up from 676 at HB#22). Agent made MAJOR progress:
+  - **Key discovery**: `prime_large_divisor_case` as originally stated (k ≥ 2) is FALSE. Counterexample: (n=62, k=6) where minFac(C(62,6))=19 > 10=n/k.
+  - **Correct fix**: Added `29 ≤ k` hypothesis to both `prime_large_divisor_case` and `large_n_minFac_bound`. This is valid since both are only called from `no_exception_k_ge_29` where k ≥ 29. NOT a main theorem modification.
+  - **New proof structure**: For k ≥ 29, use `smallPrimeDivCheck` (digit domination). If true, get prime p ≤ 29 dividing C(n,k), then chain: minFac ≤ p ≤ 29 ≤ n/k (since n > k² and k ≥ 29).
+  - **Remaining sorry (line 273)**: Need to prove `smallPrimeDivCheck n k = true` for all residual cases with k ≥ 29. Comment: "TODO: Extend crt_verified_700 to cover n > k² in residual case."
+  - Currently iterating on compilation — fixing type errors in `smallPrimeDivCheck_sound` call.
+- KGe29.lean now 362 lines (up from ~340). git diff shows 190 net insertions from HEAD.
+- **Sorry scope narrower**: The sorry is now "prove digit domination works for k≥29, n>k², in the residual case" — more specific than original "prove minFac ≤ n/k for general k≥2."
+- **Conceptual challenge**: n is unbounded (n > k²), so native_decide can't directly verify. Agent may need: (a) theoretical argument, (b) reduce to finite range, or (c) leave as sorry and close task.
+- Worker not stale. Very active.
+**Actions**: None — agent making excellent structural progress.
+**Watch next**:
+- Does `lake build` succeed with the restructured proof? Agent is close.
+- How does the agent handle the remaining sorry? Three likely outcomes:
+  1. Leaves it as a sorry with clearer scope and closes task → acceptable, task for lwe or new task
+  2. Proves it via theoretical argument about digit domination for large n → ideal
+  3. Gets stuck → may need intervention at HB#24
+- The sorry at :273 and the sorry at :166 (crt_large_k) are now closely related — both are about proving smallPrimeDivCheck works for specific ranges. Task `lwe` already targets crt_large_k. The new sorry might be absorbable into lwe's scope.
+- If 25t closes: lwe picks up crt_large_k. The two remaining sorrys (crt_large_k for k>700 in [2k,k²] range, and smallPrimeDivCheck for k≥29 in n>k² range) are conceptually similar — both assert digit domination works for large k.
+- Strike count: Prime-large-divisor (25t) = 0/3 (actively progressing). CRT large_k (lwe) = 0/3.
+
+## Heartbeat — 2026-02-08T17:02:10Z (Heartbeat #24)
+
+**Metrics**: 3 sorry in working dir (KGe29.lean:166 crt_large_k, :273 smallPrimeDivCheck k≥29, KLe28.lean:103 smallPrimeDivCheck k≤28) | 7 verified proofs | 1 open | 1 in_progress | 30 closed | 0 failed
+**Status**: ⚠️ Sorry count INCREASED from 2 to 3. Agent refactoring across files. Monitoring closely.
+**Observations**:
+- `erdos1094-25t` IN PROGRESS: 2074 log lines (up from 1767 at HB#23). Agent handling the cascade from discovering `prime_large_divisor_case` is false for k < 29:
+  1. Added `29 ≤ k` hypothesis to `large_n_minFac_bound` in KGe29.lean
+  2. This BROKE KLe28.lean line 80 which called `large_n_minFac_bound` for k ∈ [2,28] — k < 29 can't satisfy the new hypothesis!
+  3. Agent created `large_n_minFac_bound_small_k` in KLe28.lean (74 new lines) to handle k ≤ 28 case
+  4. New sorry at KLe28.lean:103 for residual case (k ≤ 28, n > 284, d prime, d > n/k)
+  5. Making private helpers in KGe29.lean public for cross-file use (`mod_lt_of_prime_dvd_div`, `div_gcd_dvd_choose`, `smallPrimeDivCheck_sound`)
+  6. Currently running `lake build` to check compilation
+- **KLe28.lean was sorry-free on HEAD**. Agent introducing a NEW sorry in a previously-clean file. This is a regression risk if committed without closing it.
+- **Sorry inventory (working dir)**:
+  - KGe29.lean:166 `crt_large_k` (k > 700, n ∈ [2k,k²]) → task `lwe` ✅
+  - KGe29.lean:273 `smallPrimeDivCheck` (k ≥ 29, n > k², residual case) → **NO TASK** ⚠️
+  - KLe28.lean:103 `smallPrimeDivCheck` (k ≤ 28, n > 284, residual case) → **NO TASK** ⚠️
+- No git commits yet. All changes are uncommitted on `task/erdos1094-25t` branch.
+- Worker not stale.
+**Actions**: None yet — agent actively working. Holding off on creating tasks for uncovered sorrys until 25t closes.
+**Watch next (CRITICAL)**:
+- **When 25t closes**: Check sorry count. If sorrys at KGe29:273 and KLe28:103 remain, create tasks for them IMMEDIATELY (backlog will be empty otherwise).
+- **Compilation**: Does `lake build` succeed with the refactored code? The cross-file changes (public helpers) must all be consistent.
+- **KLe28 sorry**: Can the agent close it? The condition (k ≤ 28, n > 284, d prime, d > n/k) might be vacuously true — if no such n exists, the sorry is trivially closable. Agent's comment says "Verified computationally" but needs formal proof.
+- **Scope creep**: Task was "close prime_large_divisor_case sorry" but agent is now modifying TWO files, changing visibility, and adding new lemmas. This is justified by the mathematical discovery but increases risk.
+- If 25t closes with 3 sorrys: need tasks for KGe29:273 (smallPrimeDivCheck k≥29 n>k²) and KLe28:103 (smallPrimeDivCheck k≤28 n>284).
+- Strike count: Prime-large-divisor (25t) = 0/3 (actively working). CRT large_k (lwe) = 0/3.
+
+## Heartbeat — 2026-02-08T17:19:46Z (Heartbeat #25)
+
+**Metrics**: 5 sorry in working dir (KGe29:167 crt_large_k, :282 h2k_le_nk, :292 hmod; KLe28:107 smallPrimeDivCheck, :118 hp_bound) | 7 verified proofs | 1 open | 1 in_progress | 30 closed | 0 failed
+**Status**: ⚠️ Sorry count up to 5 BUT agent is decomposing correctly. Build in progress.
+**Observations**:
+- `erdos1094-25t` IN PROGRESS: 2309 log lines. Agent decomposing the hard sorry into smaller, more specific sorrys. This is CORRECT behavior per formalize agent rules.
+- **Stale detection FALSE POSITIVE**: tm shows stale (40 min since status update at 16:39), but `lake build` is ACTIVELY RUNNING (started 17:17, lean process at 103% CPU, 5GB RAM processing KGe29.lean with native_decide). DO NOT RECOVER.
+- **Sorry decomposition (working dir)**:
+  1. KGe29.lean:167 `crt_large_k` — unchanged, k > 700 → task `lwe`
+  2. KGe29.lean:282 `h2k_le_nk` — NEW: prove 2k ≤ n/k when smallPrimeDivCheck fails in residual case
+  3. KGe29.lean:292 `hmod` — NEW: prove n % p < k for Bertrand prime p in residual case
+  4. KLe28.lean:107 `smallPrimeDivCheck` — same as HB#24, for k ≤ 28 residual case
+  5. KLe28.lean:118 `hp_bound` — NEW: prove p ≤ n/k where p from smallPrimeDivCheck
+- **Agent found Bertrand in Mathlib**: `Nat.exists_prime_lt_and_le_two_mul`. Using it existentially for the Bertrand prime in (k, 2k].
+- **Proof structure**: prime_large_divisor_case now tries (1) smallPrimeDivCheck → if true, done; (2) if false, use Bertrand prime p ∈ (k, 2k] with two sub-goals (n ≥ 2k² for p ≤ n/k, and n mod p < k for p | C(n,k)).
+- KGe29.lean: 381 lines. KLe28.lean: 169 lines. Total 550 lines (up from 445 on HEAD).
+- **Each new sorry is SMALLER and MORE SPECIFIC** than the original. This is progress, not regression.
+**Actions**: None — agent actively building, correct decomposition pattern. DO NOT run `tm worker recover`.
+**Watch next**:
+- Does `lake build` succeed? If yes, agent should COMMIT immediately (compile checkpoint).
+- After commit: agent may try to close remaining sorrys or close the task.
+- **If 25t closes with 4-5 sorrys**: I need to create tasks for each uncovered sorry. The `lwe` task only covers crt_large_k. Need tasks for:
+  - h2k_le_nk (computational, may be native_decide-able for specific k range)
+  - hmod (Bertrand prime modular condition)
+  - smallPrimeDivCheck k≤28 (computational)
+  - hp_bound k≤28 (computational)
+  - Alternatively, some of these might be closable by the same approach — group into fewer tasks.
+- **Stagnant sorry watch**: Sorry count has INCREASED over 9 heartbeats (HB#16-25). BUT the sorrys are getting NARROWER. This is the correct pattern for bidirectional search. The 3-strike rule doesn't apply since we're decomposing, not retrying.
+- Strike count: Prime-large-divisor (25t) = 0/3 (decomposing, not failing). CRT large_k (lwe) = 0/3.
+
+## Heartbeat — 2026-02-08T17:37:30Z (Heartbeat #26)
+
+**Metrics**: 5 sorry in working dir (KGe29:193 crt_large_k, :308 h2k_le_nk, :318 hmod; KLe28:107 smallPrimeDivCheck, :118 hp_bound) | 7 verified proofs | 2 open | 1 in_progress | 31 closed | 0 failed
+**Status**: ⚠️ Intervened. Closed zombie 25t, created tasks for uncovered sorrys.
+**Observations**:
+- `erdos1094-25t` CLOSED (manually by overseer). Agent completed structural proof and returned `needs_input`, but session ended. Build succeeds with 5 sorry warnings. Work preserved in uncommitted working directory changes.
+  - **Key achievements**: discovered prime_large_divisor_case false for k<29, added 29≤k hypothesis, structured proof with Bertrand postulate, created KLe28.lean parallel handler. Excellent work.
+  - **Answered needs_input**: told agent to go with option (A) — native_decide for computational verification.
+- `erdos1094-lwe` (crt_large_k, p1) IN PROGRESS: 283 log lines. Agent testing `crtRangeCheckFrom` timing. k∈[701,800] timed out at 120s. Trying with 300s timeout. Working to extend native_decide range for k > 700.
+- Worker not stale. lwe actively working.
+- **Sorry line shifts**: KGe29 lines moved +26 from HB#25 (lwe adding infrastructure code above sorrys).
+- On branch `task/erdos1094-lwe` with uncommitted changes from lth + 25t + lwe.
+**Actions**:
+1. Closed `erdos1094-25t` manually (zombie task — session ended, task stuck in in_progress with needs_input)
+2. Created `erdos1094-kd6` (p1, formalize): Close h2k_le_nk and hmod sorrys in KGe29.lean (Bertrand prime case, k ≥ 29)
+3. Created `erdos1094-kmd` (p1, formalize): Close KLe28.lean residual case sorrys (k ≤ 28)
+**Sorry coverage (all covered now)**:
+- KGe29:193 `crt_large_k` (k > 700) → `lwe` (in_progress)
+- KGe29:308 `h2k_le_nk` + :318 `hmod` → `kd6` (open)
+- KLe28:107 `smallPrimeDivCheck` + :118 `hp_bound` → `kmd` (open)
+**Watch next**:
+- Does lwe succeed in extending native_decide? The 120s timeout at k∈[701,800] is concerning — may need to use smaller chunks or a different approach.
+- After lwe: worker picks up kd6 or kmd (both p1).
+- The kmd task (KLe28 sorrys) might be easier — the residual case for k ≤ 28 may be vacuous or closable with a small native_decide range since k is bounded.
+- Strike count: crt_large_k (lwe) = 0/3. h2k_le_nk+hmod (kd6) = 0/3. KLe28 residual (kmd) = 0/3.
+
+## Heartbeat — 2026-02-08T17:52:55Z (Heartbeat #27)
+
+**Metrics**: 5 sorry (KGe29:193 crt_large_k, :308 h2k_le_nk, :318 hmod; KLe28:107 smallPrimeDivCheck, :118 hp_bound) | 7 verified proofs | 2 open | 1 in_progress | 31 closed | 0 failed
+**Status**: ✅ System healthy. lwe actively benchmarking native_decide timing for k > 700.
+**Observations**:
+- `erdos1094-lwe` IN PROGRESS: 351 log lines (up from 283 at HB#26). Agent running timing tests with `#eval crtRangeCheckFrom`. Previous attempts: k∈[701,800] timed out at 120s; [701,1000] and [701,1500] also timed out at 300s. Currently testing k∈[701,900] with 180s timeout. Lean process at 98.9% CPU, 5.2GB RAM — genuine computation.
+- Agent discovered key insight: `#eval` is fast (native code), but `native_decide` in proof mode is much slower (kernel evaluation). This means the agent may need a different strategy than just extending the range.
+- `erdos1094-kd6` (h2k_le_nk + hmod) and `erdos1094-kmd` (KLe28 residual) both OPEN, queued after lwe.
+- No new git commits. Working dir has 243 net insertions to KGe29.lean + 84 to KLe28.lean from lth + 25t + lwe.
+- Worker not stale (confirmed by tm worker stale check).
+**Actions**: None — agent actively working on timing, making reasonable decisions.
+**Watch next**:
+- Does lwe find a workable chunking strategy? If native_decide is too slow for k>700, options:
+  1. Chunked proofs: split k∈[701,800], [801,900], etc. into separate `native_decide` calls (each as a lemma)
+  2. Raise bound and leave citation sorry: extend to whatever B works, sorry for k > B
+  3. Switch to `decide` or `Decidable` instance with smaller kernel footprint
+  4. Theoretical argument: for large enough k, digit sum argument gives enough primes directly
+- If lwe closes: worker picks up kd6 or kmd. kmd (k≤28) may be easier — finite, small range.
+- If lwe stalls on timing issues for 2+ more heartbeats, may need to update task description with approach hints.
+- Strike count: crt_large_k (lwe) = 0/3. h2k_le_nk+hmod (kd6) = 0/3. KLe28 residual (kmd) = 0/3.
+
+## Heartbeat — 2026-02-08T18:08:10Z (Heartbeat #28)
+
+**Metrics**: 5 sorry (KGe29:193, :308, :318; KLe28:107, :118) | 7 verified proofs | 2 open | 1 in_progress | 31 closed | 0 failed
+**Status**: ✅ System healthy. lwe making excellent methodical progress on native_decide timing.
+**Observations**:
+- `erdos1094-lwe` IN PROGRESS: 478 log lines (up from 351 at HB#27, +127 lines). Agent has:
+  - Confirmed `#eval` runs instantly for ALL ranges (native code) — the bottleneck is `native_decide` in proof elaboration.
+  - Timed `native_decide` for [701,1000]: ~8 minutes. This is feasible for chunked proofs.
+  - Now testing [1001,2000] with 3600s timeout. Lean process at 99.4% CPU, 5.2GB RAM — genuine computation.
+  - Strategy emerging: chunked `native_decide` with separate lemmas per range (e.g., [701,1000], [1001,2000], etc.).
+- `erdos1094-kd6` and `erdos1094-kmd` both OPEN, queued after lwe.
+- No new git commits. Sorry count unchanged.
+- Worker not stale (confirmed).
+**Actions**: None — agent making excellent progress, approach is sound.
+**Watch next**:
+- How long does [1001,2000] take? If ~30 min, chunked approach is viable up to ~5000-10000.
+- If [1001,2000] takes too long (>60 min), agent may need to cap at k=1000 and leave k>1000 as citation sorry.
+- After lwe closes: worker picks up kd6 or kmd.
+- **Stagnant sorry watch**: Sorry count unchanged for 12 heartbeats (HB#16-28) BUT sorrys are getting narrower through decomposition. Agent is doing computational groundwork for elimination. Not a concern.
+- Strike count: crt_large_k (lwe) = 0/3. h2k_le_nk+hmod (kd6) = 0/3. KLe28 residual (kmd) = 0/3.
+
+## Heartbeat — 2026-02-08T18:24:01Z (Heartbeat #29)
+
+**Metrics**: 5 sorry (KGe29:193, :308, :318; KLe28:107, :118) | 7 verified proofs | 2 open | 1 in_progress | 31 closed | 0 failed
+**Status**: ✅ System healthy. lwe blocked on long-running native_decide timing test.
+**Observations**:
+- `erdos1094-lwe` IN PROGRESS: 478 log lines (unchanged from HB#28 — agent blocked on subprocess). Agent's `native_decide` test for [1001,2000] has been running ~16 min (started 18:08). Lean process at 99.7% CPU, 5.2GB RAM. 3600s timeout gives plenty of room.
+- Previous finding: [701,1000] takes ~8 min for native_decide. [1001,2000] is a wider range with larger k — expected to take longer (30-60 min estimate).
+- Worker not stale. No new git commits. Sorry count unchanged.
+- `erdos1094-kd6` and `erdos1094-kmd` both OPEN, queued.
+**Actions**: None — agent doing legitimate computational benchmarking.
+**Watch next**:
+- Does [1001,2000] complete? If so, how long did it take?
+  - If ≤30 min: chunked approach viable up to k~5000-10000. Agent can produce 5-10 chunked lemmas.
+  - If 30-60 min: may only reach k~2000-3000. Still useful narrowing.
+  - If >60 min or timeout: agent caps at k=1000, leaves k>1000 as citation sorry.
+- After timing test returns: agent should integrate chunked native_decide proofs into KGe29.lean.
+- **Concern**: This task has been running since HB#26 (~47 min of wall time). Most of that was productive (benchmarking, testing). But if lwe takes 2+ more heartbeats, the queued tasks (kd6, kmd) are being delayed.
+- Strike count: crt_large_k (lwe) = 0/3. h2k_le_nk+hmod (kd6) = 0/3. KLe28 residual (kmd) = 0/3.
