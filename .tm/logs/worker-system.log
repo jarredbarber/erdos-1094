@@ -6224,3 +6224,316 @@ $ tm update erdos1094-hvy --status "Review complete - proof verified and approve
 📊 Task erdos1094-hvy completed:
 [2026-02-08T10:45:26.887Z]    Summary: Approved ✅ — proofs/main-theorem.md
 [2026-02-08T10:45:26.887Z]    Details: The main theorem proof is mathematically sound, complete, and rigorous. The proof uses a classic finiteness argument: it exhibits a finite superset B = {(n,k) : k ≤ 28, n ≤ 284} and proves E ⊆ B via two contrapositive arguments. Both dependencies (Result A: no-exceptions-k-ge-29.md and Result B: bound-n-for-small-k.md) are now verified ✅. All edge cases are handled correctly (k=28, k=29, n=284, n=2k). The combining logic is purely set-theoretic and introduces no new mathematical claims. The proof has been updated to status 'Verified ✅' with comprehensive review notes. Ready for formalization.
+[2026-02-08T10:45:27.044Z] ✅ Successfully merged task/erdos1094-hvy into main
+[2026-02-08T10:45:27.044Z] 🗑️  Deleting branch task/erdos1094-hvy...
+[2026-02-08T10:45:27.052Z] ✓ Deleted local branch task/erdos1094-hvy
+[2026-02-08T10:45:27.058Z] 🚀 Pushing main to remote...
+[2026-02-08T10:45:27.857Z] ✓ Pushed to remote
+[2026-02-08T10:45:28.859Z] 
+================================================================================
+[2026-02-08T10:45:28.860Z] 📌 Processing task: erdos1094-7tg - Formalize: exceptions with k ≤ 28 have n ≤ 284
+[2026-02-08T10:45:28.860Z]    Role: formalize | Priority: 1 | Size: medium
+[2026-02-08T10:45:28.860Z] ================================================================================
+
+[2026-02-08T10:45:28.863Z] ✓ Claimed task erdos1094-7tg
+
+[2026-02-08T10:45:28.863Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T10:45:28.863Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T10:45:28.878Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:45:28.891Z] ✓ Captured state: 54 tracked, 1 untracked files
+
+[2026-02-08T10:45:28.892Z] 🌿 Creating branch: task/erdos1094-7tg
+[2026-02-08T10:45:28.899Z] ✓ Working on branch task/erdos1094-7tg
+
+[2026-02-08T10:45:33.717Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.lean" | head -30
+[2026-02-08T10:45:33.727Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/bound-n-for-small-k.md 2>/dev/null || echo "File not found"
+[2026-02-08T10:45:33.734Z] 
+$ cd /home/jarred/code/erdos-1094 && cat CLAUDE.md 2>/dev/null
+[2026-02-08T10:45:38.668Z] 
+$ cd /home/jarred/code/erdos-1094 && cat Erdos.lean
+[2026-02-08T10:45:38.669Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:45:38.670Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:45:38.671Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:45:38.673Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:47:08.733Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.lean
+[2026-02-08T10:47:08.739Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | tail -20
+[2026-02-08T10:47:16.933Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.toml
+[2026-02-08T10:47:20.071Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-7tg --status "Exploring API and planning proof structure"
+[2026-02-08T10:47:25.980Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test.lean << 'EOF'
+import Mathlib
+
+-- Check key lemmas exist
+#check Nat.minFac_le
+#check Nat.minFac_le_of_dvd
+#check Nat.choose_one_right
+#check Nat.minFac_prime
+#check Finset.Icc
+#check Nat.choose_pos
+EOF
+lake env lean /tmp/api_test.lean 2>&1
+[2026-02-08T10:47:37.724Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test2.lean << 'EOF'
+import Mathlib
+
+-- Check decidability of Finset.forall
+#check @Finset.decidableBAll
+-- Check minFac properties
+#check Nat.minFac_eq_one_iff
+#check @Nat.minFac_dvd
+-- Check if native_decide works with choose and minFac
+example : (10 : ℕ).choose 3 = 120 := by native_decide
+example : (120 : ℕ).minFac = 2 := by native_decide
+-- Test a small finite check
+example : ∀ n ∈ Finset.Icc 5 10, (n.choose 2).minFac ≤ n / 2 := by native_decide
+EOF
+lake env lean /tmp/api_test2.lean 2>&1
+[2026-02-08T10:47:48.543Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test3.lean << 'EOF'
+import Mathlib
+
+-- Test the finite check pattern
+example : ∀ n ∈ Finset.Icc 5 10, (n.choose 2).minFac ≤ n / 2 := by native_decide
+
+-- Test dependent range
+example : ∀ k ∈ Finset.Icc 3 5, ∀ n ∈ Finset.Icc 10 (k * k),
+    (n.choose k).minFac ≤ max (n / k) k := by native_decide
+EOF
+lake env lean /tmp/api_test3.lean 2>&1
+[2026-02-08T10:48:01.572Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test4.lean << 'EOF'
+import Mathlib
+
+-- Debug: which cases fail?
+#eval do
+  let mut failures := #[]
+  for k in List.range 3 |>.map (· + 3) do
+    for n in List.range (k * k - 10 + 1) |>.map (· + 10) do
+      let c := Nat.choose n k
+      let mf := c.minFac
+      let bound := max (n / k) k
+      if mf > bound then
+        failures := failures.push (n, k, c, mf, bound)
+  return failures
+EOF
+lake env lean /tmp/api_test4.lean 2>&1
+[2026-02-08T10:48:13.759Z] 
+$ cd /home/jarred/code/erdos-1094 && python3 -c "
+from math import comb
+from sympy import factorint
+for k in range(3, 6):
+    for n in range(10, k*k+1):
+        c = comb(n, k)
+        if c <= 1:
+            continue
+        mf = min(factorint(c).keys())
+        bound = max(n // k, k)
+        if mf > bound:
+            print(f'FAIL: n={n}, k={k}, C={c}, minFac={mf}, bound={bound}')
+" 2>/dev/null || python3 -c "
+from math import comb
+
+def min_fac(n):
+    if n <= 1: return n
+    if n % 2 == 0: return 2
+    i = 3
+    while i * i <= n:
+        if n % i == 0: return i
+        i += 2
+    return n
+
+for k in range(3, 6):
+    for n in range(10, k*k+1):
+        c = comb(n, k)
+        if c <= 1: continue
+        mf = min_fac(c)
+        bound = max(n // k, k)
+        if mf > bound:
+            print(f'FAIL: n={n}, k={k}, C={c}, minFac={mf}, bound={bound}')
+"
+[2026-02-08T10:48:24.714Z] 
+$ cd /home/jarred/code/erdos-1094 && python3 -c "
+from math import comb
+
+def min_fac(n):
+    if n <= 1: return n
+    if n % 2 == 0: return 2
+    i = 3
+    while i * i <= n:
+        if n % i == 0: return i
+        i += 2
+    return n
+
+# Test the actual case: k in [17,28], n in [285, k^2]
+for k in range(17, 29):
+    for n in range(285, k*k+1):
+        if 2*k > n: continue
+        c = comb(n, k)
+        if c <= 1: continue
+        mf = min_fac(c)
+        bound = max(n // k, k)
+        if mf > bound:
+            print(f'FAIL: n={n}, k={k}, C(n,k) has minFac={mf}, bound={bound}')
+
+print('Done checking. If no FAIL lines above, all cases pass.')
+"
+[2026-02-08T10:48:30.030Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test5.lean << 'EOF'
+import Mathlib
+
+-- Test the finite check for the actual range
+-- k ∈ [17, 28], n ∈ [285, k²], with 2k ≤ n (always true since 2*28 = 56 ≤ 285)
+-- But we need to be careful about what native_decide can handle
+
+-- Start small: just k = 17, n ∈ [285, 289]
+example : ∀ n ∈ Finset.Icc 285 289,
+    (n.choose 17).minFac ≤ max (n / 17) 17 := by native_decide
+EOF
+lake env lean /tmp/api_test5.lean 2>&1
+[2026-02-08T10:48:40.908Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test6.lean << 'EOF'
+import Mathlib
+
+-- Test larger range: k = 28, n ∈ [285, 784]
+-- This is 500 values with C(n, 28) which are large numbers
+set_option maxHeartbeats 800000 in
+example : ∀ n ∈ Finset.Icc 285 784,
+    (n.choose 28).minFac ≤ max (n / 28) 28 := by native_decide
+EOF
+lake env lean /tmp/api_test6.lean 2>&1
+[2026-02-08T10:48:51.752Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test7.lean << 'EOF'
+import Mathlib
+
+-- Test the full dependent range: all k ∈ [17, 28], n ∈ [285, k²]
+set_option maxHeartbeats 2000000 in
+example : ∀ k ∈ Finset.Icc 17 28, ∀ n ∈ Finset.Icc 285 (k * k),
+    (n.choose k).minFac ≤ max (n / k) k := by native_decide
+EOF
+lake env lean /tmp/api_test7.lean 2>&1
+[2026-02-08T10:49:02.513Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-7tg --status "Writing KLe28.lean - proof structure validated, native_decide works for finite cases"
+[2026-02-08T10:49:11.829Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test8.lean << 'EOF'
+import Mathlib
+
+-- Check available APIs for the proof
+#check Nat.minFac_le  -- 0 < n → n.minFac ≤ n
+#check @le_max_left
+#check @le_max_right
+#check Nat.choose_one_right -- n.choose 1 = n
+
+-- Check: for k=1, n/1 = n, so max(n/1, 1) = n
+-- minFac(n) ≤ n (for n > 0)
+-- So minFac(C(n,1)) = minFac(n) ≤ n = max(n/1, 1)
+example (n : ℕ) (hn : 284 < n) :
+    (n.choose 1).minFac ≤ max (n / 1) 1 := by
+  rw [Nat.choose_one_right, Nat.div_one]
+  exact le_trans (Nat.minFac_le (by omega)) (le_max_left _ _)
+EOF
+lake env lean /tmp/api_test8.lean 2>&1
+[2026-02-08T10:49:23.396Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test9.lean << 'EOF'
+import Erdos.KGe29
+
+-- Check signature
+#check @Erdos1094.large_n_minFac_bound
+-- large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : k ≤ n)
+EOF
+lake env lean /tmp/api_test9.lean 2>&1
+[2026-02-08T10:49:36.814Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test10.lean << 'EOF'
+import Mathlib
+
+-- Test: if k ≤ 28, 284 < n, n ≤ k*k, then 17 ≤ k
+example (k n : ℕ) (hk28 : k ≤ 28) (hn284 : 284 < n) (hkk : n ≤ k * k) : 17 ≤ k := by
+  nlinarith
+
+-- Test: for k ≥ 2 and n > 284, we have k ≤ n
+example (n k : ℕ) (hn : 2 * k ≤ n) (hn284 : 284 < n) : k ≤ n := by omega
+
+-- Test: for k ≤ 16 and n > 284, k*k < n
+example (n k : ℕ) (hk : k ≤ 16) (hn284 : 284 < n) : k * k < n := by nlinarith
+EOF
+lake env lean /tmp/api_test10.lean 2>&1
+[2026-02-08T10:50:08.348Z] 
+🛠️  Executing tool: write...
+[2026-02-08T10:50:11.973Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-7tg --status "Building KLe28.lean - testing compilation"
+[2026-02-08T10:50:16.451Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/KLe28.lean 2>&1
+[2026-02-08T10:50:28.965Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test11.lean << 'EOF'
+import Mathlib
+-- Find the right name for eq_or_gt
+#check @eq_or_gt_of_le
+#check @Nat.eq_one_or_self_of_prime
+-- Actually, for k = 1 case, let's just use omega or interval_cases
+example (k : ℕ) (hk : 0 < k) (hk2 : ¬(2 ≤ k)) : k = 1 := by omega
+EOF
+lake env lean /tmp/api_test11.lean 2>&1
+[2026-02-08T10:50:38.604Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_test12.lean << 'EOF'
+import Mathlib
+example (k : ℕ) (hk : 0 < k) : k = 1 ∨ 2 ≤ k := by omega
+EOF
+lake env lean /tmp/api_test12.lean 2>&1
+[2026-02-08T10:50:50.044Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:50:56.893Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:50:59.007Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/KLe28.lean 2>&1
+[2026-02-08T10:51:10.553Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:51:12.722Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1
+[2026-02-08T10:51:38.940Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:51:41.440Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1
+[2026-02-08T10:52:04.567Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:52:12.521Z] 
+$ cd /home/jarred/code/erdos-1094 && git add Erdos/KLe28.lean Erdos.lean && git commit -m "Formalize bound_n_for_small_k: k ≤ 28 exceptions have n ≤ 284
+
+New file Erdos/KLe28.lean proves that for k ≤ 28, n > 284, 2k ≤ n:
+  (n.choose k).minFac ≤ max (n/k) k
+
+Proof structure:
+- k = 1: C(n,1) = n, minFac(n) ≤ n directly
+- k ∈ [2,16]: k² ≤ 256 < 284 < n, so large_n_minFac_bound applies
+- k ∈ [17,28], n > k²: large_n_minFac_bound applies
+- k ∈ [17,28], 284 < n ≤ k²: exhaustive native_decide over 2810 cases
+
+No sorry holes introduced. lake build succeeds."
+[2026-02-08T10:52:15.362Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-7tg --status "Complete - KLe28.lean compiles, no sorry holes, committed"
+[2026-02-08T10:52:25.332Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:52:25.333Z] 📄 Log saved to .tm/logs/worker-erdos1094-7tg.md
+[2026-02-08T10:52:25.333Z] 
+📊 Task erdos1094-7tg completed:
+[2026-02-08T10:52:25.333Z]    Summary: Closed all goals in bound_n_for_small_k (Erdos/KLe28.lean). lake build succeeds with zero new sorry holes.
+[2026-02-08T10:52:25.333Z]    Details: Created Erdos/KLe28.lean with the theorem bound_n_for_small_k proving that for k ≤ 28, n > 284, and 2k ≤ n, (n.choose k).minFac ≤ max (n/k) k.
+
+Proof structure (no sorry holes):
+1. k = 1: C(n,1) = n, so minFac(n) ≤ n = max(n/1, 1) by Nat.minFac_le.
+2. k ∈ [2, 16]: Since k² ≤ 256 < 284 < n, we have n > k². Apply large_n_minFac_bound from Erdos.KGe29.
+3. k ∈ [17, 28], n > k²: Same large_n_minFac_bound applies.
+4. k ∈ [17, 28], 284 < n ≤ k²: Exhaustive finite verification of all 2810 cases via native_decide (private lemma case_b_finite).
+
+The key insight is that k ≤ 16 forces n > k² (since k² ≤ 256 < 284), and for k ∈ [17,28] the finite range 284 < n ≤ k² ≤ 784 is small enough for native_decide to verify computationally. No new sorry holes were introduced.
