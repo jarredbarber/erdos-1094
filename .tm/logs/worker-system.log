@@ -6537,3 +6537,136 @@ Proof structure (no sorry holes):
 4. k ∈ [17, 28], 284 < n ≤ k²: Exhaustive finite verification of all 2810 cases via native_decide (private lemma case_b_finite).
 
 The key insight is that k ≤ 16 forces n > k² (since k² ≤ 256 < 284), and for k ∈ [17,28] the finite range 284 < n ≤ k² ≤ 784 is small enough for native_decide to verify computationally. No new sorry holes were introduced.
+[2026-02-08T10:52:25.491Z] ✅ Successfully merged task/erdos1094-7tg into main
+[2026-02-08T10:52:25.491Z] 🗑️  Deleting branch task/erdos1094-7tg...
+[2026-02-08T10:52:25.500Z] ✓ Deleted local branch task/erdos1094-7tg
+[2026-02-08T10:52:25.507Z] 🚀 Pushing main to remote...
+[2026-02-08T10:52:26.315Z] ✓ Pushed to remote
+[2026-02-08T10:52:27.317Z] 
+================================================================================
+[2026-02-08T10:52:27.317Z] 📌 Processing task: erdos1094-n3e - Close sorry at Basic.lean:15 (erdos_1094) using verified proofs
+[2026-02-08T10:52:27.317Z]    Role: formalize | Priority: 0 | Size: medium
+[2026-02-08T10:52:27.317Z] ================================================================================
+
+[2026-02-08T10:52:27.321Z] ✓ Claimed task erdos1094-n3e
+
+[2026-02-08T10:52:27.321Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T10:52:27.321Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T10:52:27.336Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:52:27.350Z] ✓ Captured state: 56 tracked, 1 untracked files
+
+[2026-02-08T10:52:27.350Z] 🌿 Creating branch: task/erdos1094-n3e
+[2026-02-08T10:52:27.358Z] ✓ Working on branch task/erdos1094-n3e
+
+[2026-02-08T10:52:31.291Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-n3e --status "Reading project files and understanding current state"
+[2026-02-08T10:52:35.492Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:52:35.493Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:52:35.494Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:52:35.494Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:52:45.350Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.lean" | head -20 && echo "---" && cat lakefile.lean
+[2026-02-08T10:52:45.361Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | tail -30
+[2026-02-08T10:52:54.120Z] 
+$ cd /home/jarred/code/erdos-1094 && cat Erdos.lean && echo "---" && cat lakefile.toml 2>/dev/null || cat lakefile.lean 2>/dev/null || echo "no lakefile found"
+[2026-02-08T10:52:57.616Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-n3e --status "Build succeeds with sorrys. Now writing the main theorem proof."
+[2026-02-08T10:53:17.252Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_api.lean << 'EOF'
+import Mathlib
+
+-- Check finiteness API
+#check Set.Finite.subset
+#check Set.Finite.prod
+#check Set.finite_Iio
+#check Finset.finite_toSet
+#check Set.Finite.mono
+
+-- Check Finset product
+#check Finset.product
+#check Finset.range
+
+-- Check Set product
+#check Set.prod
+
+-- Check membership in range
+#check Finset.mem_range
+#check Finset.mem_product
+
+-- Check what `not_le` gives us
+#check not_le
+#check Nat.not_lt
+EOF
+lake env lean /tmp/test_api.lean 2>&1
+[2026-02-08T10:53:31.008Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_proof.lean << 'EOF'
+import Erdos.KLe28
+
+open Nat
+
+namespace Erdos1094
+
+theorem erdos_1094 :
+    {(n, k) : ℕ × ℕ | 0 < k ∧ 2 * k ≤ n ∧ (n.choose k).minFac > max (n / k) k}.Finite := by
+  apply Set.Finite.subset (Set.Finite.prod (Set.finite_Iio 285) (Set.finite_Iio 29))
+  intro ⟨n, k⟩ h
+  simp only [Set.mem_setOf_eq] at h
+  obtain ⟨hk_pos, h2k, hminFac⟩ := h
+  simp only [Set.mem_prod, Set.mem_Iio]
+  constructor
+  · -- Show n < 285
+    by_contra hn
+    push_neg at hn
+    -- First establish k ≤ 28
+    have hk28 : k ≤ 28 := by
+      by_contra hk
+      push_neg at hk
+      have hk29 : 29 ≤ k := by omega
+      have := no_exception_k_ge_29 n k hk_pos h2k hk29
+      omega
+    have := bound_n_for_small_k n k hk_pos h2k hk28 (by omega)
+    omega
+  · -- Show k < 29
+    by_contra hk
+    push_neg at hk
+    have hk29 : 29 ≤ k := by omega
+    have := no_exception_k_ge_29 n k hk_pos h2k hk29
+    omega
+
+end Erdos1094
+EOF
+lake env lean /tmp/test_proof.lean 2>&1
+[2026-02-08T10:53:48.922Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:53:51.980Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | tail -20
+[2026-02-08T10:54:14.299Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | grep -i "sorry\|warning\|error"
+[2026-02-08T10:54:23.814Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:54:29.612Z] 
+$ cd /home/jarred/code/erdos-1094 && git add -A && git commit -m "Close sorry in erdos_1094: main theorem proof complete
+
+The exceptional set E = {(n,k) : 0 < k ∧ 2k ≤ n ∧ minFac(C(n,k)) > max(n/k, k)}
+is shown to be finite by containment in {(n,k) : n < 285 ∧ k < 29}:
+- k < 29: contrapositive of no_exception_k_ge_29 (KGe29.lean)
+- n < 285: contrapositive of bound_n_for_small_k (KLe28.lean)
+
+Remaining sorrys are in KGe29.lean (crt_small_prime_divides, large_n_minFac_bound)."
+[2026-02-08T10:54:33.073Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-n3e --status "Proof compiled and committed. Main theorem sorry is closed."
+[2026-02-08T10:54:39.962Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:54:39.963Z] 📄 Log saved to .tm/logs/worker-erdos1094-n3e.md
+[2026-02-08T10:54:39.963Z] 
+📊 Task erdos1094-n3e completed:
+[2026-02-08T10:54:39.963Z]    Summary: Closed sorry in erdos_1094 (Basic.lean:15). lake build succeeds.
+[2026-02-08T10:54:39.963Z]    Details: The main theorem `erdos_1094` is now proved by showing the exceptional set E ⊆ {(n,k) : n < 285 ∧ k < 29}, which is finite (via `Set.Finite.prod (Set.finite_Iio 285) (Set.finite_Iio 29)`). The subset proof uses contrapositives of `no_exception_k_ge_29` (k ≥ 29 → not exceptional) and `bound_n_for_small_k` (k ≤ 28 ∧ n > 284 → not exceptional). No new sorry holes introduced in Basic.lean. Two existing sorrys remain in KGe29.lean for the sub-lemmas `crt_small_prime_divides` and `large_n_minFac_bound`.
