@@ -1702,3 +1702,60 @@ $ tm update erdos1094-nii --status "Review complete - proof approved"
 📊 Task erdos1094-nii completed:
 [2026-02-08T07:53:34.310Z]    Summary: Approved — proofs/kummer-theorem.md
 [2026-02-08T07:53:34.310Z]    Details: The proof of Kummer's Theorem is mathematically rigorous and complete. All six parts (Legendre's formula, digit sum identity, valuation of binomials, carry analysis, digit-domination criterion, and Lucas' theorem context) are correctly proven with proper justification at each step. Key verifications: (1) fractional part bounds in Part 2 are correct, (2) carry sequence bounds properly justified, (3) all algebraic simplifications verified, (4) edge cases handled, (5) no hidden assumptions. The proof establishes both the carry-based and digit-sum formulations of Kummer's theorem and derives the digit-domination criterion as a corollary. Status updated to Verified ✅.
+[2026-02-08T07:53:34.448Z] ✅ Successfully merged task/erdos1094-nii into main
+[2026-02-08T07:53:34.448Z] 🗑️  Deleting branch task/erdos1094-nii...
+[2026-02-08T07:53:34.456Z] ✓ Deleted local branch task/erdos1094-nii
+[2026-02-08T07:53:34.462Z] 🚀 Pushing main to remote...
+[2026-02-08T07:53:35.046Z] ✓ Pushed to remote
+[2026-02-08T07:53:36.048Z] 
+================================================================================
+[2026-02-08T07:53:36.048Z] 📌 Processing task: erdos1094-a0e - Prove large prime divisibility criterion for binomials
+[2026-02-08T07:53:36.048Z]    Role: explore | Priority: 2 | Size: medium
+[2026-02-08T07:53:36.048Z] ================================================================================
+
+[2026-02-08T07:53:36.050Z] ✓ Claimed task erdos1094-a0e
+
+[2026-02-08T07:53:36.050Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T07:53:36.050Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T07:53:36.064Z] 📸 Capturing file state before agent execution...
+[2026-02-08T07:53:36.078Z] ✓ Captured state: 25 tracked, 1 untracked files
+
+[2026-02-08T07:53:36.078Z] 🌿 Creating branch: task/erdos1094-a0e
+[2026-02-08T07:53:36.085Z] ✓ Working on branch task/erdos1094-a0e
+
+[2026-02-08T07:53:40.276Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/ 2>/dev/null || echo "No proofs directory yet"
+[2026-02-08T07:53:40.283Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/dead-ends.md 2>/dev/null || echo "No dead-ends file"
+[2026-02-08T07:53:43.378Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:53:43.380Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:53:43.381Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:53:56.819Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-a0e --status "Developing proof of large prime criterion"
+[2026-02-08T07:55:01.837Z] 
+🛠️  Executing tool: write...
+[2026-02-08T07:55:04.508Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-a0e --status "Proof written, verifying completeness and rigor"
+[2026-02-08T07:55:09.339Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:55:39.906Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T07:55:53.224Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T07:55:55.925Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:56:06.626Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-a0e --status "Proof complete, publishing"
+[2026-02-08T07:56:15.916Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T07:56:15.917Z] 📄 Log saved to .tm/logs/worker-erdos1094-a0e.md
+[2026-02-08T07:56:15.917Z] 
+📊 Task erdos1094-a0e completed:
+[2026-02-08T07:56:15.917Z]    Summary: Proved: For prime p > k ≥ 1 and n ≥ k, p | C(n,k) iff n mod p < k. Published to proofs/large-prime-criterion.md
+[2026-02-08T07:56:15.917Z]    Details: Confidence: Certain. Two independent proofs provided. The main proof uses Legendre's formula: since v_p(k!) = 0 when p > k, the valuation v_p(C(n,k)) equals the sum over i ≥ 1 of (⌊n/p^i⌋ - ⌊(n-k)/p^i⌋). Each term counts multiples of p^i in {n-k+1,...,n}, which is at most 1 since p^i > k. The i=1 term controls all others (multiples of p^2 are multiples of p), so p | C(n,k) iff ⌊n/p⌋ > ⌊(n-k)/p⌋. A case split on r = n mod p shows this holds iff r < k. A second proof via the digit-domination criterion (Kummer's theorem) gives the same result in three lines: since k < p, k is a single base-p digit, and digit domination reduces to n mod p ≥ k. Also proved two corollaries: (1) the geometric interpretation (p | C(n,k) iff a multiple of p lies in {n-k+1,...,n}), and (2) the sharpened valuation v_p(C(n,k)) ∈ {0,1} for p > k.
