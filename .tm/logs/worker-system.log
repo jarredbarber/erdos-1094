@@ -1607,3 +1607,54 @@ $ tm close erdos1094-sac
 📊 Task erdos1094-sac completed:
 [2026-02-08T07:49:29.152Z]    Summary: Proved: The set {(n,k) : 0 < k, 2k ≤ n, minFac(C(n,k)) > max(n/k, k)} is finite. Published to proofs/main-theorem.md
 [2026-02-08T07:49:29.152Z]    Details: Confidence: Certain (given the two dependencies). The proof combines two results via a simple set-containment argument: (1) Result A (no-exceptions-k-ge-29.md) gives k ≤ 28 for any exception, (2) Result B (bound-n-for-small-k.md) gives n ≤ 284 for any exception with k ≤ 28. Therefore the exceptional set E is contained in {(n,k) : k ≤ 28 ∧ n ≤ 284}, which has 8265 elements and is finite. By Set.Finite.subset, E is finite. The proof exactly matches the Lean theorem statement in Erdos/Basic.lean:13 and includes formalization notes for the downstream formalize task.
+[2026-02-08T07:49:29.280Z] ✅ Successfully merged task/erdos1094-sac into main
+[2026-02-08T07:49:29.280Z] 🗑️  Deleting branch task/erdos1094-sac...
+[2026-02-08T07:49:29.286Z] ✓ Deleted local branch task/erdos1094-sac
+[2026-02-08T07:49:29.293Z] 🚀 Pushing main to remote...
+[2026-02-08T07:49:29.874Z] ✓ Pushed to remote
+[2026-02-08T07:49:30.877Z] 
+================================================================================
+[2026-02-08T07:49:30.877Z] 📌 Processing task: erdos1094-58u - Prove Kummer/Lucas criterion for prime non-divisibility of binomials
+[2026-02-08T07:49:30.877Z]    Role: explore | Priority: 2 | Size: medium
+[2026-02-08T07:49:30.877Z] ================================================================================
+
+[2026-02-08T07:49:30.880Z] ✓ Claimed task erdos1094-58u
+
+[2026-02-08T07:49:30.880Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T07:49:30.880Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T07:49:30.893Z] 📸 Capturing file state before agent execution...
+[2026-02-08T07:49:30.904Z] ✓ Captured state: 22 tracked, 1 untracked files
+
+[2026-02-08T07:49:30.904Z] 🌿 Creating branch: task/erdos1094-58u
+[2026-02-08T07:49:30.910Z] ✓ Working on branch task/erdos1094-58u
+
+[2026-02-08T07:49:34.472Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T07:49:34.474Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T07:49:35.287Z] 
+$ ls proofs/ 2>/dev/null && cat proofs/dead-ends.md 2>/dev/null || echo "No proofs directory or dead-ends file"
+[2026-02-08T07:49:35.295Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/*.md 2>/dev/null || echo "No existing proof files"
+[2026-02-08T07:49:38.760Z] 
+$ cat proofs/exploration.md 2>/dev/null
+[2026-02-08T07:49:38.765Z] 
+$ cat proofs/main-theorem.md 2>/dev/null
+[2026-02-08T07:49:38.773Z] 
+$ tm update erdos1094-58u --status "Reviewing existing literature, developing proof of Kummer's theorem"
+[2026-02-08T07:50:10.844Z] 
+$ tm update erdos1094-58u --status "Writing complete proof of Kummer's theorem"
+[2026-02-08T07:51:30.358Z] 
+🛠️  Executing tool: write...
+[2026-02-08T07:51:32.918Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:51:41.823Z] 
+$ tm update erdos1094-58u --status "Proof complete, published to proofs/kummer-theorem.md"
+[2026-02-08T07:51:50.228Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T07:51:50.228Z] 📄 Log saved to .tm/logs/worker-erdos1094-58u.md
+[2026-02-08T07:51:50.229Z] 
+📊 Task erdos1094-58u completed:
+[2026-02-08T07:51:50.229Z]    Summary: Proved Kummer's theorem and the digit-domination criterion. Published to proofs/kummer-theorem.md
+[2026-02-08T07:51:50.229Z]    Details: Confidence: Certain. The proof proceeds in 5 steps: (1) Legendre's formula v_p(m!) = Σ floor(m/p^i) via double counting; (2) Digit sum identity Σ floor(m/p^i) = (m - s_p(m))/(p-1) by expanding floors in terms of base-p digits and summing the geometric series; (3) Valuation formula v_p(C(n,k)) = (s_p(k) + s_p(n-k) - s_p(n))/(p-1) by subtracting the Legendre formulas; (4) Kummer's theorem v_p(C(n,k)) = number of carries, proved by summing the carry recurrence a_j + b_j + c_j = n_j + p·c_{j+1} over all positions to get s_p(a) + s_p(b) - s_p(n) = (p-1)C; (5) Digit-domination corollary: p ∤ C(n,k) iff k_j ≤ n_j for all j, proved by showing zero carries ⟺ digit-domination via uniqueness of base-p representation. All steps are fully rigorous with no gaps.
