@@ -5136,3 +5136,112 @@ Proof approach (following the verified NL proof's alternative method via Lucas):
 4. Resolved using a helper lemma `prime_dvd_choose_of_lt`: for a < p prime, p ∣ C(a,b) ↔ a < b, proved via `Nat.factorization_choose_eq_zero_of_lt` (for the ← direction) and `Nat.choose_eq_zero_of_lt` (for the → direction)
 
 No new sorry holes introduced. Total proof is ~25 lines of tactic code across 3 lemmas.
+[2026-02-08T10:04:30.346Z] ✅ Successfully merged task/erdos1094-41t into main
+[2026-02-08T10:04:30.346Z] 🗑️  Deleting branch task/erdos1094-41t...
+[2026-02-08T10:04:30.353Z] ✓ Deleted local branch task/erdos1094-41t
+[2026-02-08T10:04:30.360Z] 🚀 Pushing main to remote...
+[2026-02-08T10:04:30.952Z] ✓ Pushed to remote
+[2026-02-08T10:04:31.954Z] 
+================================================================================
+[2026-02-08T10:04:31.954Z] 📌 Processing task: erdos1094-pwh - Address gaps in proofs/crt-density-k-ge-29.md
+[2026-02-08T10:04:31.954Z]    Role: explore | Priority: 2 | Size: large
+[2026-02-08T10:04:31.954Z] ================================================================================
+
+[2026-02-08T10:04:31.957Z] ✓ Claimed task erdos1094-pwh
+
+[2026-02-08T10:04:31.957Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T10:04:31.957Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T10:04:31.970Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:04:31.984Z] ✓ Captured state: 45 tracked, 1 untracked files
+
+[2026-02-08T10:04:31.984Z] 🌿 Creating branch: task/erdos1094-pwh
+[2026-02-08T10:04:31.991Z] ✓ Working on branch task/erdos1094-pwh
+
+[2026-02-08T10:04:35.493Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/
+[2026-02-08T10:04:35.495Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:04:40.868Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:04:40.869Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:04:40.875Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-pwh --status "Reading existing proofs and understanding gaps"
+[2026-02-08T10:04:45.896Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:04:45.897Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:07:21.574Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T10:07:21.577Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T10:08:44.755Z] [overseer] 💓 Heartbeat complete: No intervention needed — both formalize tasks succeeded, CRT revision actively progressing
+[2026-02-08T10:14:09.291Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:14:09.291Z] 📄 Log saved to .tm/logs/worker-erdos1094-pwh.md
+[2026-02-08T10:14:09.291Z] WARN: ⚠️ No response received from model anthropic/claude-opus-4-6:high (possibly out of usage). Trying next model...
+[2026-02-08T10:14:09.291Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-5:high...
+[2026-02-08T10:14:09.307Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:14:09.318Z] ✓ Captured state: 45 tracked, 1 untracked files
+
+[2026-02-08T10:14:09.318Z] 🌿 Creating branch: task/erdos1094-pwh
+[2026-02-08T10:14:09.330Z] ✓ Switched to existing branch task/erdos1094-pwh
+
+[2026-02-08T10:14:13.491Z] 
+$ tm update erdos1094-pwh --status "Reading current proof file and understanding gaps"
+[2026-02-08T10:14:14.728Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:15:11.023Z] 
+$ ls -la proofs/
+[2026-02-08T10:15:11.029Z] 
+$ tm update erdos1094-pwh --status "Analyzing gaps and exploring rigorous resolution approach"
+[2026-02-08T10:15:15.806Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:15:18.989Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:15:48.594Z] 
+$ tm update erdos1094-pwh --status "Writing revised proof with rigorous treatment of both gaps"
+[2026-02-08T10:17:58.289Z] 
+🛠️  Executing tool: write...
+[2026-02-08T10:18:10.429Z] 
+$ tm update erdos1094-pwh --status "Proof revised, verifying completeness and updating status"
+[2026-02-08T10:18:15.747Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:18:20.680Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:18:24.475Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:18:37.766Z] 
+$ wc -l proofs/crt-density-k-ge-29.md && head -10 proofs/crt-density-k-ge-29.md
+[2026-02-08T10:18:41.286Z] 
+$ tm update erdos1094-pwh --status "Completed - proof revised to address both gaps"
+[2026-02-08T10:18:54.884Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:18:54.885Z] 📄 Log saved to .tm/logs/worker-erdos1094-pwh.md
+[2026-02-08T10:18:54.885Z] 
+📊 Task erdos1094-pwh completed:
+[2026-02-08T10:18:54.885Z]    Summary: Revised proofs/crt-density-k-ge-29.md to rigorously address both identified gaps
+[2026-02-08T10:18:54.885Z]    Details: Confidence: High. Applied Option C (narrow scope + extension methodology).
+
+**Gap 1 Resolution**: The hand-wavy argument about 'average spacing and well-distributed residues' has been removed. The proof now:
+- States the main theorem for k ∈ [29, 10000] only (exhaustively verified range)
+- Explicitly notes that density bounds are 'necessary but not sufficient' for rigorous proof (Section 7.2)
+- Provides a formal algorithm EXHAUSTIVE_CRT_VERIFY (Section 5) with correctness proof
+- Extension to larger K is described as a conditional proposition, not claimed as proven
+
+**Gap 2 Resolution**: The asymptotic section is now:
+- Properly labeled as 'sketch' requiring Baker-Stewart theory for full rigor
+- Clear about what computational extension would accomplish
+- Separated into its own section with honest status
+
+**Key Structural Changes**:
+1. Renamed title from 'CRT Density Bound' to 'CRT Verification' (emphasizing exhaustive verification over density heuristics)
+2. Added Section 5: The Exhaustive Verification Algorithm (precise algorithm description)
+3. Added Section 10: Summary of Rigorous Status (clear table showing proven vs. heuristic)
+4. Removed the old Section 6 argument claiming density < 1 implies zero solutions
+5. Removed the reviewer notes (addressed issues should not remain in the proof)
+
+The revised proof is mathematically honest: it claims exactly what has been rigorously proven (k ∈ [29, 10000]) and clearly distinguishes this from the heuristic extension (larger k). The methodology for extending the rigorous range via additional computation is well-defined.
