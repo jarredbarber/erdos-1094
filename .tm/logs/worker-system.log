@@ -3887,3 +3887,118 @@ $ cd /home/jarred/code/erdos-1094 && tm close erdos1094-7c8
 I have updated the file status to 'Under review 🔍' and added detailed review notes. I have also created follow-up task erdos1094-bfj for the explore agent to address the rigor gap (once the dependency is verified).
 
 The core insight—that combined constraints from small primes (digit domination) and large primes (residue constraints) eliminate all exceptions for n > k²—is mathematically sound and well-supported by numerical evidence. The execution just needs more rigor in the final step.
+[2026-02-08T09:14:34.513Z] ✅ Successfully merged task/erdos1094-7c8 into main
+[2026-02-08T09:14:34.514Z] 🗑️  Deleting branch task/erdos1094-7c8...
+[2026-02-08T09:14:34.521Z] ✓ Deleted local branch task/erdos1094-7c8
+[2026-02-08T09:14:34.528Z] 🚀 Pushing main to remote...
+[2026-02-08T09:14:35.322Z] ✓ Pushed to remote
+[2026-02-08T09:14:36.323Z] 
+================================================================================
+[2026-02-08T09:14:36.323Z] 📌 Processing task: erdos1094-bfj - Address rigor gap in large-n-divisibility proof
+[2026-02-08T09:14:36.323Z]    Role: explore | Priority: 2 | Size: small
+[2026-02-08T09:14:36.323Z] ================================================================================
+
+[2026-02-08T09:14:36.326Z] ✓ Claimed task erdos1094-bfj
+
+[2026-02-08T09:14:36.326Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T09:14:36.326Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T09:14:36.339Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:14:36.352Z] ✓ Captured state: 34 tracked, 1 untracked files
+
+[2026-02-08T09:14:36.352Z] 🌿 Creating branch: task/erdos1094-bfj
+[2026-02-08T09:14:36.358Z] ✓ Working on branch task/erdos1094-bfj
+
+[2026-02-08T09:14:40.954Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/
+[2026-02-08T09:14:40.957Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:14:43.834Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-bfj --status "Reading dependencies and dead-ends"
+[2026-02-08T09:14:48.025Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:14:48.026Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:14:48.026Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:14:48.028Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:16:42.828Z] [overseer] 💓 Heartbeat complete: No intervention needed — verify pipeline caught gaps, revision tasks in progress
+[2026-02-08T09:24:06.155Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T09:24:06.155Z] 📄 Log saved to .tm/logs/worker-erdos1094-bfj.md
+[2026-02-08T09:24:06.156Z] WARN: ⚠️ No response received from model anthropic/claude-opus-4-6:high (possibly out of usage). Trying next model...
+[2026-02-08T09:24:06.156Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-5:high...
+[2026-02-08T09:24:06.171Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:24:06.185Z] ✓ Captured state: 34 tracked, 1 untracked files
+
+[2026-02-08T09:24:06.185Z] 🌿 Creating branch: task/erdos1094-bfj
+[2026-02-08T09:24:06.199Z] ✓ Switched to existing branch task/erdos1094-bfj
+
+[2026-02-08T09:24:10.806Z] 
+$ tm update erdos1094-bfj --status "Reading current proofs and dependencies"
+[2026-02-08T09:24:12.027Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:24:12.029Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:26:52.418Z] 
+$ ls -la proofs/
+[2026-02-08T09:26:52.425Z] 
+$ tm update erdos1094-bfj --status "Developing rigorous argument to replace density heuristic"
+[2026-02-08T09:26:56.387Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:27:11.685Z] 
+$ tm update erdos1094-bfj --status "Writing revised Section 7 with interval-CRT structural proof"
+[2026-02-08T09:28:35.682Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:28:41.225Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:28:44.047Z] 
+$ tail -100 proofs/large-n-divisibility.md
+[2026-02-08T09:28:58.258Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:29:10.230Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:29:15.479Z] 
+$ grep -n "## 7\." proofs/large-n-divisibility.md | head -10
+[2026-02-08T09:29:15.486Z] 
+$ sed -n '/^## 7\. Main Result/,/^## 8\./p' proofs/large-n-divisibility.md | head -100
+[2026-02-08T09:29:21.619Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:29:37.395Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:29:41.065Z] 
+$ tm update erdos1094-bfj --status "Revision complete, verifying final state"
+[2026-02-08T09:29:46.812Z] 
+$ sed -n '/^## 7\. Main Result/,/^## 8\./p' proofs/large-n-divisibility.md | wc -l
+[2026-02-08T09:29:46.821Z] 
+$ grep -E "(expected count|probabilistic|density.*<.*1)" proofs/large-n-divisibility.md
+[2026-02-08T09:29:52.041Z] 
+$ sed -n '/### 7.4 Complete Proof/,/### 7.5/p' proofs/large-n-divisibility.md
+[2026-02-08T09:29:59.038Z] 
+$ tm update erdos1094-bfj --status "Completed revision of Section 7"
+[2026-02-08T09:30:09.840Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T09:30:09.840Z] 📄 Log saved to .tm/logs/worker-erdos1094-bfj.md
+[2026-02-08T09:30:09.841Z] 
+📊 Task erdos1094-bfj completed:
+[2026-02-08T09:30:09.841Z]    Summary: Revised proofs/large-n-divisibility.md Section 7 to eliminate the rigor gap
+[2026-02-08T09:30:09.841Z]    Details: Replaced the probabilistic density argument ('expected count < 1 implies zero') with a rigorous two-part structural proof:
+
+1. **Lemma 3 (Interval Divisibility)**: New key lemma proving that when M = ⌊n/k⌋ has a prime factor p ∈ (k, M], then p | binom(n,k) for ALL n in [kM, k(M+1)). This is a complete, deterministic argument that eliminates Type A cases.
+
+2. **Type A/B classification**: M values are now explicitly classified:
+   - Type A (M has prime factor > k): Handled by Lemma 3 (structural)
+   - Type B (M is k-smooth): Handled by explicit CRT residue verification (computational but exact)
+
+3. **Section 7.5 (Rigor Note)**: Added explicit statement that the proof never uses 'expected count < 1 implies zero'.
+
+4. **Updated Section 9.2**: Rewrote 'Key Insight' to reflect the structural Interval Divisibility argument.
+
+5. **Revision Notes**: Added documentation of the changes at the end of the file.
+
+The dependency on proofs/crt-density-k-ge-29.md remains (for Type B verification), but the logical structure is now rigorous.

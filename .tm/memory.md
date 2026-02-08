@@ -159,3 +159,26 @@
 - Pipeline: once n>k² completes, combine task `erdos1094-liv` can run. Then k≤28 bound `erdos1094-w0p`.
 - Formalize tasks are waiting — would be nice to start Kummer formalization soon.
 - Strike count: CRT density = 1/3 (completed but with gap, awaiting verify). n>k² = 0/3. k≤28 = 0/3.
+
+## Heartbeat — 2026-02-08T09:14:30Z (Heartbeat #9)
+
+**Metrics**: 1 sorry | 2 verified proofs | 11 open | 1 in_progress | 11 closed | 0 failed
+**Status**: ✅ System healthy. Verify pipeline working perfectly — caught rigor gaps in both proofs.
+**Observations**:
+- 3 tasks closed since HB#8: n>k² explore (`erdos1094-5y9`), CRT density verify (`erdos1094-2gy`), large-n verify (`erdos1094-7c8`).
+- **Both verify tasks requested revision** — exactly as predicted in HB#8. Both proofs have the same core gap: density argument (expected count < 1) doesn't rigorously prove zero solutions.
+  - CRT density: rigorous for k∈[29,10000], gap for k>10000. Revision task `erdos1094-pwh` (large, open).
+  - Large-n: rigorous approach but Section 7 uses density reasoning. Revision task `erdos1094-bfj` (small, in_progress, 69 log lines).
+- 2 verified proofs: kummer-theorem.md, large-prime-criterion.md (Status line confirmed).
+- 2 under review: crt-density-k-ge-29.md, large-n-divisibility.md.
+- `erdos1094-bfj` in_progress — fixing large-n rigor gap.
+- `erdos1094-pwh` open — fixing CRT density gaps (larger task).
+- Both face same fundamental math challenge: converting CRT density bounds to exact zero-count proofs.
+- Still waiting: k≤28 bound (`erdos1094-w0p`), combine k≥29 (`erdos1094-liv`), formalize tasks.
+**Actions**: None — verify pipeline working as designed. Revision tasks created and being processed.
+**Watch next**:
+- Does `erdos1094-bfj` fix the large-n rigor gap? The fix likely involves showing CRT period > interval length for specific k ranges, then direct enumeration.
+- Does `erdos1094-pwh` fix the CRT density gap? Options: extend computation, rigorous density→zero argument, or narrow scope.
+- If BOTH revision tasks fail on the density→count gap: this is a fundamental mathematical challenge. May need to restructure: instead of "density < 1 → zero count", use "exhaustive CRT enumeration for all k" (computationally intensive but rigorous).
+- Strike count: CRT density = 1/3. Large-n = 1/3. k≤28 = 0/3.
+- Strategic framing level: 2 for CRT density and large-n (revision after first attempt). Level 1 for k≤28.
