@@ -1,6 +1,7 @@
 # No Exceptions Exist for $k \geq 29$
 
-**Status:** Draft ✏️
+**Status:** Under review 🔍
+**Reviewed by:** erdos1094-gca (awaiting dependency verification)
 **Statement:** For all integers $k \geq 29$ and $n \geq 2k$:
 $$\mathrm{minFac}\!\left(\binom{n}{k}\right) \leq \max\!\left(\left\lfloor \frac{n}{k} \right\rfloor,\, k\right).$$
 Equivalently, the exceptional set $E = \{(n, k) \mid 0 < k,\; 2k \leq n,\; \mathrm{minFac}(\binom{n}{k}) > \max(\lfloor n/k \rfloor, k)\}$ contains no pair $(n, k)$ with $k \geq 29$.
@@ -138,3 +139,109 @@ The combining argument itself introduces no new mathematical content — it is a
 - proofs/kummer-theorem.md — Kummer's theorem and the digit-domination criterion (Corollary 5). **Verified ✅.**
 - proofs/crt-density-k-ge-29.md — CRT density analysis showing no digit-domination survivors in $[2k, k^2]$ for $k \geq 29$.
 - proofs/large-n-divisibility.md — Structural proof that $\mathrm{minFac}(\binom{n}{k}) \leq \lfloor n/k \rfloor$ for $n > k^2$.
+
+---
+
+## Review Notes
+
+**Reviewer:** erdos1094-gca  
+**Date:** 2026-02-08  
+**Decision:** Awaiting dependency verification
+
+### Summary
+
+This proof presents a **clean and correct logical combination** of two main results to establish that no exceptions exist for $k \geq 29$. The combining argument itself is mathematically sound with no gaps. However, the proof cannot be fully verified until its dependencies are verified.
+
+### Strengths
+
+1. **Crystal clear organization**: The two-case split is natural, exhaustive, and well-motivated. Section 5.1 explains why $k^2$ is the right dividing line.
+
+2. **Correct logical flow**: 
+   - Case 1 ($2k \leq n \leq k^2$): Uses Result 1 + Kummer's theorem to get a prime $p_0 \leq 29 \leq k = T(n,k)$ dividing $\binom{n}{k}$.
+   - Case 2 ($n > k^2$): Uses Result 2 to get $\mathrm{minFac}(\binom{n}{k}) \leq \lfloor n/k \rfloor \leq T(n,k)$.
+   Both arguments are valid.
+
+3. **All edge cases handled**:
+   - $n = 2k$: Correctly falls into Case 1 with $T(n,k) = k \geq 29$.
+   - $n = k^2$: Boundary value, explicitly included in Case 1.
+   - $k = 29$: Boundary value, correctly used throughout.
+
+4. **Honest about conditional nature**: Section 5.3 (Dependency status) explicitly states that the proof's correctness is conditional on Results 1 and 2, and provides a clear table showing which dependencies are verified.
+
+5. **Good mathematical exposition**: Section 5 discusses:
+   - Why $k^2$ is the natural threshold
+   - Why $k \geq 29$ is not arbitrary (ten independent CRT constraints)
+   - The role of each dependency
+
+6. **Correct corollary**: The corollary (Section 4) correctly derives that $(n,k) \in E \implies k \leq 28$, which is the key input to the main finiteness result.
+
+### Critical Issue: Unverified Dependencies
+
+The proof depends on three results:
+
+| Dependency | Current Status | Role |
+|------------|---------------|------|
+| proofs/kummer-theorem.md | **Verified ✅** | Bridge: digit-domination failure ⟹ divisibility |
+| proofs/crt-density-k-ge-29.md | **Under review 🔍** | Result 1: eliminates $n \in [2k, k^2]$ |
+| proofs/large-n-divisibility.md | **Under review 🔍** | Result 2: eliminates $n > k^2$ |
+
+**According to the verification protocol**: "If the proof cites another proofs/*.md that isn't Verified ✅, note this. The proof can't be verified until its dependencies are."
+
+Since two of the three dependencies are "Under review 🔍" and not yet "Verified ✅", this proof **cannot be verified** at this time.
+
+### Assessment of the Combining Logic
+
+**Important**: The combining argument itself is mathematically sound and introduces no new mathematical content — it is purely a two-case split with straightforward inequality chaining.
+
+**What this proof does**:
+1. Splits the range $n \geq 2k$ into two exhaustive cases: $n \leq k^2$ vs. $n > k^2$.
+2. In Case 1, applies Result 1 + Kummer's theorem to get a small prime dividing $\binom{n}{k}$.
+3. In Case 2, applies Result 2 directly.
+4. Verifies in each case that the prime found is $\leq T(n,k)$.
+
+**What this proof does NOT do**:
+- Does not prove Result 1 (that's in proofs/crt-density-k-ge-29.md)
+- Does not prove Result 2 (that's in proofs/large-n-divisibility.md)
+- Does not prove Kummer's theorem (that's in proofs/kummer-theorem.md)
+
+The only mathematical content in this proof is the case analysis and inequality verification, both of which are correct.
+
+### What Happens When Dependencies Are Verified
+
+Once both dependencies are verified:
+- If both Result 1 and Result 2 are correct, then this proof is correct.
+- If either Result 1 or Result 2 has a gap, then this proof inherits that gap.
+
+Any flaws in the overall argument reside entirely within the dependencies, not in this combining proof.
+
+### Verification Path Forward
+
+**To verify this proof**, the following steps are needed:
+
+1. **Complete the review of proofs/crt-density-k-ge-29.md** (task erdos1094-2gy):
+   - That review has already been started and identified gaps requiring revision.
+   - Once revised and verified, Result 1 will be established.
+
+2. **Complete the review of proofs/large-n-divisibility.md** (task erdos1094-7c8):
+   - That review has also been started and identified issues requiring revision.
+   - Once revised and verified, Result 2 will be established.
+
+3. **Re-review this proof** once both dependencies are verified:
+   - If no issues are found in the dependencies, this proof can be immediately verified (the combining logic is already sound).
+   - Update status from "Under review 🔍" to "Verified ✅".
+
+### Minor Observations
+
+1. **Notation consistency**: The use of $T(n,k) = \max(\lfloor n/k \rfloor, k)$ is helpful and used consistently throughout.
+
+2. **Section numbering**: The proof is well-structured with clear section headings.
+
+3. **No circular dependencies**: Verified that Result 1 and Result 2 do not depend on this proof (they cite other results, creating a proper dependency DAG).
+
+### Recommendation
+
+**Status**: Keep as "Under review 🔍" until dependencies are verified.
+
+**Next action**: Once tasks erdos1094-2gy (review crt-density-k-ge-29.md) and erdos1094-7c8 (review large-n-divisibility.md) are completed and those proofs are verified, this proof should be immediately re-reviewed. The combining logic is sound, so verification should be straightforward once dependencies are in place.
+
+**No revision needed** for this proof itself — the issue is entirely with the dependencies.
