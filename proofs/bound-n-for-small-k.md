@@ -1,6 +1,6 @@
 # Bound on $n$ for Small $k$: Exceptions with $k \leq 28$ Satisfy $n \leq 284$
 
-**Status:** Draft ✏️  
+**Status:** Under review 🔍  
 **Statement:** For every integer $k$ with $1 \leq k \leq 28$ and every integer $n > 284$ with $n \geq 2k$:
 $$\mathrm{minFac}\left(\binom{n}{k}\right) \leq \max\!\left(\left\lfloor \frac{n}{k} \right\rfloor, k\right).$$
 Equivalently, there exists a prime $p \leq \max(\lfloor n/k \rfloor, k)$ such that $p \mid \binom{n}{k}$.
@@ -408,6 +408,88 @@ For example, testing $k = 17$ on the interval $(284, 289] = \{285, 286, 287, 288
 - $n = 289$: Fails at $p = 2$ (and others)
 
 No $n$ in the interval passes all digit-domination tests, confirming zero exceptions.
+
+---
+
+## Review Notes
+
+**Reviewed by:** erdos1094-8tg  
+**Date:** 2026-02-08  
+**Decision:** Revision requested 🔍
+
+### Summary
+
+The proof has excellent structure and the mathematical approach is fundamentally sound. The strategy of splitting into Case A (n > k²) and Case B (284 < n ≤ k²) is appropriate, and the worked examples demonstrate correct application of digit-domination criteria. However, two critical issues prevent verification at this stage:
+
+### Issue 1: Unverified Dependency (Critical)
+
+**Case A** (Section 3) relies entirely on proofs/large-n-divisibility.md, which is currently **Under review 🔍**. The proof explicitly acknowledges this in Section 9:
+
+> "The proof of Case A (Theorem 1) relies on proofs/large-n-divisibility.md, which establishes that for n > k², some prime ≤ n/k divides \binom{n}{k}. That result is currently under review. If verified, this proof is complete."
+
+While Section 9 mentions an alternative approach (extending CRT verification to all n > 284), this alternative is not actually implemented in the proof.
+
+**Required action:** Either:
+1. Wait for proofs/large-n-divisibility.md to be verified, OR
+2. Implement the alternative approach: Extend the explicit verification of Case B to prove that for each k ≤ 28 and all n > k², either some prime p ≤ k divides \binom{n}{k} (via digit domination failure) or some prime p ∈ (k, n/k] divides \binom{n}{k} (via the large prime criterion).
+
+### Issue 2: Insufficient Computational Verification (Critical)
+
+**Case B** (Sections 4.3, 7, 9) claims "exhaustive verification" for k ∈ {17, ..., 28} but provides:
+- Worked examples for k=17 (checking 5 specific values) and k=18 (partial check)
+- A table of results (Section 7.3) stating "zero exceptions found"
+- An algorithm description in Section 9
+
+However, the proof does NOT provide:
+1. The actual code or detailed pseudocode used for verification
+2. Reproducible computational results
+3. Verification that the implementation is correct
+
+**Example of the gap:** Section 9 states:
+> "Direct enumeration confirms that zero valid CRT residues fall in (284, 784]."
+
+This is asserted without proof. The worked examples show the methodology is correct for small cases, but the claim that ALL n in each interval were checked is not substantiated.
+
+**Required action:** Either:
+1. Provide the actual verification code (e.g., a Python/Lean script) in an appendix, with clear instructions for reproduction, OR
+2. Provide a purely mathematical argument that doesn't rely on computation. For example:
+   - Use the CRT density estimates from Section 7.3 combined with explicit bounds on prime gaps
+   - Or strengthen the near-prime capacity argument (Section 5) to make it rigorous
+   - Or use an inclusion-exclusion principle on the CRT residue classes
+
+### What Works Well
+
+1. **Clear structure:** The case split is logical and well-motivated
+2. **Correct dependencies:** proofs/kummer-theorem.md (✅) and proofs/large-prime-criterion.md (✅) are properly verified
+3. **Sound methodology:** The worked examples for k=17, k=18 demonstrate correct application of digit-domination
+4. **Mathematical correctness:** The base conversions, digit comparisons, and CRT calculations in Sections 4.3 and 7.2 are all correct
+5. **Transparent about limitations:** Section 9 honestly identifies the dependency gap
+
+### Suggested Path Forward
+
+**Option 1 (Easiest):** Wait for proofs/large-n-divisibility.md to be verified, then add reproducible verification code for Case B.
+
+**Option 2 (Self-contained):** Implement both alternative approaches:
+- For Case A: Add explicit verification for n > k² (likely computationally intensive but finite)
+- For Case B: Provide complete verification code with checksums
+
+**Option 3 (Most rigorous):** Develop a purely mathematical proof for Case B that doesn't require computation, perhaps by:
+- Proving an upper bound on the number of valid CRT residues that's smaller than the interval length
+- Using explicit constructions to show no residue can satisfy all constraints
+
+### Minor Issues
+
+- **Section 2.2:** The "Smooth Parts Identity" is stated informally. While the intuition is clear, a more formal derivation would strengthen the exposition.
+- **Section 5.2, Observation 2:** The application of Bertrand's postulate assumes n/s ≥ 25. This should be verified for the relevant ranges.
+- **Table in Section 7.3:** The numerical values for M_k and R_k are stated without source. Consider adding a footnote indicating these were computed (and how to verify).
+
+### Recommendation
+
+**Request revision** to address Issues 1 and 2. Once either:
+- proofs/large-n-divisibility.md is verified AND computational verification for Case B is provided with code, OR
+- Alternative mathematical approaches for both cases are implemented
+
+then this proof will be ready for verification.
 
 ---
 
