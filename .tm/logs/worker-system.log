@@ -5570,3 +5570,174 @@ $ cd /home/jarred/code/erdos-1094 && tm update erdos1094-qw0 --status "Complete.
 2. `large_n_minFac_bound` (line 88): For k ≥ 2 and n > k², minFac(C(n,k)) ≤ n/k. This is the Interval Divisibility Lemma from proofs/large-n-divisibility.md. The Type A (structural) part could be formalized using `large_prime_dvd_choose`; the Type B (k-smooth) part is computational.
 
 Also updated Erdos.lean to import the new module.
+[2026-02-08T10:29:52.981Z] ✅ Successfully merged task/erdos1094-qw0 into main
+[2026-02-08T10:29:52.981Z] 🗑️  Deleting branch task/erdos1094-qw0...
+[2026-02-08T10:29:52.988Z] ✓ Deleted local branch task/erdos1094-qw0
+[2026-02-08T10:29:52.994Z] 🚀 Pushing main to remote...
+[2026-02-08T10:29:53.790Z] ✓ Pushed to remote
+[2026-02-08T10:29:54.794Z] 
+================================================================================
+[2026-02-08T10:29:54.794Z] 📌 Processing task: erdos1094-tg2 - Revise proofs/bound-n-for-small-k.md
+[2026-02-08T10:29:54.794Z]    Role: explore | Priority: 2 | Size: large
+[2026-02-08T10:29:54.794Z] ================================================================================
+
+[2026-02-08T10:29:54.797Z] ✓ Claimed task erdos1094-tg2
+
+[2026-02-08T10:29:54.797Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T10:29:54.797Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T10:29:54.811Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:29:54.824Z] ✓ Captured state: 51 tracked, 1 untracked files
+
+[2026-02-08T10:29:54.824Z] 🌿 Creating branch: task/erdos1094-tg2
+[2026-02-08T10:29:54.831Z] ✓ Working on branch task/erdos1094-tg2
+
+[2026-02-08T10:29:57.850Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:29:57.857Z] 
+$ ls proofs/
+[2026-02-08T10:30:04.392Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:30:04.393Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:30:04.394Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:30:04.395Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:30:04.402Z] 
+$ tm update erdos1094-tg2 --status "Reading existing proofs and dependencies"
+[2026-02-08T10:36:33.145Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:36:33.146Z] 📄 Log saved to .tm/logs/worker-erdos1094-tg2.md
+[2026-02-08T10:36:33.146Z] WARN: ⚠️ No response received from model anthropic/claude-opus-4-6:high (possibly out of usage). Trying next model...
+[2026-02-08T10:36:33.146Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-5:high...
+[2026-02-08T10:36:33.160Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:36:33.174Z] ✓ Captured state: 51 tracked, 1 untracked files
+
+[2026-02-08T10:36:33.174Z] 🌿 Creating branch: task/erdos1094-tg2
+[2026-02-08T10:36:33.188Z] ✓ Switched to existing branch task/erdos1094-tg2
+
+[2026-02-08T10:36:37.589Z] 
+$ tm update erdos1094-tg2 --status "Reading current proof and review notes"
+[2026-02-08T10:36:38.819Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:36:45.928Z] 
+$ ls -la proofs/
+[2026-02-08T10:36:45.930Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:36:45.937Z] 
+$ grep -l "dead-ends" proofs/ 2>/dev/null || echo "No dead-ends.md found"
+[2026-02-08T10:36:51.888Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:36:51.894Z] 
+$ tm update erdos1094-tg2 --status "Issue 1 resolved (dependency now verified). Developing rigorous verification for Issue 2"
+[2026-02-08T10:37:11.801Z] 
+$ tm update erdos1094-tg2 --status "Writing revised proof with complete verification"
+[2026-02-08T10:39:22.844Z] 
+🛠️  Executing tool: write...
+[2026-02-08T10:39:35.124Z] 
+$ cat << 'EOF' | python3
+def digit_dominates(k: int, n: int, p: int) -> bool:
+    """Check if k ≼_p n (all base-p digits of k ≤ corresponding digits of n)."""
+    while k > 0 or n > 0:
+        k_digit = k % p
+        n_digit = n % p
+        if k_digit > n_digit:
+            return False
+        k //= p
+        n //= p
+    return True
+
+def primes_up_to(limit: int) -> list:
+    if limit < 2:
+        return []
+    sieve = [True] * (limit + 1)
+    sieve[0] = sieve[1] = False
+    for i in range(2, int(limit**0.5) + 1):
+        if sieve[i]:
+            for j in range(i*i, limit + 1, i):
+                sieve[j] = False
+    return [i for i, is_prime in enumerate(sieve) if is_prime]
+
+def find_exceptions(k: int, lower: int, upper: int) -> list:
+    primes = primes_up_to(k)
+    exceptions = []
+    for n in range(lower + 1, upper + 1):
+        is_exception = True
+        for p in primes:
+            if not digit_dominates(k, n, p):
+                is_exception = False
+                break
+        if is_exception:
+            exceptions.append(n)
+    return exceptions
+
+print("Verification of Case B: n ∈ (284, k²] for k ∈ {17, ..., 28}")
+print("=" * 70)
+
+total_tested = 0
+all_passed = True
+
+for k in range(17, 29):
+    lower = 284
+    upper = k * k
+    interval_size = upper - lower
+    
+    exceptions = find_exceptions(k, lower, upper)
+    total_tested += interval_size
+    
+    status = "✓ PASS" if len(exceptions) == 0 else "✗ FAIL"
+    print(f"k={k:2d}: interval ({lower}, {upper:3d}], size={interval_size:3d}, exceptions={len(exceptions)} {status}")
+    
+    if len(exceptions) > 0:
+        print(f"       Exception values: {exceptions}")
+        all_passed = False
+
+print("=" * 70)
+print(f"Total values tested: {total_tested}")
+print()
+
+if all_passed:
+    print("VERIFICATION PASSED: Zero exceptions for all k in {17, ..., 28}")
+else:
+    print("VERIFICATION FAILED: Some exceptions found")
+
+# Verify boundary case (284, 28)
+print("\nBoundary check: n=284, k=28")
+k, n = 28, 284
+primes = primes_up_to(k)
+for p in primes:
+    result = digit_dominates(k, n, p)
+    print(f"  p={p:2d}: {k} ≼_{p} {n}? {result}")
+
+# Verify non-exception (285, 28)  
+print("\nNon-exception check: n=285, k=28")
+k, n = 28, 285
+for p in primes:
+    result = digit_dominates(k, n, p)
+    print(f"  p={p:2d}: {k} ≼_{p} {n}? {result}")
+    if not result:
+        print(f"  → n=285 fails at p={p}, confirming it is NOT an exception")
+        break
+EOF
+[2026-02-08T10:39:40.925Z] 
+$ tm update erdos1094-tg2 --status "Revision complete - both issues addressed"
+[2026-02-08T10:39:45.861Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:39:51.353Z] 
+$ tm close erdos1094-tg2 --reason "Revised proof addressing both review issues. Issue 1: Dependency on large-n-divisibility.md is now verified. Issue 2: Added complete Python verification code in Appendix A with execution confirming zero exceptions in all 2810 tested values."
+[2026-02-08T10:39:55.133Z] 
+$ tm close erdos1094-tg2 "Revised proof addressing both review issues. Issue 1: Dependency on large-n-divisibility.md is now verified. Issue 2: Added complete Python verification code in Appendix A with execution confirming zero exceptions in all 2810 tested values."
+[2026-02-08T10:40:03.886Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T10:40:03.889Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T10:40:03.905Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:40:03.905Z] 📄 Log saved to .tm/logs/worker-erdos1094-tg2.md
+[2026-02-08T10:40:03.905Z] 
+📊 Task erdos1094-tg2 completed:
+[2026-02-08T10:40:03.905Z]    Summary: Revised proofs/bound-n-for-small-k.md to address both critical review issues. Published to proofs/bound-n-for-small-k.md
+[2026-02-08T10:40:03.906Z]    Details: Confidence: High. **Issue 1 (Resolved):** The dependency proofs/large-n-divisibility.md is now Verified ✅, so Case A (n > k²) is fully supported. **Issue 2 (Resolved):** Added complete, reproducible Python verification code in Appendix A. The algorithm tests all 2810 values in the intervals (284, k²] for k ∈ {17,...,28} against digit-domination conditions for all primes p ≤ k. Execution confirms zero exceptions. Also added: (1) Complete worked examples for k=17 (all 5 values) and k=18, (2) Algorithm pseudocode in Section 5, (3) Boundary verification that (284,28) IS an exception but (285,28) is NOT, (4) Manual verification of algorithm correctness in Appendix B. The proof now has all dependencies verified and provides fully reproducible computational verification.
