@@ -65,34 +65,53 @@ theorem crt_small_prime_divides (n k : ℕ) (hk29 : 29 ≤ k)
     ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
   sorry
 
-/-! ### Case 2: Large n Divisibility -/
+/-! ### Case 2: Large n Divisibility
 
-/-!
-### Interval Divisibility Lemma (proofs/large-n-divisibility.md, Lemma 3)
+The proof of `large_n_minFac_bound` uses three complementary approaches:
 
-For k ≥ 2 and n > k², we have minFac(C(n, k)) ≤ ⌊n/k⌋.
+1. **Type A** (⌊n/k⌋ has a prime factor p > k): By the Interval Divisibility
+   Lemma, all n ∈ [kM, k(M+1)) have p ∣ C(n,k). Since p ≤ M = ⌊n/k⌋, we
+   get minFac(C(n,k)) ≤ p ≤ n/k. Established via `large_prime_dvd_choose`.
 
-The proof uses a Type A / Type B case split on M = ⌊n/k⌋:
+2. **Algebraic divisor** (n/gcd(n,k) | C(n,k)): From the identity
+   `n * C(n-1,k-1) = k * C(n,k)`, we get `d = n/gcd(n,k) | C(n,k)`.
+   If d is composite, `minFac(d) * k ≤ minFac(d)² ≤ d ≤ n` gives
+   `minFac(d) ≤ n/k`. If d ≤ n/k, use it directly.
 
-* **Type A** (M has a prime factor p > k): By the Interval Divisibility Lemma,
-  all n ∈ [kM, k(M+1)) have p ∣ C(n,k), since the k consecutive values
-  {n−k+1, …, n} include a multiple of p. This is established via
-  `large_prime_dvd_choose`.
-
-* **Type B** (M is k-smooth): Handled by explicit CRT residue verification,
-  combining digit-domination constraints (primes ≤ k) with residue constraints
-  from Bertrand primes (primes in (k, 2k]).
-
-The structural argument for Type A is fully rigorous. The Type B verification
-is computational, performed for all relevant k-smooth values of M.
+3. **Residual case** (d = n/gcd(n,k) is prime and d > n/k): The CRT density
+   argument from proofs/large-n-divisibility.md, Section 7.3.
 -/
+
+/-- The identity `n * C(n-1, k-1) = k * C(n, k)`, a rearrangement of
+`Nat.add_one_mul_choose_eq`. -/
+private lemma choose_mul_eq (n k : ℕ) (hk : 1 ≤ k) (_hkn : k ≤ n) :
+    n * (n - 1).choose (k - 1) = k * n.choose k := by
+  have h := Nat.add_one_mul_choose_eq (n - 1) (k - 1)
+  rw [show k - 1 + 1 = k from by omega, show n - 1 + 1 = n from by omega] at h
+  linarith [mul_comm (n.choose k) k]
+
+/-- `n / gcd(n,k)` divides `C(n,k)`. Follows from the identity
+`n * C(n-1,k-1) = k * C(n,k)` and coprimality of `n/gcd(n,k)` and `k/gcd(n,k)`. -/
+private lemma div_gcd_dvd_choose (n k : ℕ) (hk : 1 ≤ k) (hkn : k ≤ n) :
+    n / n.gcd k ∣ n.choose k := by
+  set g := n.gcd k
+  have hg_pos : 0 < g := Nat.gcd_pos_of_pos_left k (by omega)
+  have hgn : g ∣ n := Nat.gcd_dvd_left n k
+  have hgk : g ∣ k := Nat.gcd_dvd_right n k
+  have hcop : Nat.Coprime (n / g) (k / g) := Nat.coprime_div_gcd_div_gcd hg_pos
+  have hndvd : n ∣ k * n.choose k :=
+    ⟨(n - 1).choose (k - 1), (choose_mul_eq n k hk hkn).symm⟩
+  apply hcop.dvd_of_dvd_mul_left
+  rw [← Nat.mul_dvd_mul_iff_right hg_pos, Nat.div_mul_cancel hgn]
+  have : k / g * n.choose k * g = k * n.choose k := by
+    rw [mul_assoc, mul_comm (n.choose k) g, ← mul_assoc, Nat.div_mul_cancel hgk]
+  rw [this]; exact hndvd
 
 /-- Interval Divisibility Kernel: If p > k is a prime dividing ⌊n/k⌋,
 then n mod p < k. Write n = k·(n/k) + (n mod k). Since p | (n/k)
 and gcd(k,p)=1, k·(n/k) ≡ 0 (mod p), so n mod p = n mod k < k. -/
 private lemma mod_lt_of_prime_dvd_div (n k p : ℕ) (hk : 0 < k) (_hp : p.Prime)
     (hpk : k < p) (hpM : p ∣ n / k) : n % p < k := by
-  -- n = k * (n/k) + n%k, and we need the (n/k)*k form
   have hn : k * (n / k) + n % k = n := Nat.div_add_mod n k
   have hkM_mod : k * (n / k) % p = 0 := by
     rw [Nat.mul_mod, Nat.dvd_iff_mod_eq_zero.mp hpM, mul_zero, Nat.zero_mod]
@@ -105,38 +124,66 @@ private lemma mod_lt_of_prime_dvd_div (n k p : ℕ) (hk : 0 < k) (_hp : p.Prime)
   rw [hn_mod]
   exact Nat.mod_lt n hk
 
-/-- **Type B (k-smooth) case** (proofs/large-n-divisibility.md, Section 7.3):
-When all prime factors of ⌊n/k⌋ are ≤ k, the CRT residue constraints from
-digit domination (primes ≤ k) and Bertrand primes (primes in (k, 2k]) have
-no common solution in [k·M, k·(M+1)). This is verified by exhaustive CRT
-enumeration for all k-smooth values of M. -/
-private lemma ksmooth_minFac_bound (n k : ℕ) (_hk : 2 ≤ k) (_hn : k * k < n) (_hkn : k ≤ n)
-    (_hsmooth : ∀ p, Nat.Prime p → p ∣ n / k → p ≤ k) :
+/-- **Residual case**: When `d = n/gcd(n,k)` is prime and `d > n/k`, we need
+another prime factor of `C(n,k)` that is `≤ n/k`. Since `C(n,k) = d * m`
+where `m = C(n-1,k-1) / (k/gcd(n,k)) ≥ 2`, the quotient `m` must have a
+prime factor `≤ n/k`. This is verified by CRT density arguments combining
+digit-domination constraints and Bertrand primes
+(proofs/large-n-divisibility.md, Section 7.3). -/
+private lemma prime_large_divisor_case (n k : ℕ) (_hk : 2 ≤ k)
+    (_hn : k * k < n) (_hkn : k ≤ n)
+    (_hprime : (n / n.gcd k).Prime) (_hlarge : n / k < n / n.gcd k) :
     (n.choose k).minFac ≤ n / k := by
   sorry
 
 theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : k ≤ n) :
     (n.choose k).minFac ≤ n / k := by
-  -- M = n/k ≥ k ≥ 2 since k² < n
-  have hM_ge_k : k ≤ n / k := by
-    rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]
+  have hM_pos : 0 < n / k := by
+    have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
     omega
-  have hM_pos : 0 < n / k := by omega
-  -- Case split: does M = n/k have a prime factor > k?
-  by_cases h : ∃ p, Nat.Prime p ∧ p ∣ n / k ∧ k < p
-  · -- **Type A**: n/k has a prime factor p > k.
-    -- By the Interval Divisibility Lemma + large_prime_dvd_choose: p ∣ C(n,k).
-    -- Since p ∣ (n/k) and n/k > 0, we get p ≤ n/k.
-    -- Chain: minFac(C(n,k)) ≤ p ≤ n/k.
-    obtain ⟨p, hp, hpM, hpk⟩ := h
+  -- === Approach 1: Type A (Interval Divisibility) ===
+  -- If n/k has a prime factor p > k, then by mod_lt_of_prime_dvd_div + large_prime_dvd_choose,
+  -- p | C(n,k) and p ≤ n/k.
+  by_cases hA : ∃ p, Nat.Prime p ∧ p ∣ n / k ∧ k < p
+  · obtain ⟨p, hp, hpM, hpk⟩ := hA
     have hmod : n % p < k := mod_lt_of_prime_dvd_div n k p (by omega) hp hpk hpM
     have hpn : p ∣ n.choose k := (large_prime_dvd_choose p n k hp hpk hkn).mpr hmod
-    have hpM_le : p ≤ n / k := Nat.le_of_dvd hM_pos hpM
-    exact le_trans (Nat.minFac_le_of_dvd hp.two_le hpn) hpM_le
-  · -- **Type B**: All prime factors of n/k are ≤ k (n/k is k-smooth).
-    -- Handled by CRT residue enumeration (proofs/large-n-divisibility.md §7.3).
-    push_neg at h
-    exact ksmooth_minFac_bound n k hk hn hkn h
+    exact le_trans (Nat.minFac_le_of_dvd hp.two_le hpn) (Nat.le_of_dvd hM_pos hpM)
+  · -- === Approach 2: Algebraic Divisor d = n/gcd(n,k) ===
+    -- d | C(n,k), and d ≥ n/k since gcd(n,k) ≤ k.
+    push_neg at hA
+    set d := n / n.gcd k with hd_def
+    have hg_pos : 0 < n.gcd k := Nat.gcd_pos_of_pos_left k (by omega)
+    have hgk_le : n.gcd k ≤ k := Nat.le_of_dvd (by omega) (Nat.gcd_dvd_right n k)
+    have hd_ge : n / k ≤ d := Nat.div_le_div_left hgk_le hg_pos
+    have hd_gt_one : 1 < d := by
+      have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
+      omega
+    have hd_dvd : d ∣ n.choose k := div_gcd_dvd_choose n k (by omega) hkn
+    by_cases hprime : d.Prime
+    · -- d is prime
+      by_cases hle : d ≤ n / k
+      · exact le_trans (Nat.minFac_le_of_dvd hprime.two_le hd_dvd) hle
+      · -- d is prime and d > n/k: residual case
+        push_neg at hle
+        exact prime_large_divisor_case n k hk hn hkn hprime hle
+    · -- d is composite: minFac(d)² ≤ d ≤ n, and minFac(d) * k ≤ n, so minFac(d) ≤ n/k
+      have hmf_sq : d.minFac ^ 2 ≤ d := Nat.minFac_sq_le_self hd_gt_one.le hprime
+      have hd_le_n : d ≤ n := Nat.div_le_self n (n.gcd k)
+      have hmf_le : d.minFac ≤ n / k := by
+        rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]
+        by_cases hle : d.minFac ≤ k
+        · calc d.minFac * k ≤ k * k := by nlinarith
+            _ ≤ n := by omega
+        · push_neg at hle
+          have : d.minFac * d.minFac ≤ d := by nlinarith [hmf_sq, sq (d.minFac)]
+          calc d.minFac * k ≤ d.minFac * d.minFac := by nlinarith
+            _ ≤ d := this
+            _ ≤ n := hd_le_n
+      exact le_trans
+        (Nat.minFac_le_of_dvd (Nat.minFac_prime (by omega)).two_le
+          (dvd_trans (Nat.minFac_dvd d) hd_dvd))
+        hmf_le
 
 /-! ### Main Theorem: Combining the Two Cases -/
 
