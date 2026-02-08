@@ -139,3 +139,23 @@
   (2) "Prove: for k > K, the density δ_k · k² < 1 using digit-sum bounds"
 - Other blocked work: 3 explore tasks, 2 formalize tasks, 5 verify tasks all waiting.
 - Strike count: CRT density = 0/3 (first attempt, still running).
+
+## Heartbeat — 2026-02-08T08:57:51Z (Heartbeat #8)
+
+**Metrics**: 1 sorry | 2 verified proofs | 12 open | 1 in_progress | 8 closed | 0 failed
+**Status**: ✅ Bottleneck resolved. CRT task completed. Pipeline flowing again.
+**Observations**:
+- CRT density task `erdos1094-6fs` CLOSED after ~65 min. Produced proofs/crt-density-k-ge-29.md (15KB). 
+- **CRT proof has a known rigor gap**: fully rigorous for k∈[29,10000] via exhaustive CRT computation. Density heuristic (δ_k×k²<0.42) for k∈[29,10^7]. Asymptotic for k>10^7 relies on Baker-Stewart theory with unspecified threshold K₁. Proof includes honest "Note on Rigor" section acknowledging gap. 
+- The verify task `erdos1094-2gy` will catch this gap. Expected outcome: revision requested or rejected for k>10000 coverage. This is the workflow working correctly.
+- **If verify rejects/revises CRT proof**: fallback is to extend exhaustive CRT computation further (proof says this is O(log k) per k, trivially parallelizable). Could also try to find explicit K₁ for Baker-Stewart.
+- `erdos1094-5y9` (n>k²) now in_progress: 261 log lines, actively reasoning about prime density in (k, n/k]. Agent finding same density vs. exact count challenge. Not stuck.
+- 3 explore tasks remaining: n>k², k≤28 bound, combine k≥29.
+- Formalize tasks for Kummer and large-prime still unblocked and waiting.
+**Actions**: None — system flowing again, verify task will handle CRT gap.
+**Watch next**:
+- Does `erdos1094-5y9` (n>k²) complete with a proof? This is mathematically cleaner than CRT — Bertrand's postulate should give enough primes.
+- Does verify `erdos1094-2gy` catch the CRT rigor gap? What does it request?
+- Pipeline: once n>k² completes, combine task `erdos1094-liv` can run. Then k≤28 bound `erdos1094-w0p`.
+- Formalize tasks are waiting — would be nice to start Kummer formalization soon.
+- Strike count: CRT density = 1/3 (completed but with gap, awaiting verify). n>k² = 0/3. k≤28 = 0/3.
