@@ -4002,3 +4002,66 @@ $ tm update erdos1094-bfj --status "Completed revision of Section 7"
 5. **Revision Notes**: Added documentation of the changes at the end of the file.
 
 The dependency on proofs/crt-density-k-ge-29.md remains (for Type B verification), but the logical structure is now rigorous.
+[2026-02-08T09:30:10.103Z] ✅ Successfully merged task/erdos1094-bfj into main
+[2026-02-08T09:30:10.103Z] 🗑️  Deleting branch task/erdos1094-bfj...
+[2026-02-08T09:30:10.109Z] ✓ Deleted local branch task/erdos1094-bfj
+[2026-02-08T09:30:10.114Z] 🚀 Pushing main to remote...
+[2026-02-08T09:30:10.894Z] ✓ Pushed to remote
+[2026-02-08T09:30:11.896Z] 
+================================================================================
+[2026-02-08T09:30:11.896Z] 📌 Processing task: erdos1094-liv - Prove no exceptions exist for k ≥ 29 (combine density bounds)
+[2026-02-08T09:30:11.896Z]    Role: explore | Priority: 2 | Size: medium
+[2026-02-08T09:30:11.896Z] ================================================================================
+
+[2026-02-08T09:30:11.899Z] ✓ Claimed task erdos1094-liv
+
+[2026-02-08T09:30:11.899Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T09:30:11.899Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T09:30:11.916Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:30:11.928Z] ✓ Captured state: 35 tracked, 1 untracked files
+
+[2026-02-08T09:30:11.928Z] 🌿 Creating branch: task/erdos1094-liv
+[2026-02-08T09:30:11.934Z] ✓ Working on branch task/erdos1094-liv
+
+[2026-02-08T09:30:16.045Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/
+[2026-02-08T09:30:16.051Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/dead-ends.md 2>/dev/null || echo "No dead-ends file found."
+[2026-02-08T09:30:19.202Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:30:19.203Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:30:19.204Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:30:24.008Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:30:24.009Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:30:59.725Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-liv --status "Reading dependencies; drafting combined proof for no-exceptions-k-ge-29"
+[2026-02-08T09:31:42.833Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T09:31:42.836Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T09:31:45.745Z] 
+🛠️  Executing tool: write...
+[2026-02-08T09:31:48.302Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-liv --status "Proof written to proofs/no-exceptions-k-ge-29.md; finalizing"
+[2026-02-08T09:31:52.525Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:31:55.489Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-liv --status "Completed. Proof published to proofs/no-exceptions-k-ge-29.md"
+[2026-02-08T09:32:04.114Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T09:32:04.114Z] 📄 Log saved to .tm/logs/worker-erdos1094-liv.md
+[2026-02-08T09:32:04.114Z] 
+📊 Task erdos1094-liv completed:
+[2026-02-08T09:32:04.114Z]    Summary: Proved: For k ≥ 29 and n ≥ 2k, minFac(C(n,k)) ≤ max(⌊n/k⌋, k). Published to proofs/no-exceptions-k-ge-29.md
+[2026-02-08T09:32:04.114Z]    Details: Confidence: Certain (conditional on two dependencies). The proof is a clean two-case combination:
+
+- Case 1 (2k ≤ n ≤ k²): By crt-density-k-ge-29.md, digit-domination fails for some prime p₀ ≤ 29. By Kummer's theorem (verified ✅), p₀ | C(n,k). Since p₀ ≤ 29 ≤ k = max(⌊n/k⌋, k), done.
+
+- Case 2 (n > k²): By large-n-divisibility.md, minFac(C(n,k)) ≤ ⌊n/k⌋ ≤ max(⌊n/k⌋, k), done.
+
+The combining argument introduces no new mathematics—it is a two-case split with straightforward inequality chaining. The proof is transparent about the status of its dependencies: kummer-theorem.md is Verified ✅, while crt-density-k-ge-29.md and large-n-divisibility.md are both Under review 🔍. All mathematical risk resides in those dependencies, not in this combining step.
