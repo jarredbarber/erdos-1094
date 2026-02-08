@@ -5449,3 +5449,124 @@ The combining logic is sound:
 - Introduces no new mathematical content (pure case analysis)
 
 File status updated to 'Verified ✅' with review notes appended.
+[2026-02-08T10:25:47.962Z] ✅ Successfully merged task/erdos1094-q3j into main
+[2026-02-08T10:25:47.962Z] 🗑️  Deleting branch task/erdos1094-q3j...
+[2026-02-08T10:25:47.969Z] ✓ Deleted local branch task/erdos1094-q3j
+[2026-02-08T10:25:47.976Z] 🚀 Pushing main to remote...
+[2026-02-08T10:25:48.568Z] ✓ Pushed to remote
+[2026-02-08T10:25:49.570Z] 
+================================================================================
+[2026-02-08T10:25:49.570Z] 📌 Processing task: erdos1094-qw0 - Formalize: no exceptions for k ≥ 29
+[2026-02-08T10:25:49.570Z]    Role: formalize | Priority: 1 | Size: medium
+[2026-02-08T10:25:49.570Z] ================================================================================
+
+[2026-02-08T10:25:49.574Z] ✓ Claimed task erdos1094-qw0
+
+[2026-02-08T10:25:49.574Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T10:25:49.574Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T10:25:49.588Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:25:49.602Z] ✓ Captured state: 49 tracked, 1 untracked files
+
+[2026-02-08T10:25:49.602Z] 🌿 Creating branch: task/erdos1094-qw0
+[2026-02-08T10:25:49.610Z] ✓ Working on branch task/erdos1094-qw0
+
+[2026-02-08T10:25:53.626Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.lean" -o -name "*.md" | head -40
+[2026-02-08T10:25:53.637Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/
+[2026-02-08T10:25:56.755Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:25:56.757Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:25:56.759Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:26:01.760Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:26:01.762Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:26:01.762Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:26:01.763Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:26:05.049Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.lean
+[2026-02-08T10:26:05.051Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:26:08.291Z] 
+$ cd /home/jarred/code/erdos-1094 && ls lakefile* lean-toolchain 2>/dev/null && cat lean-toolchain 2>/dev/null
+[2026-02-08T10:26:10.877Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.toml
+[2026-02-08T10:26:14.433Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-qw0 --status "Reading NL proofs and existing Lean code; planning formalization approach"
+[2026-02-08T10:26:59.677Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | tail -20
+[2026-02-08T10:27:09.602Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check.lean << 'EOF'
+import Mathlib
+
+-- Check minFac API
+#check Nat.minFac_le_of_dvd
+#check Nat.minFac_dvd
+#check Nat.minFac_prime
+#check Nat.Prime.two_le
+#check le_max_left
+#check le_max_right
+#check Nat.choose_pos
+#check Nat.choose_eq_zero_of_lt
+EOF
+lake env lean /tmp/api_check.lean 2>&1
+[2026-02-08T10:27:21.771Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check2.lean << 'EOF'
+import Mathlib
+
+-- Check if minFac_le_of_dvd works the way I expect
+example : (28 : ℕ).choose 2 = 378 := by native_decide
+example : (378 : ℕ).minFac = 2 := by native_decide
+
+-- Check what we need for the combining proof
+-- le_max_left/le_max_right use Nat ordering
+example (n k : ℕ) : n / k ≤ max (n / k) k := le_max_left _ _
+example (n k : ℕ) : k ≤ max (n / k) k := le_max_right _ _
+EOF
+lake env lean /tmp/api_check2.lean 2>&1
+[2026-02-08T10:27:31.885Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-qw0 --status "Writing Erdos/KGe29.lean with two sorry'd lemmas + combining logic"
+[2026-02-08T10:28:08.845Z] 
+🛠️  Executing tool: write...
+[2026-02-08T10:28:12.312Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:28:15.256Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | tail -30
+[2026-02-08T10:28:57.676Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:29:01.864Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:29:04.475Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1 | tail -20
+[2026-02-08T10:29:25.381Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:29:28.623Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1
+[2026-02-08T10:29:36.946Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "sorry" Erdos/KGe29.lean
+[2026-02-08T10:29:42.691Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-qw0 --status "Complete. KGe29.lean compiles with 2 sorry holes for sub-lemmas; combining logic fully formalized."
+[2026-02-08T10:29:52.830Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:29:52.830Z] 📄 Log saved to .tm/logs/worker-erdos1094-qw0.md
+[2026-02-08T10:29:52.830Z] 
+📊 Task erdos1094-qw0 completed:
+[2026-02-08T10:29:52.830Z]    Summary: Created Erdos/KGe29.lean with the main theorem `no_exception_k_ge_29`. lake build succeeds.
+[2026-02-08T10:29:52.830Z]    Details: Created Erdos/KGe29.lean formalizing the proof structure from proofs/no-exceptions-k-ge-29.md.
+
+**Fully formalized (no sorry):**
+- `no_exception_k_ge_29`: The main combining theorem. Splits on n ≤ k² vs n > k², chains the two sub-lemmas through `calc` blocks using `Nat.minFac_le_of_dvd`, `le_max_left`, and `le_max_right`.
+
+**New sorry holes (2):**
+1. `crt_small_prime_divides` (line 66): For k ≥ 29 and n ∈ [2k, k²], ∃ prime p ≤ 29 with p ∣ C(n,k). This is the CRT density computation from proofs/crt-density-k-ge-29.md. Closing it requires either a decidable digit-domination computation or a verified external computation.
+2. `large_n_minFac_bound` (line 88): For k ≥ 2 and n > k², minFac(C(n,k)) ≤ n/k. This is the Interval Divisibility Lemma from proofs/large-n-divisibility.md. The Type A (structural) part could be formalized using `large_prime_dvd_choose`; the Type B (k-smooth) part is computational.
+
+Also updated Erdos.lean to import the new module.
