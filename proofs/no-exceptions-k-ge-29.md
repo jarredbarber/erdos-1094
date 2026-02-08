@@ -1,12 +1,12 @@
 # No Exceptions Exist for $k \geq 29$
 
-**Status:** Under review 🔍
-**Reviewed by:** erdos1094-gca (awaiting dependency verification)
+**Status:** Verified ✅
+**Reviewed by:** erdos1094-gca (initial review), erdos1094-q3j (verified after dependencies)
 **Statement:** For all integers $k \geq 29$ and $n \geq 2k$:
 $$\mathrm{minFac}\!\left(\binom{n}{k}\right) \leq \max\!\left(\left\lfloor \frac{n}{k} \right\rfloor,\, k\right).$$
 Equivalently, the exceptional set $E = \{(n, k) \mid 0 < k,\; 2k \leq n,\; \mathrm{minFac}(\binom{n}{k}) > \max(\lfloor n/k \rfloor, k)\}$ contains no pair $(n, k)$ with $k \geq 29$.
 **Dependencies:** proofs/kummer-theorem.md, proofs/crt-density-k-ge-29.md, proofs/large-n-divisibility.md
-**Confidence:** Certain (conditional on the two main dependencies)
+**Confidence:** Certain
 
 ---
 
@@ -122,15 +122,15 @@ The number 29 is not arbitrary. The set of primes $\{2, 3, 5, 7, 11, 13, 17, 19,
 
 ### 5.3 Dependency status
 
-This proof is a clean logical combination. Its correctness is **conditional** on Results 1 and 2:
+This proof is a clean logical combination of verified results:
 
 | Dependency | Current Status | Role in This Proof |
 |-----------|---------------|-------------------|
 | proofs/kummer-theorem.md | Verified ✅ | Bridge: digit-domination failure ⟹ divisibility |
-| proofs/crt-density-k-ge-29.md | Under review 🔍 | Result 1: eliminates $n \in [2k, k^2]$ |
-| proofs/large-n-divisibility.md | Under review 🔍 | Result 2: eliminates $n > k^2$ |
+| proofs/crt-density-k-ge-29.md | Verified ✅ | Result 1: eliminates $n \in [2k, k^2]$ |
+| proofs/large-n-divisibility.md | Verified ✅ | Result 2: eliminates $n > k^2$ |
 
-The combining argument itself introduces no new mathematical content — it is a two-case split with straightforward inequality chaining. Any gaps in the overall argument reside entirely within the dependencies.
+The combining argument itself introduces no new mathematical content — it is a two-case split with straightforward inequality chaining. With all dependencies now verified, the proof is complete and rigorous.
 
 ---
 
@@ -245,3 +245,48 @@ Any flaws in the overall argument reside entirely within the dependencies, not i
 **Next action**: Once tasks erdos1094-2gy (review crt-density-k-ge-29.md) and erdos1094-7c8 (review large-n-divisibility.md) are completed and those proofs are verified, this proof should be immediately re-reviewed. The combining logic is sound, so verification should be straightforward once dependencies are in place.
 
 **No revision needed** for this proof itself — the issue is entirely with the dependencies.
+
+---
+
+**Re-reviewer:** erdos1094-q3j  
+**Date:** 2026-02-08  
+**Decision:** Verified ✅
+
+### Re-review Summary
+
+All dependencies are now verified:
+- ✅ proofs/kummer-theorem.md (already verified)
+- ✅ proofs/crt-density-k-ge-29.md (verified by erdos1094-z4m)
+- ✅ proofs/large-n-divisibility.md (verified by erdos1094-ons)
+
+### Verification of Combining Logic
+
+The proof structure is exactly as described in the original review — a clean two-case split:
+
+**Case 1 ($2k \leq n \leq k^2$):**
+- Uses Result 1 (CRT density analysis) + Kummer's theorem
+- Obtains prime $p_0 \leq 29$ with $p_0 \mid \binom{n}{k}$
+- Verifies $p_0 \leq k = T(n,k)$
+- Logic is valid ✓
+
+**Case 2 ($n > k^2$):**
+- Uses Result 2 (large-n divisibility)
+- Directly obtains $\mathrm{minFac}(\binom{n}{k}) \leq \lfloor n/k \rfloor \leq T(n,k)$
+- Logic is valid ✓
+
+### Edge Cases Verified
+
+- ✓ $n = 2k$: Correctly falls into Case 1
+- ✓ $n = k^2$: Boundary handled correctly in Case 1
+- ✓ $k = 29$: Boundary value used correctly throughout
+
+### Assessment
+
+The combining argument introduces no new mathematical content — it is purely a case analysis with inequality verification. Both cases are:
+- Logically sound
+- Exhaustive (every $n \geq 2k$ falls into exactly one case)
+- Based on verified results
+
+The proof is **rigorous and complete**.
+
+**APPROVED ✅**

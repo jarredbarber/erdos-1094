@@ -254,3 +254,24 @@
 - **Pattern concern**: All three explore proofs (CRT, large-n, k≤28) hit the same density→count gap. This is a recurring theme — if pwh and tg2 both fail on this same gap, may need to redesign the proof decomposition. The 3-strike rule may apply across the pattern, not just per-task.
 - Formalize velocity: 2 formalize tasks in one heartbeat period — strong signal. Once verify pipeline clears, remaining formalize tasks should go quickly.
 - Strike count: CRT density = 1/3 (revision in progress). Large-n = 1/3 (revision done). k≤28 = 1/3 (revision pending).
+
+## Heartbeat — 2026-02-08T10:24:33Z (Heartbeat #13)
+
+**Metrics**: 1 sorry | 4 verified proofs | 6 open | 1 in_progress | 21 closed | 0 failed | 3 Lean files (2 sorry-free)
+**Status**: ✅ Excellent progress. k≥29 critical path nearly clear. 4 verified proofs!
+**Observations**:
+- 3 tasks closed since HB#12: `erdos1094-pwh` (CRT revision), `erdos1094-z4m` (re-review CRT → Verified ✅), `erdos1094-ons` (re-review large-n → Verified ✅).
+- **🎯 MILESTONE: CRT density proof VERIFIED!** After revision, both CRT density and large-n proofs are now Verified ✅. The density→count gap was resolved.
+- 4 verified proofs: kummer-theorem, large-prime-criterion, crt-density-k-ge-29, large-n-divisibility.
+- `erdos1094-q3j` (re-review combine k≥29) IN PROGRESS: 98 log lines, actively checking logical flow. Both deps now Verified ✅ — should approve. After this, formalize k≥29 (`erdos1094-qw0`) unblocks.
+- k≤28 branch: tg2 (revision) still open, kwa (re-review) blocked on tg2.
+- DAG is clean and compact: only 6 open + 1 in_progress tasks remain.
+- **Velocity**: 3 tasks per heartbeat, steady acceleration.
+**Actions**: None — system flowing beautifully, nearing endgame.
+**Watch next**:
+- Does `erdos1094-q3j` approve no-exceptions-k-ge-29? Expected: yes, since both deps verified.
+- After q3j: worker picks up `erdos1094-tg2` (k≤28 revision, large task) or `erdos1094-qw0` (formalize k≥29, p1).
+- **Priority ordering**: qw0 is p1, tg2 is p2. Worker should pick qw0 first! But qw0 depends on q3j (in_progress). Once q3j closes, qw0 unblocks at p1.
+- The k≤28 path (tg2 → kwa) is now the bottleneck for overall completion.
+- Strike count: CRT density = resolved (Verified ✅). Large-n = resolved (Verified ✅). k≤28 = 1/3 (revision pending).
+- **Remaining work**: q3j → qw0 (formalize k≥29) + tg2 → kwa → 7tg (formalize k≤28) → hvy (main review) → n3e (sorry=0).

@@ -5375,3 +5375,77 @@ $ tm update erdos1094-ons --status "Review complete. Both issues resolved. Updat
    - Section 7.5 correctly characterizes the non-probabilistic proof structure
 
 The proof is mathematically sound and complete for all k ≥ 2 and n > k². All verification checklist items passed. Status updated to Verified ✅, review notes added to proof file.
+[2026-02-08T10:23:47.768Z] ✅ Successfully merged task/erdos1094-ons into main
+[2026-02-08T10:23:47.768Z] 🗑️  Deleting branch task/erdos1094-ons...
+[2026-02-08T10:23:47.775Z] ✓ Deleted local branch task/erdos1094-ons
+[2026-02-08T10:23:47.781Z] 🚀 Pushing main to remote...
+[2026-02-08T10:23:48.419Z] ✓ Pushed to remote
+[2026-02-08T10:23:49.420Z] 
+================================================================================
+[2026-02-08T10:23:49.420Z] 📌 Processing task: erdos1094-q3j - Re-review proofs/no-exceptions-k-ge-29.md (all deps verified)
+[2026-02-08T10:23:49.420Z]    Role: verify | Priority: 2 | Size: medium
+[2026-02-08T10:23:49.420Z] ================================================================================
+
+[2026-02-08T10:23:49.424Z] ✓ Claimed task erdos1094-q3j
+
+[2026-02-08T10:23:49.424Z] 🤖 Using agent: verify with models: anthropic/claude-sonnet-4-5:medium, google-antigravity/gemini-3-flash:medium
+
+[2026-02-08T10:23:49.424Z] 💭 Starting pi agent session with model: anthropic/claude-sonnet-4-5:medium...
+[2026-02-08T10:23:49.439Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:23:49.453Z] ✓ Captured state: 48 tracked, 1 untracked files
+
+[2026-02-08T10:23:49.453Z] 🌿 Creating branch: task/erdos1094-q3j
+[2026-02-08T10:23:49.461Z] ✓ Working on branch task/erdos1094-q3j
+
+[2026-02-08T10:23:55.842Z] 
+$ tm update erdos1094-q3j --status "Reading proof file and checking dependencies"
+[2026-02-08T10:23:57.039Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:24:01.132Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:24:01.133Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:24:07.806Z] 
+$ tm update erdos1094-q3j --status "Both dependencies now verified. Reviewing the combining proof logic."
+[2026-02-08T10:24:56.425Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:25:02.703Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:25:03.885Z] [overseer] 💓 Heartbeat complete: No intervention needed — CRT density and large-n both verified, k≥29 path nearly clear
+[2026-02-08T10:25:07.059Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:25:21.965Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:25:26.791Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:25:31.956Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:25:35.734Z] 
+$ tm update erdos1094-q3j --status "Proof verified and approved. Updating file status."
+[2026-02-08T10:25:47.802Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:25:47.802Z] 📄 Log saved to .tm/logs/worker-erdos1094-q3j.md
+[2026-02-08T10:25:47.802Z] 
+📊 Task erdos1094-q3j completed:
+[2026-02-08T10:25:47.802Z]    Summary: Approved ✅ — proofs/no-exceptions-k-ge-29.md
+[2026-02-08T10:25:47.802Z]    Details: Re-reviewed after all dependencies verified. The proof presents a clean and correct logical combination of two main results:
+
+**Case 1 (n ∈ [2k, k²]):** Uses Result 1 (CRT density, from proofs/crt-density-k-ge-29.md) + Kummer's theorem to obtain prime p₀ ≤ 29 dividing binomial coefficient.
+
+**Case 2 (n > k²):** Uses Result 2 (from proofs/large-n-divisibility.md) to directly establish minFac(C(n,k)) ≤ ⌊n/k⌋.
+
+All dependencies now verified:
+✅ proofs/kummer-theorem.md (already verified)
+✅ proofs/crt-density-k-ge-29.md (verified by erdos1094-z4m)
+✅ proofs/large-n-divisibility.md (verified by erdos1094-ons)
+
+The combining logic is sound:
+- Both cases logically valid
+- Exhaustive coverage (all n ≥ 2k fall into exactly one case)
+- All edge cases handled correctly (n=2k, n=k², k=29)
+- No hidden assumptions
+- Introduces no new mathematical content (pure case analysis)
+
+File status updated to 'Verified ✅' with review notes appended.
