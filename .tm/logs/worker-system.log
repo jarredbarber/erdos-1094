@@ -1192,3 +1192,355 @@ $ tm update erdos1094-53e --state closed
 📊 Task erdos1094-53e completed:
 [2026-02-08T07:26:15.686Z]    Summary: Comprehensive exploration of Erdős 1094 completed. Published to proofs/exploration.md and proofs/dead-ends.md
 [2026-02-08T07:26:15.686Z]    Details: Confidence: High. Key findings: (1) Exhaustive computation identifies exactly 14 exceptions, the largest being (n=284, k=28). All exceptions have k≤28 and n≤284. (2) Kummer's theorem provides the structural key: an exception occurs iff k digit-dominates n in ALL prime bases up to the threshold, AND n mod p ≥ k for all primes p in (k, threshold]. (3) A remarkable exact identity: in every exception, the 'smooth parts' of the k numerator integers multiply to exactly k!. (4) The digit-domination density δ_k drops below 1/k² for k≥29, explaining why no exceptions exist for k≥29. (5) Proposed three-step proof strategy: bound k≥29 via CRT density, bound n for each k≤28 via near-prime capacity, then finite verification. (6) For Lean formalization: the most tractable approach is showing all exceptions lie in {(n,k): n≤284} and using native_decide, but the bounding proof requires Kummer's theorem (not yet in Mathlib). Dead ends documented to prevent re-exploration.
+[2026-02-08T07:26:15.925Z] ✅ Successfully merged task/erdos1094-53e into main
+[2026-02-08T07:26:15.925Z] 🗑️  Deleting branch task/erdos1094-53e...
+[2026-02-08T07:26:15.933Z] ✓ Deleted local branch task/erdos1094-53e
+[2026-02-08T07:26:15.939Z] 🚀 Pushing main to remote...
+[2026-02-08T07:26:16.729Z] ✓ Pushed to remote
+[2026-02-08T07:26:17.731Z] ⏳ No tasks available. Waiting for new tasks (polling every 5 seconds)...
+[2026-02-08T07:32:21.484Z] [overseer] No active work. Running one idle heartbeat...
+[2026-02-08T07:32:21.484Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T07:32:21.488Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T07:34:08.119Z] 
+================================================================================
+[2026-02-08T07:34:08.119Z] 📌 Processing task: erdos1094-1k9 - Gap analysis: design proof decomposition from exploration
+[2026-02-08T07:34:08.119Z]    Role: advisor | Priority: 0 | Size: medium
+[2026-02-08T07:34:08.119Z] ================================================================================
+
+[2026-02-08T07:34:08.121Z] ✓ Claimed task erdos1094-1k9
+
+[2026-02-08T07:34:08.121Z] 🤖 Using agent: advisor with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T07:34:08.121Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T07:34:08.135Z] 📸 Capturing file state before agent execution...
+[2026-02-08T07:34:08.148Z] ✓ Captured state: 19 tracked, 1 untracked files
+
+[2026-02-08T07:34:08.148Z] 🌿 Creating branch: task/erdos1094-1k9
+[2026-02-08T07:34:08.155Z] ✓ Working on branch task/erdos1094-1k9
+
+[2026-02-08T07:34:11.737Z] 
+$ cd /home/jarred/code/erdos-1094 && cat /home/jarred/.pi/agent/skills/timtam/SKILL.md
+[2026-02-08T07:34:11.740Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:34:11.743Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:34:16.034Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/dead-ends.md 2>/dev/null || echo "No dead-ends file found"
+[2026-02-08T07:34:16.040Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/ 2>/dev/null
+[2026-02-08T07:34:16.047Z] 
+$ cd /home/jarred/code/erdos-1094 && tm tree 2>/dev/null; echo "---"; tm list 2>/dev/null
+[2026-02-08T07:34:34.470Z] [overseer] 💓 Heartbeat complete: Intervened: sanitized defeatist content, created advisor task to fill empty backlog
+[2026-02-08T07:43:10.466Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T07:43:10.467Z] 📄 Log saved to .tm/logs/worker-erdos1094-1k9.md
+[2026-02-08T07:43:10.467Z] WARN: ⚠️ No response received from model anthropic/claude-opus-4-6:high (possibly out of usage). Trying next model...
+[2026-02-08T07:43:10.467Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-5:high...
+[2026-02-08T07:43:10.480Z] 📸 Capturing file state before agent execution...
+[2026-02-08T07:43:10.491Z] ✓ Captured state: 19 tracked, 1 untracked files
+
+[2026-02-08T07:43:10.491Z] 🌿 Creating branch: task/erdos1094-1k9
+[2026-02-08T07:43:10.504Z] ✓ Switched to existing branch task/erdos1094-1k9
+
+[2026-02-08T07:43:15.605Z] 
+$ tm update erdos1094-1k9 --status "Reading sorry goals and exploration results"
+[2026-02-08T07:43:16.791Z] 
+$ grep -rn sorry *.lean **/*.lean 2>/dev/null | grep -v '.lake/'
+[2026-02-08T07:43:16.795Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:43:16.796Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:43:20.071Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:44:18.059Z] 
+$ tm list
+[2026-02-08T07:44:30.373Z] 
+$ tm update erdos1094-1k9 --status "Designing proof decomposition and creating task pipeline"
+[2026-02-08T07:44:40.606Z] 
+$ tm create -t "Prove Kummer/Lucas criterion for prime non-divisibility of binomials" -r explore -p 2 -d "Prove: For prime p and integers n ≥ k ≥ 0, we have p ∤ C(n,k) if and only if every base-p digit of k is ≤ the corresponding base-p digit of n (digit-domination).
+
+Equivalently: v_p(C(n,k)) = number of carries when adding k and (n-k) in base p.
+
+This is Kummer's theorem (1852). Provide a complete proof suitable for formalization. The proof should:
+1. Use the formula v_p(m!) = Σ_{i≥1} floor(m/p^i)
+2. Show v_p(C(n,k)) = (s_p(k) + s_p(n-k) - s_p(n))/(p-1) where s_p(m) = digit sum in base p
+3. Relate this to carry counting
+
+Write to: proofs/kummer-theorem.md"
+[2026-02-08T07:44:51.385Z] 
+$ tm create -t "Review proofs/kummer-theorem.md" -r verify -p 2 --deps erdos1094-58u
+[2026-02-08T07:44:52.581Z] 
+$ tm create -t "Prove large prime divisibility criterion for binomials" -r explore -p 2 -d "Prove: For prime p > k and n ≥ k, we have p | C(n,k) if and only if n mod p < k.
+
+Proof approach:
+1. Since p > k, we have v_p(k!) = 0
+2. v_p(C(n,k)) = v_p(n!) - v_p((n-k)!) - v_p(k!) = v_p(n!/(n-k)!)
+3. n!/(n-k)! = n(n-1)...(n-k+1) is the product of k consecutive integers ending at n
+4. Since p > k, at most one of these k consecutive integers is divisible by p
+5. Exactly one is divisible by p iff there exists m ∈ {n-k+1, ..., n} with p | m
+6. This happens iff floor(n/p) > floor((n-k)/p), i.e., n mod p < k
+
+Write to: proofs/large-prime-criterion.md"
+[2026-02-08T07:44:56.436Z] 
+$ tm create -t "Review proofs/large-prime-criterion.md" -r verify -p 2 --deps erdos1094-a0e
+[2026-02-08T07:45:09.383Z] 
+$ tm create -t "Prove CRT constraint eliminates all n in [2k, k²] for k ≥ 29" -r explore -p 2 -d "Prove: For k ≥ 29, there is no integer n ∈ [2k, k²] such that k is digit-dominated by n in base p for all primes p ≤ 29.
+
+The argument:
+1. For each prime p ≤ 29, the digit-domination condition 'each base-p digit of k ≤ corresponding digit of n' constrains n to certain residue classes mod p^L where L = ceil(log_p(k+1))
+2. The density of valid n for a single prime p is ∏_i ((p - d_i(k))/p) where d_i(k) is the i-th base-p digit of k
+3. By CRT, the combined constraints mod lcm(2^a, 3^b, 5^c, ..., 29^f) have density δ_k = ∏_{p ≤ 29} (single-prime density)
+4. For k = 29, compute δ_29 explicitly and show δ_29 · (29² - 2·29) < 1
+5. For k ≥ 30, show δ_k decreases (additional digits create stricter constraints)
+6. Conclude: no valid n exists in the interval [2k, k²]
+
+This is a concrete calculation with explicit bounds. Show the density computation for k = 29, 30, and argue monotonicity.
+
+Write to: proofs/crt-density-k-ge-29.md"
+[2026-02-08T07:45:19.771Z] 
+$ tm create -t "Prove n > k² forces some prime in (k, n/k] to divide C(n,k)" -r explore -p 2 -d "Prove: For k ≥ 2 and n > k², there exists a prime p with k < p ≤ n/k such that p | C(n,k).
+
+The argument:
+1. For n > k², we have n/k > k, so the interval (k, n/k] is non-empty
+2. By Bertrand's postulate (iterated), there exist multiple primes in (k, n/k]
+3. For each such prime p, we have p | C(n,k) iff n mod p < k (by large prime criterion)
+4. The condition 'n mod p ≥ k for all primes p ∈ (k, n/k]' constrains n via CRT
+5. Count primes in (k, n/k] using PNT or Chebyshev bounds: there are ≥ c·(n/k - k)/ln(n/k) primes
+6. The probability of avoiding all these primes is ∏_p ((p-k)/p) which decreases exponentially
+7. For n > k², show this probability times the interval length gives < 1 valid n per period
+
+The key is that having n/k > k means there are 'enough' primes to cover all residue classes.
+
+Write to: proofs/large-n-divisibility.md"
+[2026-02-08T07:45:24.377Z] 
+$ tm create -t "Review proofs/crt-density-k-ge-29.md" -r verify -p 2 --deps erdos1094-6fs
+[2026-02-08T07:45:25.554Z] 
+$ tm create -t "Review proofs/large-n-divisibility.md" -r verify -p 2 --deps erdos1094-5y9
+[2026-02-08T07:45:40.028Z] 
+$ tm create -t "Prove no exceptions exist for k ≥ 29 (combine density bounds)" -r explore -p 2 -d "Prove: For k ≥ 29 and n ≥ 2k, there exists a prime p ≤ max(n/k, k) with p | C(n,k).
+
+This combines two prior results:
+1. From crt-density-k-ge-29.md: For n ∈ [2k, k²], digit-domination fails for some prime ≤ k
+2. From large-n-divisibility.md: For n > k², some prime in (k, n/k] divides C(n,k)
+
+Structure of the proof:
+- Case 1: n ∈ [2k, k²]. By (1), there exists prime p ≤ k where digit-domination fails.
+  By Kummer, p | C(n,k). Since p ≤ k ≤ max(n/k, k), we're done.
+- Case 2: n > k². By (2), there exists prime p ∈ (k, n/k] with p | C(n,k).
+  Since p ≤ n/k ≤ max(n/k, k), we're done.
+
+Conclusion: The exceptional set contains no pairs (n, k) with k ≥ 29.
+
+Dependencies: proofs/kummer-theorem.md, proofs/crt-density-k-ge-29.md, proofs/large-n-divisibility.md
+Write to: proofs/no-exceptions-k-ge-29.md"
+[2026-02-08T07:45:44.439Z] 
+$ tm create -t "Review proofs/no-exceptions-k-ge-29.md" -r verify -p 2 --deps erdos1094-liv,erdos1094-2gy,erdos1094-7c8
+[2026-02-08T07:45:58.277Z] 
+$ tm create -t "Prove exceptions with k ≤ 28 satisfy n ≤ 284 (near-prime capacity)" -r explore -p 2 -d "Prove: For k ∈ {1, 2, ..., 28} and n > 284, there exists prime p ≤ max(n/k, k) with p | C(n,k).
+
+The strategy uses 'near-prime capacity analysis' from the exploration:
+
+For C(n,k) to avoid all primes ≤ max(n/k, k), each of the k consecutive integers {n-k+1, ..., n} must factor as s·q where:
+- s is the k-smooth part (all prime factors ≤ k)  
+- q is either 1 or a prime > n/k
+
+Key observations:
+1. For q > 1: s = m/q < m·k/n ≤ k (since q > n/k)
+2. So each m uses a 'channel' s ∈ {1, 2, ..., k-1} for its smooth part
+3. Channel s can support at most one prime q in the range (n/s - k/s, n/s]
+4. Total capacity ≈ k · (average primes per channel) ≈ k · Σ_{s<k} 1/(s·ln(n/s))
+5. For n large, this capacity falls below k (the requirement)
+
+For n > 284 and k ≤ 28:
+- Either n > k² (handled by large-prime iteration) OR
+- n ∈ (284, k²] requires explicit analysis for each k
+
+Show that for each k ≤ 28, the capacity argument or direct verification gives n ≤ 284.
+
+Write to: proofs/bound-n-for-small-k.md"
+[2026-02-08T07:46:02.676Z] 
+$ tm create -t "Review proofs/bound-n-for-small-k.md" -r verify -p 2 --deps erdos1094-w0p
+[2026-02-08T07:46:13.274Z] 
+$ tm create -t "Prove finiteness of exceptional set (combine k≥29 and k≤28 bounds)" -r explore -p 1 -d "Prove: The set {(n,k) : 0 < k, 2k ≤ n, minFac(C(n,k)) > max(n/k, k)} is finite.
+
+This combines the two established bounds:
+1. From no-exceptions-k-ge-29.md: k ≥ 29 → no exceptions
+2. From bound-n-for-small-k.md: k ≤ 28 → exceptions have n ≤ 284
+
+The proof:
+1. Let E = {(n,k) : 0 < k ∧ 2k ≤ n ∧ minFac(C(n,k)) > max(n/k, k)}
+2. If (n,k) ∈ E, then k ≤ 28 (by contrapositive of result 1)
+3. If (n,k) ∈ E, then n ≤ 284 (by result 2 applied to k ≤ 28)
+4. Therefore E ⊆ {(n,k) : k ≤ 28 ∧ n ≤ 284}
+5. The bounding set {(n,k) : k ≤ 28 ∧ n ≤ 284} is finite (28 × 284 = 7952 elements)
+6. By Set.Finite.subset, E is finite
+
+Conclusion: The exceptional set is finite, completing the proof of Erdős 1094.
+
+Dependencies: proofs/no-exceptions-k-ge-29.md, proofs/bound-n-for-small-k.md
+Write to: proofs/main-theorem.md"
+[2026-02-08T07:46:18.855Z] 
+$ tm create -t "Review proofs/main-theorem.md" -r verify -p 1 --deps erdos1094-sac,erdos1094-gca,erdos1094-8tg
+[2026-02-08T07:46:31.206Z] 
+$ tm create -t "Formalize Kummer/Lucas criterion for binomial divisibility" -r formalize -p 2 -d "Formalize the Kummer/Lucas criterion from proofs/kummer-theorem.md.
+
+Target location: Erdos/Kummer.lean (new file)
+
+Required statement:
+  theorem kummer_criterion (p : ℕ) [Fact p.Prime] (n k : ℕ) (hk : k ≤ n) :
+    p ∣ n.choose k ↔ ∃ i, (Nat.digits p k).getD i 0 > (Nat.digits p n).getD i 0
+
+Or equivalently using carries:
+  theorem kummer_valuation (p : ℕ) [Fact p.Prime] (n k : ℕ) :
+    padicValNat p (n.choose k) = <carry count formula>
+
+Note: Kummer's theorem is a classical result (1852). If Mathlib already has this, use it. If not, it may be acceptable to introduce as an axiom with citation for the main proof, with a sorry for the proof of Kummer itself.
+
+Check Mathlib for: Nat.Prime.multiplicity_choose, lucas_theorem, or similar.
+
+Depends on: proofs/kummer-theorem.md being verified" --deps erdos1094-nii
+[2026-02-08T07:46:38.769Z] 
+$ tm create -t "Formalize large prime divisibility criterion" -r formalize -p 2 -d "Formalize the large prime criterion from proofs/large-prime-criterion.md.
+
+Target location: Erdos/LargePrime.lean (new file)
+
+Required statement:
+  theorem large_prime_dvd_choose (p n k : ℕ) (hp : p.Prime) (hpk : k < p) (hkn : k ≤ n) :
+    p ∣ n.choose k ↔ n % p < k
+
+This is simpler than Kummer and should be directly provable using:
+- The fact that n.choose k = (n-k+1) * ... * n / k!
+- When p > k, we have p ∤ k!
+- Among k consecutive integers, at most one is divisible by p (when p > k)
+
+Depends on: proofs/large-prime-criterion.md being verified" --deps erdos1094-oil
+[2026-02-08T07:46:49.357Z] 
+$ tm create -t "Formalize: no exceptions for k ≥ 29" -r formalize -p 1 -d "Formalize the k ≥ 29 bound from proofs/no-exceptions-k-ge-29.md.
+
+Target location: Erdos/KGe29.lean (new file)
+
+Required statement:
+  theorem no_exception_k_ge_29 (n k : ℕ) (hk : 0 < k) (hn : 2 * k ≤ n) (hk29 : 29 ≤ k) :
+    (n.choose k).minFac ≤ max (n / k) k
+
+This depends on:
+- proofs/crt-density-k-ge-29.md (CRT density eliminates n ∈ [2k, k²])
+- proofs/large-n-divisibility.md (large primes cover n > k²)
+- Kummer criterion from Erdos/Kummer.lean
+- Large prime criterion from Erdos/LargePrime.lean
+
+The formalization may involve:
+- A decidable predicate for digit-domination
+- Finite computation for the CRT check (for specific k values)
+- Prime counting/existence lemmas
+
+Depends on: verification of k≥29 proof + formalization of Kummer/large-prime criteria" --deps erdos1094-gca,erdos1094-419,erdos1094-41t
+[2026-02-08T07:46:57.295Z] 
+$ tm create -t "Formalize: exceptions with k ≤ 28 have n ≤ 284" -r formalize -p 1 -d "Formalize the k ≤ 28 bound from proofs/bound-n-for-small-k.md.
+
+Target location: Erdos/KLe28.lean (new file)
+
+Required statement:
+  theorem bound_n_for_small_k (n k : ℕ) (hk : 0 < k) (hn : 2 * k ≤ n) (hk28 : k ≤ 28) (hn284 : 284 < n) :
+    (n.choose k).minFac ≤ max (n / k) k
+
+This may be proven by:
+- Case split on k values (for k ≤ 28, there are only 28 cases)
+- For each k, use the near-prime capacity argument OR
+- For each k, use explicit computation up to some bound + analytical argument beyond
+
+The formalization may involve:
+- Decidable predicates for the main condition
+- Bertrand's postulate / prime existence lemmas
+- Finite computation for boundary cases
+
+Depends on: verification of k≤28 proof + formalization of Kummer/large-prime criteria" --deps erdos1094-8tg,erdos1094-419,erdos1094-41t
+[2026-02-08T07:47:08.818Z] 
+$ tm create -t "Close sorry at Basic.lean:15 (erdos_1094) using verified proofs" -r formalize -p 0 -d "Close the main sorry in Erdos/Basic.lean:15.
+
+Target: Complete the proof of erdos_1094:
+  theorem erdos_1094 :
+    {(n, k) : ℕ × ℕ | 0 < k ∧ 2 * k ≤ n ∧ (n.choose k).minFac > max (n / k) k}.Finite
+
+Using the established bounds:
+1. Erdos/KGe29.lean: no_exception_k_ge_29 (k ≥ 29 → no exceptions)
+2. Erdos/KLe28.lean: bound_n_for_small_k (k ≤ 28 ∧ n > 284 → no exceptions)
+
+The proof structure:
+1. Show: exceptional_set ⊆ {(n,k) : k ≤ 28 ∧ n ≤ 284}
+   - Use no_exception_k_ge_29 and bound_n_for_small_k as contrapositives
+2. The bounding set {(n,k) : k ≤ 28 ∧ n ≤ 284} is finite:
+   - Use Finset.product on Finset.range 29 and Finset.range 285
+3. Apply Set.Finite.subset
+
+Mathematical reference: proofs/main-theorem.md
+Depends on: verification + formalization of both branches" --deps erdos1094-hvy,erdos1094-qw0,erdos1094-7tg
+[2026-02-08T07:47:12.341Z] 
+$ tm list
+[2026-02-08T07:47:18.103Z] 
+$ tm update erdos1094-1k9 --status "Completed task pipeline creation"
+[2026-02-08T07:47:19.260Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:47:30.266Z] 
+$ tm close erdos1094-1k9 -d "Created complete task pipeline with 19 tasks:
+
+**EXPLORE tasks (7):**
+- erdos1094-58u: Kummer/Lucas criterion (foundation)
+- erdos1094-a0e: Large prime divisibility criterion (foundation)
+- erdos1094-6fs: CRT density bound for k≥29
+- erdos1094-5y9: Large n forces prime divisor
+- erdos1094-liv: Combined k≥29 bound
+- erdos1094-w0p: Bound n≤284 for k≤28
+- erdos1094-sac: Main theorem (combine both branches)
+
+**VERIFY tasks (7):**
+- One for each explore task, properly chained
+
+**FORMALIZE tasks (5):**
+- erdos1094-419: Kummer criterion
+- erdos1094-41t: Large prime criterion
+- erdos1094-qw0: k≥29 bound
+- erdos1094-7tg: k≤28 bound
+- erdos1094-n3e: Main theorem (close sorry at Basic.lean:15)
+
+**Proof architecture:**
+1. Foundation: Kummer + large prime criterion
+2. Branch 1 (k≥29): CRT density + Bertrand iteration → no exceptions
+3. Branch 2 (k≤28): Near-prime capacity → n≤284
+4. Combine: E ⊆ {k≤28, n≤284} is finite
+
+Current sorry count: 1 (Basic.lean:15)
+Next step: Execute parallel foundation tasks (erdos1094-58u, erdos1094-a0e)"
+[2026-02-08T07:47:43.962Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T07:47:43.963Z] 📄 Log saved to .tm/logs/worker-erdos1094-1k9.md
+[2026-02-08T07:47:43.963Z] 
+📊 Task erdos1094-1k9 completed:
+[2026-02-08T07:47:43.963Z]    Summary: Created 19 tasks: 7 explore, 7 verify, 5 formalize
+[2026-02-08T07:47:43.963Z]    Details: Designed complete proof decomposition for Erdős 1094 based on exploration findings.
+
+**Proof Architecture:**
+
+1. **Foundation Layer** (parallel):
+   - Kummer/Lucas criterion: p ∤ C(n,k) ↔ digit-domination
+   - Large prime criterion: for p > k, p | C(n,k) ↔ n mod p < k
+
+2. **Branch 1 (k ≥ 29):**
+   - CRT density: no n ∈ [2k, k²] satisfies digit-domination for all primes ≤ 29
+   - Large n: for n > k², Bertrand iteration forces some prime to divide
+   - Combined: k ≥ 29 → no exceptions
+
+3. **Branch 2 (k ≤ 28):**
+   - Near-prime capacity: for n > 284, cannot fill k channels with valid primes
+   - Result: k ≤ 28 ∧ exception → n ≤ 284
+
+4. **Main Theorem:**
+   - E ⊆ {k ≤ 28, n ≤ 284} → E finite by Set.Finite.subset
+
+**Current state:** 1 sorry (Basic.lean:15)
+
+**Next steps:** Foundation explore tasks (erdos1094-58u, erdos1094-a0e) are unblocked and can run in parallel.
