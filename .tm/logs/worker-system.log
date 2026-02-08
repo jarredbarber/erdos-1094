@@ -4399,3 +4399,93 @@ Key results:
 - The 14 known exceptions all satisfy n ≤ 284, with (284,28) achieving the boundary exactly
 
 Dependencies: proofs/large-n-divisibility.md (under review), proofs/kummer-theorem.md (verified), proofs/large-prime-criterion.md (verified)
+[2026-02-08T09:47:46.126Z] ✅ Successfully merged task/erdos1094-w0p into main
+[2026-02-08T09:47:46.126Z] 🗑️  Deleting branch task/erdos1094-w0p...
+[2026-02-08T09:47:46.135Z] ✓ Deleted local branch task/erdos1094-w0p
+[2026-02-08T09:47:46.141Z] 🚀 Pushing main to remote...
+[2026-02-08T09:47:46.923Z] ✓ Pushed to remote
+[2026-02-08T09:47:47.925Z] 
+================================================================================
+[2026-02-08T09:47:47.925Z] 📌 Processing task: erdos1094-8tg - Review proofs/bound-n-for-small-k.md
+[2026-02-08T09:47:47.925Z]    Role: verify | Priority: 2 | Size: medium
+[2026-02-08T09:47:47.925Z] ================================================================================
+
+[2026-02-08T09:47:47.928Z] ✓ Claimed task erdos1094-8tg
+
+[2026-02-08T09:47:47.928Z] 🤖 Using agent: verify with models: anthropic/claude-sonnet-4-5:medium, google-antigravity/gemini-3-flash:medium
+
+[2026-02-08T09:47:47.928Z] 💭 Starting pi agent session with model: anthropic/claude-sonnet-4-5:medium...
+[2026-02-08T09:47:47.943Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:47:47.957Z] ✓ Captured state: 40 tracked, 1 untracked files
+
+[2026-02-08T09:47:47.958Z] 🌿 Creating branch: task/erdos1094-8tg
+[2026-02-08T09:47:47.966Z] ✓ Working on branch task/erdos1094-8tg
+
+[2026-02-08T09:47:53.328Z] 
+$ tm update erdos1094-8tg --status "Reading proof file and beginning review"
+[2026-02-08T09:47:54.494Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:48:34.464Z] 
+$ tm update erdos1094-8tg --status "Reviewing proof structure and checking dependencies"
+[2026-02-08T09:48:35.650Z] 
+$ ls -la proofs/*.md | head -20
+[2026-02-08T09:48:38.488Z] 
+$ grep -A1 "^\*\*Status:" proofs/large-n-divisibility.md proofs/kummer-theorem.md proofs/large-prime-criterion.md
+[2026-02-08T09:48:41.965Z] 
+$ grep "^\*\*Status:" proofs/crt-density-k-ge-29.md
+[2026-02-08T09:49:05.556Z] 
+$ tm update erdos1094-8tg --status "Completing detailed review and preparing verdict"
+[2026-02-08T09:49:12.555Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:49:42.163Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:49:51.313Z] 
+$ tm create -r explore --priority 2 --size large --type task --title "Revise proofs/bound-n-for-small-k.md" --description "Address the two critical issues identified in review erdos1094-8tg:
+
+**Issue 1 (Unverified Dependency):** Case A relies on proofs/large-n-divisibility.md which is still under review. Options:
+- Wait for that proof to be verified, OR
+- Implement the alternative approach: extend Case B verification to cover all n > k²
+
+**Issue 2 (Computational Verification):** Case B claims exhaustive verification but doesn't provide reproducible code. Options:
+- Provide actual verification code (Python/Lean) with clear reproduction instructions, OR
+- Develop a purely mathematical proof that doesn't require computation (e.g., strengthen the near-prime capacity argument or use CRT density bounds)
+
+See detailed review notes in proofs/bound-n-for-small-k.md after line '## Review Notes'.
+
+The mathematical approach is sound and worked examples are correct. This is just about filling rigor gaps."
+[2026-02-08T09:49:54.156Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T09:49:54.159Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T09:49:55.203Z] 
+$ tm update erdos1094-8tg --status "Review complete - revision requested"
+[2026-02-08T09:49:59.161Z] 
+$ tm complete erdos1094-8tg --summary "Revision requested — proofs/bound-n-for-small-k.md"
+[2026-02-08T09:50:02.765Z] 
+$ tm update erdos1094-8tg --state completed
+[2026-02-08T09:50:06.171Z] 
+$ tm update erdos1094-8tg --state closed
+[2026-02-08T09:50:19.988Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T09:50:19.989Z] 📄 Log saved to .tm/logs/worker-erdos1094-8tg.md
+[2026-02-08T09:50:19.989Z] 
+📊 Task erdos1094-8tg completed:
+[2026-02-08T09:50:19.989Z]    Summary: Revision requested — proofs/bound-n-for-small-k.md
+[2026-02-08T09:50:19.989Z]    Details: The proof has excellent structure and sound mathematical approach, but requires revision to address two critical gaps:
+
+**Issue 1 (Critical):** Case A relies on proofs/large-n-divisibility.md, which is still Under review 🔍. The proof must either wait for that dependency to be verified, or implement the alternative approach mentioned in Section 9.
+
+**Issue 2 (Critical):** Case B claims exhaustive computational verification for k ∈ {17,...,28}, but provides only worked examples without reproducible code or sufficient algorithmic detail. The proof must either provide actual verification code, or develop a purely mathematical argument.
+
+**What works well:**
+- Clear case structure and logical organization
+- Verified dependencies (kummer-theorem.md ✅, large-prime-criterion.md ✅)
+- Correct worked examples for k=17, k=18 demonstrating proper digit-domination methodology
+- All base conversions and CRT calculations are mathematically correct
+
+**Actions taken:**
+- Updated status to 'Under review 🔍'
+- Added detailed review notes to the proof file
+- Created follow-up task erdos1094-tg2 for explore agent to address the revision requests
+
+The proof is NOT rejected — the approach is fundamentally sound and once the gaps are filled, it will be ready for verification.
