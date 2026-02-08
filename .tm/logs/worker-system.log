@@ -4134,3 +4134,268 @@ Strengths:
 The combining logic introduces no new mathematical content — it's purely a case analysis. Any gaps in the overall argument reside entirely within the dependencies, not in this proof. Once the two dependencies are verified (tasks erdos1094-2gy and erdos1094-7c8 complete), this proof can be immediately verified as the combining logic is already sound.
 
 Status updated in proof file: 'Under review 🔍' with detailed review notes added.
+[2026-02-08T09:34:30.333Z] ✅ Successfully merged task/erdos1094-gca into main
+[2026-02-08T09:34:30.333Z] 🗑️  Deleting branch task/erdos1094-gca...
+[2026-02-08T09:34:30.342Z] ✓ Deleted local branch task/erdos1094-gca
+[2026-02-08T09:34:30.348Z] 🚀 Pushing main to remote...
+[2026-02-08T09:34:31.137Z] ✓ Pushed to remote
+[2026-02-08T09:34:32.139Z] 
+================================================================================
+[2026-02-08T09:34:32.139Z] 📌 Processing task: erdos1094-w0p - Prove exceptions with k ≤ 28 satisfy n ≤ 284 (near-prime capacity)
+[2026-02-08T09:34:32.139Z]    Role: explore | Priority: 2 | Size: medium
+[2026-02-08T09:34:32.139Z] ================================================================================
+
+[2026-02-08T09:34:32.142Z] ✓ Claimed task erdos1094-w0p
+
+[2026-02-08T09:34:32.142Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T09:34:32.142Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T09:34:32.158Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:34:32.172Z] ✓ Captured state: 38 tracked, 1 untracked files
+
+[2026-02-08T09:34:32.172Z] 🌿 Creating branch: task/erdos1094-w0p
+[2026-02-08T09:34:32.180Z] ✓ Working on branch task/erdos1094-w0p
+
+[2026-02-08T09:34:36.337Z] 
+$ ls proofs/ 2>/dev/null
+[2026-02-08T09:34:36.345Z] 
+$ ls /home/jarred/code/erdos-1094/ 2>/dev/null
+[2026-02-08T09:34:38.964Z] 
+$ tm update erdos1094-w0p --status "Reading existing literature and understanding context"
+[2026-02-08T09:34:40.147Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:40.148Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:43.408Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:43.409Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:43.409Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:46.167Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:46.168Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:49.585Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:34:54.154Z] [overseer] 💓 Heartbeat complete: Intervened: fixed DAG gap by creating 3 re-verify tasks and updating downstream deps
+[2026-02-08T09:42:32.052Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T09:42:32.053Z] 📄 Log saved to .tm/logs/worker-erdos1094-w0p.md
+[2026-02-08T09:42:32.053Z] WARN: ⚠️ No response received from model anthropic/claude-opus-4-6:high (possibly out of usage). Trying next model...
+[2026-02-08T09:42:32.053Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-5:high...
+[2026-02-08T09:42:32.080Z] ✓ Captured state: 38 tracked, 1 untracked files
+
+[2026-02-08T09:42:32.068Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:42:32.080Z] 🌿 Creating branch: task/erdos1094-w0p
+[2026-02-08T09:42:32.092Z] ✓ Switched to existing branch task/erdos1094-w0p
+
+[2026-02-08T09:42:36.753Z] 
+$ cd /home/jarred/code/erdos-1094 && ls -la proofs/ 2>/dev/null || echo "No proofs directory yet"
+[2026-02-08T09:42:36.760Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-w0p --status "Reading existing literature and understanding the problem"
+[2026-02-08T09:42:41.189Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:42:41.190Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:42:45.173Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:42:45.174Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:42:50.145Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:42:50.150Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-w0p --status "Developing near-prime capacity argument for k ≤ 28"
+[2026-02-08T09:42:55.969Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:43:12.598Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-w0p --status "Writing proof for proofs/bound-n-for-small-k.md"
+[2026-02-08T09:45:33.962Z] 
+🛠️  Executing tool: write...
+[2026-02-08T09:45:48.748Z] 
+$ python3 << 'EOF'
+# Verify base representations and S_p calculations for k=28
+
+def to_base(n, p):
+    """Return digits of n in base p (LSB first)"""
+    if n == 0:
+        return [0]
+    digits = []
+    while n > 0:
+        digits.append(n % p)
+        n //= p
+    return digits
+
+def count_valid_residues(k, p):
+    """Count valid residues mod p^L for digit domination k ≤_p n"""
+    digits_k = to_base(k, p)
+    L = len(digits_k)
+    count = 1
+    for d in digits_k:
+        count *= (p - d)
+    return count, L
+
+# Check for k = 28
+k = 28
+primes = [2, 3, 5, 7, 11, 13, 17, 19, 23]
+
+print(f"Analysis for k = {k}")
+print("-" * 60)
+
+M = 1  # CRT modulus
+R = 1  # Number of valid residues
+
+for p in primes:
+    digits = to_base(k, p)
+    count, L = count_valid_residues(k, p)
+    mod = p ** L
+    M *= mod
+    R *= count
+    print(f"p={p:2d}: {k} = {digits} (base {p}), L={L}, |S_p|={count}, mod={mod}")
+
+print()
+print(f"CRT modulus M = {M:,}")
+print(f"Valid residues R = {R:,}")
+print(f"Density = R/M = {R/M:.6f}")
+print(f"Interval (284, {k**2}] has length {k**2 - 284}")
+print(f"Expected count in interval = R * (k^2 - 284) / M = {R * (k**2 - 284) / M:.6f}")
+
+# Check some specific k values
+print("\n" + "=" * 60)
+for k in [17, 18, 19, 20, 28]:
+    M = 1
+    R = 1
+    for p in [p for p in [2, 3, 5, 7, 11, 13, 17, 19, 23] if p <= k]:
+        count, L = count_valid_residues(k, p)
+        M *= p ** L
+        R *= count
+    interval_len = k**2 - 284 if k**2 > 284 else 0
+    expected = R * interval_len / M if M > 0 else 0
+    print(f"k={k:2d}: interval ({284}, {k**2:3d}], len={interval_len:3d}, M={M:15,}, R={R:12,}, expected={expected:.6f}")
+EOF
+
+[2026-02-08T09:46:02.584Z] 
+$ python3 << 'EOF'
+# Explicit verification for k=17: check all n in (284, 289]
+
+def to_base(n, p):
+    """Return digits of n in base p (LSB first)"""
+    if n == 0:
+        return [0]
+    digits = []
+    while n > 0:
+        digits.append(n % p)
+        n //= p
+    return digits
+
+def digit_dominates(k, n, p):
+    """Check if k ≤_p n (every digit of k ≤ corresponding digit of n)"""
+    digits_k = to_base(k, p)
+    digits_n = to_base(n, p)
+    # Pad with zeros
+    max_len = max(len(digits_k), len(digits_n))
+    digits_k += [0] * (max_len - len(digits_k))
+    digits_n += [0] * (max_len - len(digits_n))
+    
+    for dk, dn in zip(digits_k, digits_n):
+        if dk > dn:
+            return False
+    return True
+
+def check_all_primes(k, n):
+    """Check if k ≤_p n for all primes p ≤ k"""
+    primes = [p for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29] if p <= k]
+    failures = []
+    for p in primes:
+        if not digit_dominates(k, n, p):
+            failures.append(p)
+    return len(failures) == 0, failures
+
+# Test k=17
+print("Testing k=17, interval (284, 289]:")
+print("-" * 50)
+for n in range(285, 290):
+    passes, failures = check_all_primes(17, n)
+    status = "✓ PASS" if passes else f"✗ FAIL at p={failures}"
+    print(f"  n={n}: {status}")
+
+# Test k=18
+print("\nTesting k=18, interval (284, 324]:")
+print("-" * 50)
+exceptions = []
+for n in range(285, 325):
+    passes, failures = check_all_primes(18, n)
+    if passes:
+        exceptions.append(n)
+print(f"  Exceptions found: {exceptions if exceptions else 'None'}")
+
+# Test k=28
+print("\nTesting k=28, interval (284, 784]:")
+print("-" * 50)
+exceptions = []
+for n in range(285, 785):
+    passes, failures = check_all_primes(28, n)
+    if passes:
+        exceptions.append(n)
+print(f"  Exceptions found: {exceptions if exceptions else 'None'}")
+
+# Test all k from 17 to 28
+print("\n" + "=" * 50)
+print("Summary for all k in {17, ..., 28}:")
+print("-" * 50)
+for k in range(17, 29):
+    k_sq = k ** 2
+    if k_sq <= 284:
+        print(f"k={k:2d}: k² = {k_sq} ≤ 284, no interval to check")
+        continue
+    exceptions = []
+    for n in range(285, k_sq + 1):
+        passes, _ = check_all_primes(k, n)
+        if passes:
+            exceptions.append(n)
+    print(f"k={k:2d}: interval (284, {k_sq:3d}], exceptions found: {exceptions if exceptions else 'None'}")
+EOF
+
+[2026-02-08T09:46:43.732Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:46:59.601Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:47:09.445Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:47:19.774Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:47:23.333Z] 
+$ python3 -c "
+for k in range(17, 29):
+    length = k**2 - 284
+    print(f'k={k}: interval (284, {k**2}], length={length}')
+"
+[2026-02-08T09:47:27.646Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:47:31.948Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-w0p --status "Proof complete, verifying final details"
+[2026-02-08T09:47:35.813Z] 
+$ cd /home/jarred/code/erdos-1094 && wc -l proofs/bound-n-for-small-k.md && head -30 proofs/bound-n-for-small-k.md
+[2026-02-08T09:47:45.978Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T09:47:45.978Z] 📄 Log saved to .tm/logs/worker-erdos1094-w0p.md
+[2026-02-08T09:47:45.979Z] 
+📊 Task erdos1094-w0p completed:
+[2026-02-08T09:47:45.979Z]    Summary: Proved that for k ≤ 28 and n > 284, there exists a prime p ≤ max(n/k, k) dividing C(n,k). Published to proofs/bound-n-for-small-k.md
+[2026-02-08T09:47:45.979Z]    Details: Confidence: High. The proof splits into two cases:
+
+**Case A (n > k²):** References proofs/large-n-divisibility.md which establishes that primes in (k, n/k] force divisibility via the Interval Divisibility Lemma.
+
+**Case B (284 < n ≤ k²):** For k ∈ {17,...,28}, uses explicit CRT density analysis. Computed that all k in this range have expected exception count < 1 in the interval (284, k²]. Verified by exhaustive enumeration that zero n in any such interval satisfy the digit-domination conditions for all primes p ≤ k.
+
+Key results:
+- Trivial cases k=1,2 handled directly
+- For k ∈ {3,...,16}, we have k² ≤ 256 < 284, so Case A applies immediately
+- For k ∈ {17,...,28}, exhaustive verification confirms no exceptions in (284, k²]
+- The 14 known exceptions all satisfy n ≤ 284, with (284,28) achieving the boundary exactly
+
+Dependencies: proofs/large-n-divisibility.md (under review), proofs/kummer-theorem.md (verified), proofs/large-prime-criterion.md (verified)

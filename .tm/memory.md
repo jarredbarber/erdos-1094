@@ -182,3 +182,28 @@
 - If BOTH revision tasks fail on the density→count gap: this is a fundamental mathematical challenge. May need to restructure: instead of "density < 1 → zero count", use "exhaustive CRT enumeration for all k" (computationally intensive but rigorous).
 - Strike count: CRT density = 1/3. Large-n = 1/3. k≤28 = 0/3.
 - Strategic framing level: 2 for CRT density and large-n (revision after first attempt). Level 1 for k≤28.
+
+## Heartbeat — 2026-02-08T09:33:00Z (Heartbeat #10)
+
+**Metrics**: 1 sorry | 2 verified proofs | 13 open | 1 in_progress | 12 closed | 0 failed
+**Status**: ⚠️ Intervened. Fixed DAG gap — revision tasks had no downstream re-verify tasks.
+**Observations**:
+- 1 task closed since HB#9: `erdos1094-bfj` (large-n rigor fix). Revision notes say Section 7 rewritten with rigorous case analysis, removing probabilistic density argument.
+- `erdos1094-liv` (combine k≥29) CLOSED — produced `proofs/no-exceptions-k-ge-29.md` (140 lines, Draft ✏️). Fast and clean.
+- `erdos1094-gca` IN PROGRESS — verifying combine proof, finding unverified dependencies. Will likely request revision.
+- **DAG gap found**: After verify→revision cycle, no re-verify tasks existed. Proofs would be stranded at "Under review 🔍" forever. The CRT density revision (`erdos1094-pwh`) was a dangling node with no downstream.
+- New proof: `proofs/no-exceptions-k-ge-29.md` — clean two-case split (n≤k² uses CRT, n>k² uses large-n).
+**Actions**:
+1. Created `erdos1094-z4m`: Re-review CRT density after revision (depends on `erdos1094-pwh`)
+2. Created `erdos1094-ons`: Re-review large-n after CRT verified (depends on `erdos1094-z4m`)
+3. Created `erdos1094-q3j`: Re-review combine proof after all deps verified (depends on z4m + ons)
+4. Updated deps on `erdos1094-qw0` (formalize k≥29) to also depend on `erdos1094-q3j`
+5. Updated deps on `erdos1094-hvy` (review main-theorem) to also depend on `erdos1094-q3j`
+**Critical path**: pwh → z4m → ons → q3j → hvy/qw0 → n3e (sorry=0)
+**Parallel path**: w0p → 8tg → hvy/7tg → n3e
+**Unblocked after gca closes**: w0p (k≤28), pwh (CRT fix), 419 (Kummer formalize), 41t (large-prime formalize)
+**Watch next**:
+- Does `erdos1094-gca` close cleanly? (Expected: revision requested due to unverified deps)
+- Does worker pick up `erdos1094-pwh` next? This is the critical path bottleneck.
+- Watch `erdos1094-w0p` (k≤28 bound) — first attempt, should be computationally straightforward.
+- Strike count: CRT density = 1/3. Large-n = 1/3 (revision done, awaiting re-verify). k≤28 = 0/3.
