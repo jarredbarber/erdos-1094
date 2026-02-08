@@ -207,3 +207,29 @@
 - Does worker pick up `erdos1094-pwh` next? This is the critical path bottleneck.
 - Watch `erdos1094-w0p` (k≤28 bound) — first attempt, should be computationally straightforward.
 - Strike count: CRT density = 1/3. Large-n = 1/3 (revision done, awaiting re-verify). k≤28 = 0/3.
+
+## Heartbeat — 2026-02-08T09:51:00Z (Heartbeat #11)
+
+**Metrics**: 1 sorry | 2 verified proofs | 11 open | 1 in_progress | 16 closed | 0 failed
+**Status**: ✅ Strong progress. k≤28 bound completed. First formalize task started!
+**Observations**:
+- 4 tasks closed since HB#10: gca (combine verify), w0p (k≤28 explore), liv (combine k≥29), 8tg (k≤28 verify).
+- **k≤28 bound proved** (`erdos1094-w0p`): proofs/bound-n-for-small-k.md completed. Verify task 8tg requested revision — same pattern: (1) unverified dependency on large-n, (2) computational verification lacks rigor. Revision task `erdos1094-tg2` created.
+- **gca closed as expected**: combine proof remains "Under review" pending dep verification. Re-review task q3j in place.
+- **🎯 MILESTONE: First formalize task started!** `erdos1094-419` (Kummer formalization) in_progress, 125 log lines. Agent reasoning about Lean API for Lucas/Kummer theorem. This is the first backward-direction work.
+- **DAG gap fixed again**: Created re-verify task `erdos1094-kwa` for k≤28 after revision (depends on tg2). Updated deps on 7tg and hvy to include kwa.
+- All proofs now in "Under review" or "Verified" — no Drafts pending initial review (except main-theorem which is the top-level combiner).
+- **Concern**: tg2 task description offers "provide code" as an option, but explore agents can't write code. Agent should choose pure math option — monitoring.
+**Actions**:
+1. Created `erdos1094-kwa`: Re-review k≤28 bound after revision (depends on tg2)
+2. Updated deps on `erdos1094-7tg` (formalize k≤28) to include kwa
+3. Updated deps on `erdos1094-hvy` (review main-theorem) to include kwa
+**Critical paths (updated)**:
+- k≥29: pwh → z4m → ons → q3j → qw0/hvy → n3e
+- k≤28: tg2 → kwa → 7tg/hvy → n3e
+- Formalize: 419 (in_progress!) + 41t → qw0/7tg → n3e
+**Watch next**:
+- Does `erdos1094-419` (Kummer formalize) compile? First Lean work — watch for hallucination pattern (guessed lemma names).
+- Does `erdos1094-tg2` (k≤28 revision) choose pure math over code? If it writes code, role violation.
+- Worker queue after 419: 41t (formalize large-prime), pwh (CRT fix), tg2 (k≤28 fix).
+- Strike count: CRT density = 1/3. Large-n = 1/3. k≤28 = 1/3.

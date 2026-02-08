@@ -4489,3 +4489,451 @@ $ tm update erdos1094-8tg --state closed
 - Created follow-up task erdos1094-tg2 for explore agent to address the revision requests
 
 The proof is NOT rejected — the approach is fundamentally sound and once the gaps are filled, it will be ready for verification.
+[2026-02-08T09:50:20.134Z] ✅ Successfully merged task/erdos1094-8tg into main
+[2026-02-08T09:50:20.134Z] 🗑️  Deleting branch task/erdos1094-8tg...
+[2026-02-08T09:50:20.142Z] ✓ Deleted local branch task/erdos1094-8tg
+[2026-02-08T09:50:20.149Z] 🚀 Pushing main to remote...
+[2026-02-08T09:50:20.749Z] ✓ Pushed to remote
+[2026-02-08T09:50:21.751Z] 
+================================================================================
+[2026-02-08T09:50:21.751Z] 📌 Processing task: erdos1094-419 - Formalize Kummer/Lucas criterion for binomial divisibility
+[2026-02-08T09:50:21.751Z]    Role: formalize | Priority: 2 | Size: medium
+[2026-02-08T09:50:21.751Z] ================================================================================
+
+[2026-02-08T09:50:21.754Z] ✓ Claimed task erdos1094-419
+
+[2026-02-08T09:50:21.754Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T09:50:21.754Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T09:50:21.769Z] 📸 Capturing file state before agent execution...
+[2026-02-08T09:50:21.783Z] ✓ Captured state: 41 tracked, 1 untracked files
+
+[2026-02-08T09:50:21.783Z] 🌿 Creating branch: task/erdos1094-419
+[2026-02-08T09:50:21.791Z] ✓ Working on branch task/erdos1094-419
+
+[2026-02-08T09:50:25.762Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-419 --status "Reading task context and NL proof"
+[2026-02-08T09:50:30.904Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:50:30.910Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.lean" | head -20
+[2026-02-08T09:50:30.920Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.lean 2>/dev/null || cat lakefile.toml 2>/dev/null
+[2026-02-08T09:50:33.074Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:50:33.075Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:50:39.120Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -rl "multiplicity_choose\|kummer\|lucas_theorem\|Nat.Prime.multiplicity_choose\|prime_pow_dvd_choose\|digitSum\|digit_sum" .lake/packages/mathlib/Mathlib/ --include="*.lean" 2>/dev/null | head -20
+[2026-02-08T09:50:39.359Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -rl "padicValNat.*choose\|choose.*padicValNat\|multiplicity.*choose" .lake/packages/mathlib/Mathlib/ --include="*.lean" 2>/dev/null | head -20
+[2026-02-08T09:50:41.590Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:50:41.591Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:51:13.402Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "digits_get\|getD.*digits\|digits.*getD\|digit_eq\|digits_def\|digits_add\|nth_digit" .lake/packages/mathlib/Mathlib/Data/Nat/Digits/ --include="*.lean" -r | head -30
+[2026-02-08T09:51:13.410Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "def digits\|getD.*digit\|digits.*div\|digits_len\|digits_lt_base" .lake/packages/mathlib/Mathlib/Data/Nat/Digits/Defs.lean | head -30
+[2026-02-08T09:51:16.260Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "getD_digits\|sub_one_mul_sum" .lake/packages/mathlib/Mathlib/Data/Nat/Digits/Lemmas.lean | head -10
+[2026-02-08T09:51:18.957Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:52:21.571Z] [overseer] 💓 Heartbeat complete: Intervened: created re-verify task for k≤28, updated downstream deps. First formalize task running!
+[2026-02-08T09:53:04.037Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-419 --status "Exploring Mathlib API for Kummer/Lucas/factorization"
+[2026-02-08T09:53:11.838Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_api.lean << 'EOF'
+import Mathlib
+
+-- Check key API
+#check Nat.factorization_choose_eq_zero_of_lt
+#check Choose.choose_modEq_choose_mod_mul_choose_div_nat
+#check Nat.getD_digits
+#check Nat.choose_eq_zero_of_lt
+#check Nat.choose_pos
+#check Nat.Prime.dvd_mul
+#check Nat.Prime.eq_one_of_pos_of_self_mul_self_mod_prime_eq_one
+#check Nat.div_div_eq_div_mul
+#check Nat.div_le_div_right
+#check Nat.Prime.one_lt
+EOF
+lake env lean /tmp/test_api.lean 2>&1 | head -30
+[2026-02-08T09:53:23.161Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_api2.lean << 'EOF'
+import Mathlib
+
+-- Check dvd and factorization relationship
+#check Nat.dvd_iff_prime_pow_dvd_dvd
+#check Nat.Prime.dvd_iff_one_le_factorization
+#check Nat.Finsupp.mem_support_iff
+
+-- Check Nat.ModEq
+#check Nat.ModEq
+#check Nat.modEq_iff_dvd'
+#check Nat.modEq_zero_iff_dvd
+
+-- Check div stuff
+#check Nat.div_lt_self
+#check Nat.pos_of_ne_zero
+
+-- Check choose_eq_zero_iff
+#check @Nat.choose_eq_zero_iff
+EOF
+lake env lean /tmp/test_api2.lean 2>&1 | head -20
+[2026-02-08T09:53:37.080Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_api3.lean << 'EOF'
+import Mathlib
+
+-- Check how to go from ModEq to dvd
+example (p n k : ℕ) [Fact p.Prime] (h : n.choose k ≡ 0 [MOD p]) : p ∣ n.choose k := by
+  rwa [Nat.modEq_zero_iff_dvd] at h
+
+-- Check the relationship for Lucas
+example (p n k : ℕ) [Fact p.Prime] :
+    p ∣ n.choose k ↔ p ∣ (n % p).choose (k % p) * (n / p).choose (k / p) := by
+  constructor
+  · intro h
+    have lucas := Choose.choose_modEq_choose_mod_mul_choose_div_nat (n := n) (k := k) (p := p)
+    rwa [Nat.ModEq.comm, Nat.modEq_iff_dvd_sub lucas h] at h
+    sorry
+  · sorry
+
+EOF
+lake env lean /tmp/test_api3.lean 2>&1 | head -30
+[2026-02-08T09:53:48.324Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_api4.lean << 'EOF'
+import Mathlib
+
+-- Check ModEq and dvd relationship
+#check Nat.ModEq.dvd_iff
+#check Nat.ModEq
+
+example (p a b : ℕ) (h : a ≡ b [MOD p]) : p ∣ a ↔ p ∣ b := by
+  exact h.dvd_iff
+
+-- So from Lucas:
+example (p n k : ℕ) [Fact p.Prime] :
+    p ∣ n.choose k ↔ p ∣ (n % p).choose (k % p) * (n / p).choose (k / p) := by
+  exact Choose.choose_modEq_choose_mod_mul_choose_div_nat.dvd_iff
+EOF
+lake env lean /tmp/test_api4.lean 2>&1 | head -10
+[2026-02-08T09:54:05.785Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_api5.lean << 'EOF'
+import Mathlib
+
+-- Fix: dvd_iff needs d ∣ m, so d = p and m = p means we need p ∣ p
+example (p n k : ℕ) [hp : Fact p.Prime] :
+    p ∣ n.choose k ↔ p ∣ (n % p).choose (k % p) * (n / p).choose (k / p) :=
+  Choose.choose_modEq_choose_mod_mul_choose_div_nat.dvd_iff dvd_rfl
+
+-- Good! Now check the small binomial case
+-- For a, b < p (prime), p ∤ C(a, b) when b ≤ a, and C(a, b) = 0 when a < b
+example (p a : ℕ) (hp : p.Prime) (ha : a < p) (k : ℕ) :
+    (a.choose k).factorization p = 0 :=
+  Nat.factorization_choose_eq_zero_of_lt ha
+
+-- So: for a < p, p ∤ C(a, k) when C(a, k) > 0
+-- And C(a, k) > 0 iff k ≤ a
+-- And C(a, k) = 0 iff a < k
+
+-- Combined: p ∣ C(a, k) ↔ a < k, when a < p
+-- Proof: if a < k, C(a, k) = 0, p ∣ 0 ✓
+-- if k ≤ a, C(a, k) > 0, factorization p = 0, so p ∤ C(a, k)
+-- How to go from factorization p = 0 to ¬ p ∣ ?
+-- Need: n.factorization p = 0 → n ≠ 0 → ¬ p ∣ n
+-- Or equivalently: p.Prime → n ≠ 0 → (p ∣ n ↔ 1 ≤ n.factorization p)
+example (p n : ℕ) (hp : p.Prime) (hn : n ≠ 0) :
+    p ∣ n ↔ 1 ≤ n.factorization p :=
+  hp.dvd_iff_one_le_factorization hn
+EOF
+lake env lean /tmp/test_api5.lean 2>&1 | head -10
+[2026-02-08T09:54:15.201Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-419 --status "Writing Kummer.lean with digit-domination criterion"
+[2026-02-08T09:54:48.715Z] 
+🛠️  Executing tool: write...
+[2026-02-08T09:54:51.582Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:55:14.276Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix.lean << 'EOF'
+import Mathlib
+
+-- Fix 1: ne_of_gt for ℕ
+example (n : ℕ) (h : 0 < n) : n ≠ 0 := Nat.pos_iff_ne_zero.mp h
+
+-- Fix 2: strong induction
+#check Nat.strongRecOn
+-- check what induction principles are available
+example : ∀ n : ℕ, True := by
+  intro n
+  induction n using Nat.strongRecOn with
+  | _ n ih => trivial
+
+-- Fix 3: div_div rewriting
+-- Nat.div_div_eq_div_mul : m / n / k = m / (n * k)
+-- I need: k / (p * p^i) = k / p / p^i and k / (p^i * p) = k / p^i / p
+-- pow_succ : p ^ (n + 1) = p ^ n * p
+-- So k / p^(i+1) = k / (p^i * p) = k / p^i / p... no wait
+-- Nat.div_div_eq_div_mul says m / n / k = m / (n * k)
+-- So k / p / p^i = k / (p * p^i) (using div_div with n=p, k=p^i)
+-- and k / p^(i+1) = k / (p * p^i) (by pow_succ)
+-- I need: k / p / p^i → k / p^(i+1)
+-- k / p / p^i = k / (p * p^i) = k / p^(i+1)
+
+example (k p i : ℕ) : k / p / p ^ i = k / (p * p ^ i) := Nat.div_div_eq_div_mul k p (p ^ i)
+example (p i : ℕ) : p * p ^ i = p ^ (i + 1) := by ring
+
+-- So: k / p / p ^ i = k / p ^ (i + 1)
+example (k p i : ℕ) : k / p / p ^ i = k / p ^ (i + 1) := by
+  rw [Nat.div_div_eq_div_mul, pow_succ]
+
+-- And I need to convert between k / p^(i+1) % p and k / (p^i * p) % p
+-- p^(i+1) = p^i * p
+-- But also p * p^i = p^(i+1)
+-- Nat.div_div_eq_div_mul says m / n / k = m / (n * k)  [order: n * k]
+-- pow_succ: p ^ (n + 1) = p ^ n * p [not p * p^n]
+-- So k / p^(i+1) = k / (p^i * p) and
+-- k / p / p^i = k / (p * p^i)
+-- These are equal because p^i * p = p * p^i
+example (k p i : ℕ) (hi : k / (p ^ i * p) % p > 0) :
+    k / p / p ^ i % p > 0 := by
+  rwa [Nat.div_div_eq_div_mul, mul_comm] at hi
+EOF
+lake env lean /tmp/test_fix.lean 2>&1 | head -20
+[2026-02-08T09:55:30.374Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix2.lean << 'EOF'
+import Mathlib
+
+-- The issue: need to convert between k / (p^i * p) and k / p / p^i
+-- Nat.div_div_eq_div_mul : m / n / k = m / (n * k)
+-- So: k / p / p^i = k / (p * p^i) [taking n = p, k = p^i]
+-- But we have k / (p^i * p) which is k / (p^i * p)
+-- p^i * p = p * p^i by mul_comm
+-- So k / (p^i * p) = k / (p * p^i) = k / p / p^i
+
+example (k p i : ℕ) (hi : k / (p ^ i * p) % p > 0) :
+    k / p / p ^ i % p > 0 := by
+  rwa [Nat.div_div_eq_div_mul, show p * p ^ i = p ^ i * p from mul_comm p (p ^ i)]
+
+-- Similarly, if I have k / p^(i+1)
+-- pow_succ : p ^ (n + 1) = p ^ n * p
+-- or pow_succ': p ^ (n + 1) = p * p ^ n
+-- I want: k / p^(i+1) = k / p / p^i
+-- k / p^(i+1) = k / (p^i * p) = k / (p * p^i) = k / p / p^i
+
+-- From the digit_violation_iff_or, I should rewrite using pow_succ
+-- k / p^(i+1) = k / (p^i * p) and we want k / p / p^i
+-- Both are equal to k / (p * p^i)
+
+-- Better approach: just show the splitting directly
+example (k p : ℕ) (i : ℕ) : k / p ^ (i + 1) = k / p / p ^ i := by
+  rw [pow_succ, ← Nat.div_div_eq_div_mul]
+  ring_nf
+  sorry
+
+-- Hmm let me try another approach
+example (k p : ℕ) (i : ℕ) : k / p ^ (i + 1) = k / p / p ^ i := by
+  rw [pow_succ, mul_comm, ← Nat.div_div_eq_div_mul]
+EOF
+lake env lean /tmp/test_fix2.lean 2>&1 | head -20
+[2026-02-08T09:55:44.690Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix3.lean << 'EOF'
+import Mathlib
+
+-- Clean approach for digit_violation_iff_or
+-- The key facts:
+-- k / p ^ (i + 1) = k / p / p ^ i  (via pow_succ + div_div)
+-- k / p ^ 0 % p = k % p
+
+example (p : ℕ) [hp : Fact p.Prime] (n k : ℕ) :
+    (∃ i, k / p ^ i % p > n / p ^ i % p) ↔
+    (k % p > n % p ∨ ∃ i, (k / p) / p ^ i % p > (n / p) / p ^ i % p) := by
+  constructor
+  · rintro ⟨i, hi⟩
+    cases i with
+    | zero => left; simpa using hi
+    | succ i =>
+      right
+      refine ⟨i, ?_⟩
+      rwa [pow_succ, mul_comm, ← Nat.div_div_eq_div_mul,
+           mul_comm, ← Nat.div_div_eq_div_mul] at hi
+  · rintro (h | ⟨i, hi⟩)
+    · exact ⟨0, by simpa using h⟩
+    · refine ⟨i + 1, ?_⟩
+      rwa [pow_succ, mul_comm, ← Nat.div_div_eq_div_mul,
+           mul_comm, ← Nat.div_div_eq_div_mul]
+EOF
+lake env lean /tmp/test_fix3.lean 2>&1 | head -20
+[2026-02-08T09:56:00.133Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix4.lean << 'EOF'
+import Mathlib
+
+-- Helper lemma for the digit shifting
+lemma div_pow_succ_mod (k p i : ℕ) : k / p ^ (i + 1) % p = k / p / p ^ i % p := by
+  rw [pow_succ, mul_comm, ← Nat.div_div_eq_div_mul]
+
+example (p : ℕ) [hp : Fact p.Prime] (n k : ℕ) :
+    (∃ i, k / p ^ i % p > n / p ^ i % p) ↔
+    (k % p > n % p ∨ ∃ i, (k / p) / p ^ i % p > (n / p) / p ^ i % p) := by
+  constructor
+  · rintro ⟨i, hi⟩
+    cases i with
+    | zero => left; simpa using hi
+    | succ i =>
+      right
+      refine ⟨i, ?_⟩
+      rwa [div_pow_succ_mod, div_pow_succ_mod] at hi
+  · rintro (h | ⟨i, hi⟩)
+    · exact ⟨0, by simpa using h⟩
+    · refine ⟨i + 1, ?_⟩
+      rwa [div_pow_succ_mod, div_pow_succ_mod]
+EOF
+lake env lean /tmp/test_fix4.lean 2>&1 | head -10
+[2026-02-08T09:56:11.487Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix5.lean << 'EOF'
+import Mathlib
+
+-- Test the strong induction
+example (p : ℕ) [hp : Fact p.Prime] :
+    ∀ n k : ℕ, k ≤ n → (p ∣ n.choose k ↔ ∃ i, k / p ^ i % p > n / p ^ i % p) := by
+  intro n
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    intro k hkn
+    sorry
+EOF
+lake env lean /tmp/test_fix5.lean 2>&1 | head -10
+[2026-02-08T09:56:24.309Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix6.lean << 'EOF'
+import Mathlib
+
+-- Base case: n = 0, k = 0
+example (p : ℕ) [hp : Fact p.Prime] :
+    ¬(p ∣ Nat.choose 0 0) ∧ ¬(∃ i, 0 / p ^ i % p > 0 / p ^ i % p) := by
+  simp [Nat.Prime.one_lt (Fact.out : p.Prime)]
+
+-- What about if n = 0, k = 0:
+example (p : ℕ) [hp : Fact p.Prime] (k : ℕ) (hk : k ≤ 0) :
+    p ∣ Nat.choose 0 k ↔ ∃ i, k / p ^ i % p > 0 / p ^ i % p := by
+  have hk0 : k = 0 := Nat.le_zero.mp hk
+  subst hk0
+  simp [Nat.Prime.one_lt (Fact.out : p.Prime)]
+EOF
+lake env lean /tmp/test_fix6.lean 2>&1 | head -10
+[2026-02-08T09:56:34.824Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix7.lean << 'EOF'
+import Mathlib
+
+-- Base case
+example (p : ℕ) [hp : Fact p.Prime] (k : ℕ) (hk : k ≤ 0) :
+    p ∣ Nat.choose 0 k ↔ ∃ i, k / p ^ i % p > 0 / p ^ i % p := by
+  have hk0 : k = 0 := Nat.le_zero.mp hk
+  subst hk0
+  simp
+  exact (Fact.out : p.Prime).one_lt.ne'
+EOF
+lake env lean /tmp/test_fix7.lean 2>&1 | head -5
+[2026-02-08T09:56:48.407Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_fix8.lean << 'EOF'
+import Mathlib
+
+-- p ∣ C(a, b) ↔ a < b for a < p  
+example (p a b : ℕ) (hp : p.Prime) (ha : a < p) :
+    p ∣ a.choose b ↔ a < b := by
+  constructor
+  · intro hdvd
+    by_contra h
+    push_neg at h
+    have hpos : 0 < a.choose b := Nat.choose_pos h
+    have hfact : (a.choose b).factorization p = 0 :=
+      Nat.factorization_choose_eq_zero_of_lt ha
+    have h1 := (hp.dvd_iff_one_le_factorization hpos.ne').mp hdvd
+    omega
+  · intro h
+    rw [Nat.choose_eq_zero_of_lt h]
+    exact dvd_zero p
+EOF
+lake env lean /tmp/test_fix8.lean 2>&1 | head -5
+[2026-02-08T09:57:23.795Z] 
+🛠️  Executing tool: write...
+[2026-02-08T09:57:26.259Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:57:36.623Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_base.lean << 'EOF'
+import Mathlib
+
+-- Check the right name
+#check Nat.eq_zero_or_pos
+#check @eq_or_gt_of_le
+#check @Nat.eq_or_lt_of_le
+EOF
+lake env lean /tmp/test_base.lean 2>&1 | head -10
+[2026-02-08T09:57:47.405Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:57:51.226Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:57:53.446Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:58:02.961Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:58:05.924Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:58:09.905Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:58:12.708Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:58:22.278Z] 
+🛠️  Executing tool: read...
+[2026-02-08T09:58:27.055Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:58:29.448Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:58:40.411Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:58:43.120Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:58:52.869Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:58:55.742Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/Kummer.lean 2>&1
+[2026-02-08T09:59:06.334Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:59:08.673Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1
+[2026-02-08T09:59:30.686Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T09:59:32.980Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1
+[2026-02-08T09:59:56.807Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:00:00.241Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-419 --status "Completed - lake build succeeds, no sorry introduced"
+[2026-02-08T10:00:03.627Z] 
+$ cd /home/jarred/code/erdos-1094 && tm close erdos1094-419
+[2026-02-08T10:00:14.400Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:00:14.400Z] 📄 Log saved to .tm/logs/worker-erdos1094-419.md
+[2026-02-08T10:00:14.401Z] 
+📊 Task erdos1094-419 completed:
+[2026-02-08T10:00:14.401Z]    Summary: Closed kummer_criterion in Erdos/Kummer.lean. lake build succeeds. No sorry holes introduced.
+[2026-02-08T10:00:14.401Z]    Details: Created Erdos/Kummer.lean with the fully proven theorem:
+
+  theorem kummer_criterion (p : ℕ) [Fact p.Prime] (n k : ℕ) (hk : k ≤ n) :
+    p ∣ n.choose k ↔ ∃ i, (Nat.digits p k).getD i 0 > (Nat.digits p n).getD i 0
+
+Proof approach:
+- Uses Lucas' theorem from Mathlib (Choose.choose_modEq_choose_mod_mul_choose_div_nat) to decompose p ∣ C(n,k) into p ∣ C(n%p, k%p) * C(n/p, k/p)
+- Uses Nat.Prime.dvd_mul to split the product
+- Uses Nat.factorization_choose_eq_zero_of_lt to show that for a < p, p ∣ C(a,b) ↔ a < b (the single-digit case)
+- Strong induction on n (n/p < n when n > 0, p ≥ 2) to recurse on C(n/p, k/p)
+- A shifting lemma (div_pow_succ_mod) converts between p^(i+1) digits and shifted p^i digits
+
+Key helper lemmas (all private, no sorry):
+- prime_dvd_choose_small: single-digit binomial divisibility
+- div_pow_succ_mod: digit shifting identity
+- digit_violation_iff_or: splits digit condition into zeroth digit + recursive
+- kummer_criterion_core: the core induction in terms of n / p^i % p
+
+The main theorem then applies Nat.getD_digits to convert to the Nat.digits representation.
