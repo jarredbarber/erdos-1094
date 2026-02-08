@@ -1,6 +1,6 @@
 # Bound on $n$ for Small $k$: Exceptions with $k \leq 28$ Satisfy $n \leq 284$
 
-**Status:** Draft ✏️  
+**Status:** Verified ✅  
 **Statement:** For every integer $k$ with $1 \leq k \leq 28$ and every integer $n > 284$ with $n \geq 2k$:
 $$\mathrm{minFac}\left(\binom{n}{k}\right) \leq \max\!\left(\left\lfloor \frac{n}{k} \right\rfloor, k\right).$$
 Equivalently, there exists a prime $p \leq \max(\lfloor n/k \rfloor, k)$ such that $p \mid \binom{n}{k}$.
@@ -10,7 +10,8 @@ Equivalently, there exists a prime $p \leq \max(\lfloor n/k \rfloor, k)$ such th
 - proofs/kummer-theorem.md (Verified ✅) — digit-domination criterion
 - proofs/large-prime-criterion.md (Verified ✅) — divisibility criterion for primes $> k$
 
-**Confidence:** High
+**Confidence:** High  
+**Reviewed by:** erdos1094-8tg (revision requested), erdos1094-kwa (verified)
 
 ---
 
@@ -556,3 +557,58 @@ All tests confirm correct implementation.
 - proofs/kummer-theorem.md — Digit-domination criterion (Verified ✅)
 - proofs/large-prime-criterion.md — Modular condition for primes $> k$ (Verified ✅)
 - proofs/exploration.md — List of known exceptions
+
+---
+
+## Review Notes
+
+### erdos1094-8tg (Revision Requested)
+
+Two issues identified:
+1. **Dependency on unverified proof:** proofs/large-n-divisibility.md was "Under review 🔍", not "Verified ✅"
+2. **Computational verification lacks reproducible detail:** Need explicit algorithms and executable code
+
+### erdos1094-kwa (Verified ✅)
+
+**Re-review after revision by erdos1094-tg2:**
+
+Both issues have been fully resolved:
+
+**Issue 1 (Dependency): RESOLVED ✅**
+- All dependencies are now verified:
+  - proofs/large-n-divisibility.md (Verified ✅ by erdos1094-ons)
+  - proofs/kummer-theorem.md (Verified ✅)
+  - proofs/large-prime-criterion.md (Verified ✅)
+
+**Issue 2 (Computational rigor): RESOLVED ✅**
+- Section 5 now provides complete algorithm specifications:
+  - 5.1: `digit_dominates` algorithm (pseudocode)
+  - 5.2: `verify_case_B` algorithm (pseudocode)
+  - 5.3: Complete verification results (2810 values tested, 0 exceptions found)
+- Section 4.3: Detailed manual verification examples for k=17 and k=18
+- Appendix A: Full Python implementation (complete, executable, independently verified)
+- Appendix B: Algorithm correctness checks with manual examples
+
+**Verification performed:**
+1. Executed Python code from Appendix A: all tests pass
+2. Spot-checked manual examples: k=17, n=287 matches algorithmic result
+3. Verified boundary cases: (284, 28) is correctly identified as exception, (285, 28) is not
+4. Confirmed proof structure covers all cases:
+   - Case 0: k ∈ {1, 2} handled directly
+   - Case 1: k ∈ {3, ..., 16} via Case A (since k² < 284)
+   - Case 2: k ∈ {17, ..., 28} via Cases A (n > k²) and B (284 < n ≤ k²)
+
+**Review checklist:**
+- [x] Statement clarity
+- [x] Assumptions explicit  
+- [x] Logical flow complete
+- [x] Quantifiers correct
+- [x] Edge cases handled
+- [x] Dependencies verified
+- [x] Completeness (all k ≤ 28, all n > 284)
+- [x] No hidden assumptions
+- [x] Computational reproducibility
+
+**Conclusion:** The proof is rigorous, complete, and fully reproducible. All computational claims are verified by executable code. The revision successfully addressed both issues from the original review.
+
+**APPROVED ✅**
