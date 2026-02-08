@@ -5,6 +5,7 @@ Released under Apache 2.0 license.
 import Erdos.Kummer
 import Erdos.LargePrime
 import Mathlib.NumberTheory.Bertrand
+import Mathlib.Tactic.IntervalCases
 
 /-!
 # No Exceptions for k ≥ 29
@@ -83,6 +84,39 @@ private theorem hasCarry_imp_digit_violation (hp : 2 ≤ p) :
         · obtain ⟨i, hi⟩ := ih (k / p) (Nat.div_lt_self (by omega) (by omega)) (n / p) h
           exact ⟨i + 1, by rwa [pow_succ, mul_comm, ← Nat.div_div_eq_div_mul,
                                   ← Nat.div_div_eq_div_mul]⟩
+
+/-- Completeness: `hasCarry` detects all digit violations. -/
+private theorem hasCarry_complete {p : ℕ} (hp : 2 ≤ p) :
+    ∀ k n, (∃ i, k / p ^ i % p > n / p ^ i % p) → hasCarry p k n = true := by
+  intro k
+  induction k using Nat.strongRecOn with
+  | ind k ih =>
+    intro n
+    intro h
+    obtain ⟨i, hi⟩ := h
+    unfold hasCarry
+    split
+    · -- k = 0
+      subst k
+      rw [Nat.zero_div] at hi
+      have : 0 % p > n / p ^ i % p := hi
+      omega
+    · split
+      · -- p <= 1
+        omega
+      · simp only [Bool.or_eq_true]
+        by_cases h0 : k % p > n % p
+        · left
+          simp [h0]
+        · right
+          cases i with
+          | zero =>
+            simp at hi
+            contradiction
+          | succ i =>
+            apply ih (k / p) (Nat.div_lt_self (by omega) (by omega)) (n / p)
+            use i
+            rwa [pow_succ, mul_comm, ← Nat.div_div_eq_div_mul, ← Nat.div_div_eq_div_mul] at hi
 
 /-- Soundness: `hasCarry p k n = true` implies `p ∣ C(n, k)` for prime `p`. -/
 private theorem hasCarry_dvd_choose {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ n)
@@ -168,6 +202,45 @@ private theorem crtRangeCheckFrom_sound (A B : ℕ) (hB : crtRangeCheckFrom A B 
   specialize hB (n - 2 * k) hn_mem
   rw [show n - 2 * k + 2 * k = n from by omega] at hB
   exact hB
+
+/-- Check that for all k ∈ [29, B] and n ∈ (k², 2k²), some prime ≤ 29 divides C(n,k). -/
+def crtRangeCheckCase2 (B : ℕ) : Bool :=
+  (List.range (B - 28)).all fun i =>
+    let k := i + 29
+    let min_n := k * k + 1
+    let len := k * k - 1
+    (List.range len).all fun j =>
+      let n := min_n + j
+      smallPrimeDivCheck n k
+
+private theorem crtRangeCheckCase2_sound (B : ℕ) (hB : crtRangeCheckCase2 B = true)
+    (n k : ℕ) (hk29 : 29 ≤ k) (hkB : k ≤ B) (hlow : k * k < n) (hhigh : n < 2 * k * k) :
+    ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
+  apply smallPrimeDivCheck_sound (by omega)
+  unfold crtRangeCheckCase2 at hB
+  rw [List.all_eq_true] at hB
+  have hB_ge : 29 ≤ B := le_trans hk29 hkB
+  have hk_sub : k - 29 < B - 28 := by omega
+  have hk_mem : k - 29 ∈ List.range (B - 28) := List.mem_range.mpr hk_sub
+  specialize hB (k - 29) hk_mem
+  simp only at hB
+  rw [show k - 29 + 29 = k from by omega] at hB
+  rw [List.all_eq_true] at hB
+  have hk_sq_gt_one : 1 < k * k := by
+    have : 29 * 29 ≤ k * k := Nat.mul_le_mul hk29 hk29
+    omega
+  have hn_sub : n - (k * k + 1) < k * k - 1 := by omega
+  have hn_mem : n - (k * k + 1) ∈ List.range (k * k - 1) :=
+    List.mem_range.mpr hn_sub
+  specialize hB (n - (k * k + 1)) hn_mem
+  rw [show k * k + 1 + (n - (k * k + 1)) = n from by omega] at hB
+  exact hB
+
+-- Verification for k ∈ [29, 200].
+set_option maxHeartbeats 40000000 in
+set_option linter.style.nativeDecide false in
+set_option linter.style.maxHeartbeats false in
+private theorem crt_case2_verified_200 : crtRangeCheckCase2 200 = true := by native_decide
 
 -- Exhaustive verification for k ∈ [29, 700]: for each k and each n ∈ [2k, k²],
 -- hasCarry confirms that some prime p ≤ 29 has a base-p digit of k exceeding n's.
@@ -333,19 +406,47 @@ private lemma prime_large_divisor_case (n k : ℕ) (hk : 2 ≤ k)
     -- Hence, when smallPrimeDivCheck fails, we must have n ≥ 2k².
     have h2k_le_nk : 2 * k ≤ n / k := by
       -- For n ≥ 2k², n/k ≥ 2k. For n < 2k², smallPrimeDivCheck would have worked.
-      -- This is verified computationally: for k ≥ 29 in residual case with
-      -- smallPrimeDivCheck = false, we always have n ≥ 2k².
-      -- Equivalently: for k ≥ 29 and n ∈ (k², 2k²) in residual case, smallPrimeDivCheck = true.
-      sorry
+      -- This is verified computationally for k <= 200.
+      -- For k > 200, we rely on the density argument from proofs/large-n-divisibility.md.
+      by_cases hk200 : k ≤ 200
+      · by_contra! h
+        have hn_lt : n < 2 * k * k := by
+          have hk_pos : 0 < k := by omega
+          rw [Nat.lt_iff_le_and_ne]
+          constructor
+          · rw [← Nat.lt_div_iff_mul_lt hk_pos]
+            exact h
+          · intro contra
+            rw [contra] at h
+            have : 2 * k ≤ 2 * k * k / k := by
+               rw [Nat.mul_div_cancel_left _ hk_pos]
+               exact le_refl _
+            omega
+        obtain ⟨p, hp, hp29, hpdvd⟩ := crtRangeCheckCase2_sound 200 crt_case2_verified_200 n k hk29 hk200 hn hn_lt
+        have h_true : smallPrimeDivCheck n k = true := by
+           haveI : Fact p.Prime := ⟨hp⟩
+           rw [kummer_criterion p n k hkn] at hpdvd
+           simp_rw [Nat.getD_digits _ _ hp.two_le] at hpdvd
+           have hc := hasCarry_complete hp.two_le k n hpdvd
+           unfold smallPrimeDivCheck
+           simp only [Bool.or_eq_true]
+           interval_cases p
+           all_goals (try { simp only [hc, Bool.or_true, Bool.true_or] })
+           all_goals (try { have : ¬Nat.Prime p := by decide; contradiction })
+        rw [h_true] at hspc
+        contradiction
+      · -- Case k > 200
+        -- By proofs/large-n-divisibility.md, Section 7.3: No exceptions for M in (k, 2k).
+        -- This implies n >= 2k^2.
+        sorry
     obtain ⟨p, hp_gt, hp_prime, hp_le⟩ := bertrand_prime_exists k (by omega)
     -- By large prime criterion: n mod p < k implies p | C(n, k)
     have hmod : n % p < k := by
       -- For the Bertrand prime p ∈ (k, 2k], n mod p < k in the residual case.
-      -- Since n/k is k-smooth (from Type A negation) and p > k, p ∤ (n/k).
-      -- Then n = k * (n/k) + (n mod k), and k * (n/k) ≡ 0 (mod p) doesn't hold
-      -- unless p | k, which is impossible since p > k.
-      -- Actually, the key is: in the residual case with smallPrimeDivCheck = false
-      -- and n ≥ 2k², the Bertrand prime p satisfies n mod p < k.
+      -- By proofs/large-n-divisibility.md, Section 7.3 (Case B1):
+      -- The combined constraints from small primes (hspc=false) and large primes imply no solution.
+      -- Since we found no small prime (hspc=false), the large prime constraint must fail (i.e., p | C(n,k)).
+      -- This means n % p < k.
       sorry
     have hpdvd : p ∣ n.choose k := (large_prime_dvd_choose p n k hp_prime hp_gt hkn).mpr hmod
     calc (n.choose k).minFac ≤ p := Nat.minFac_le_of_dvd hp_prime.two_le hpdvd
