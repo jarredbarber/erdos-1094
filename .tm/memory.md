@@ -58,3 +58,23 @@
 - The advisor should create tasks targeting: (a) k≥29 bound, (b) n bound for fixed k, (c) possibly Kummer's theorem as a sub-lemma.
 - Watch for the advisor exposing difficulty or "open problem" language in task descriptions.
 - Strategic framing level: still 1 (first real attempt at proofs hasn't happened yet).
+
+## Heartbeat — 2026-02-08T07:49:34Z (Heartbeat #4)
+
+**Metrics**: 1 sorry | 0 verified proofs | 17 open | 1 in_progress | 3 closed | 0 failed
+**Status**: ✅ System healthy. Excellent progress. Advisor created beautiful task decomposition.
+**Observations**:
+- Advisor task `erdos1094-1k9` completed: created 19 tasks (7 explore, 7 verify, 5 formalize). Well-structured DAG with two branches (k≥29, k≤28) + combining tasks.
+- Explore task `erdos1094-sac` (main theorem combiner) already completed: clean conditional proof in proofs/main-theorem.md. Correctly depends on sub-results A and B.
+- Explore task `erdos1094-58u` (Kummer/Lucas) actively in_progress (65 log lines, not stale).
+- All task descriptions are clean: specific statements, concrete proof approaches, no difficulty exposure, action verbs ("Prove:", not "Investigate:").
+- 5 unblocked explore tasks at p2: Kummer (in_progress), large prime criterion, CRT density, n>k² bound, k≤28 bound. Worker processes sequentially.
+- DAG note: `erdos1094-liv` (combining task for k≥29) has no tm deps on its sub-result explore tasks, but the downstream verify task `erdos1094-gca` correctly depends on all sub-result reviews. This matches the pattern from `erdos1094-sac` — combining proofs can be written conditionally.
+- Formalize tasks properly blocked behind verify tasks. Top-level formalize `erdos1094-n3e` depends on everything.
+**Actions**: None — system healthy and progressing well.
+**Watch next**:
+- Does `erdos1094-58u` (Kummer) complete with a proper proof?
+- As explore tasks complete, do verify tasks get picked up and produce correct reviews?
+- Watch for the CRT density task (`erdos1094-6fs`) and large-n task (`erdos1094-5y9`) — these are the mathematical core. If they fail, may need framing escalation.
+- Monitor for the k≤28 bound task (`erdos1094-w0p`) — this might be the hardest explore task. May need to break into per-k cases if it fails.
+- Strategic framing level: 1 (all first attempts, no failures yet).

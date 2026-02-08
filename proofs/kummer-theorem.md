@@ -1,6 +1,7 @@
 # Kummer's Theorem (p-adic valuation of binomial coefficients)
 
-**Status:** Draft ✏️  
+**Status:** Verified ✅  
+**Reviewed by:** erdos1094-nii  
 **Statement:** Let $p$ be a prime and let $n, k$ be non-negative integers with $n \geq k$. Then:
 
 $$v_p\!\left(\binom{n}{k}\right) = \text{(number of carries when adding } k \text{ and } n - k \text{ in base } p\text{)}.$$
