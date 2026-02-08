@@ -233,3 +233,24 @@
 - Does `erdos1094-tg2` (k≤28 revision) choose pure math over code? If it writes code, role violation.
 - Worker queue after 419: 41t (formalize large-prime), pwh (CRT fix), tg2 (k≤28 fix).
 - Strike count: CRT density = 1/3. Large-n = 1/3. k≤28 = 1/3.
+
+## Heartbeat — 2026-02-08T10:07:21Z (Heartbeat #12)
+
+**Metrics**: 1 sorry | 2 verified proofs | 9 open | 1 in_progress | 18 closed | 0 failed | 3 Lean files (2 sorry-free)
+**Status**: ✅ Excellent progress. Both formalize tasks succeeded. Lean code compiling.
+**Observations**:
+- 2 tasks closed since HB#11: `erdos1094-419` (Kummer formalize) + `erdos1094-41t` (large-prime formalize). Both compiled, both sorry-free!
+- **🎯 MILESTONE: First Lean code on the board!** Erdos/Kummer.lean (114 lines, no sorry) and Erdos/LargePrime.lean (79 lines, no sorry). Both formalize verified NL proofs. `lake build` succeeds.
+- Sorry count still 1 (main theorem at Basic.lean:15) — expected, since the main theorem depends on all sub-results.
+- `erdos1094-pwh` (CRT density revision) IN PROGRESS: 151 log lines, actively reasoning. Agent correctly identified that "density < 1 doesn't guarantee count = 0" and exploring: (a) exhaustive sieving with multiple primes, (b) equidistribution/discrepancy bounds, (c) CRT modulus exceeding k² making exact count feasible. Not stuck, not looping.
+- Literature status: 2 Verified ✅, 4 Under review 🔍, 2 Draft ✏️.
+- No hallucination pattern in formalize tasks — agents discovered API correctly via grep/exact?.
+- Worker not stale.
+**Actions**: None — system healthy, formalize tasks working perfectly.
+**Watch next**:
+- Does `erdos1094-pwh` (CRT density revision) succeed? This is the critical path bottleneck for k≥29 branch.
+- If pwh fails: this would be strike 2/3 on CRT density. May need to escalate framing to level 3 with specific approach hints.
+- After pwh: worker picks up `erdos1094-tg2` (k≤28 revision). Both revision tasks are "large."
+- **Pattern concern**: All three explore proofs (CRT, large-n, k≤28) hit the same density→count gap. This is a recurring theme — if pwh and tg2 both fail on this same gap, may need to redesign the proof decomposition. The 3-strike rule may apply across the pattern, not just per-task.
+- Formalize velocity: 2 formalize tasks in one heartbeat period — strong signal. Once verify pipeline clears, remaining formalize tasks should go quickly.
+- Strike count: CRT density = 1/3 (revision in progress). Large-n = 1/3 (revision done). k≤28 = 1/3 (revision pending).
