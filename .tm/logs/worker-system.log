@@ -1544,3 +1544,66 @@ Next step: Execute parallel foundation tasks (erdos1094-58u, erdos1094-a0e)"
 **Current state:** 1 sorry (Basic.lean:15)
 
 **Next steps:** Foundation explore tasks (erdos1094-58u, erdos1094-a0e) are unblocked and can run in parallel.
+[2026-02-08T07:47:44.089Z] ✅ Successfully merged task/erdos1094-1k9 into main
+[2026-02-08T07:47:44.090Z] 🗑️  Deleting branch task/erdos1094-1k9...
+[2026-02-08T07:47:44.097Z] ✓ Deleted local branch task/erdos1094-1k9
+[2026-02-08T07:47:44.102Z] 🚀 Pushing main to remote...
+[2026-02-08T07:47:44.688Z] ✓ Pushed to remote
+[2026-02-08T07:47:45.690Z] 
+================================================================================
+[2026-02-08T07:47:45.690Z] 📌 Processing task: erdos1094-sac - Prove finiteness of exceptional set (combine k≥29 and k≤28 bounds)
+[2026-02-08T07:47:45.690Z]    Role: explore | Priority: 1 | Size: medium
+[2026-02-08T07:47:45.690Z] ================================================================================
+
+[2026-02-08T07:47:45.693Z] ✓ Claimed task erdos1094-sac
+
+[2026-02-08T07:47:45.693Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T07:47:45.693Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T07:47:45.709Z] 📸 Capturing file state before agent execution...
+[2026-02-08T07:47:45.720Z] ✓ Captured state: 20 tracked, 1 untracked files
+
+[2026-02-08T07:47:45.721Z] 🌿 Creating branch: task/erdos1094-sac
+[2026-02-08T07:47:45.727Z] ✓ Working on branch task/erdos1094-sac
+
+[2026-02-08T07:47:49.557Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/
+[2026-02-08T07:47:49.563Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/dead-ends.md 2>/dev/null || echo "No dead-ends.md found"
+[2026-02-08T07:47:51.723Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:47:54.575Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/ | sort
+[2026-02-08T07:48:02.761Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.md" | head -30
+[2026-02-08T07:48:02.769Z] 
+$ tm update erdos1094-sac --status "Reading existing literature and understanding dependencies"
+[2026-02-08T07:48:06.116Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:48:08.637Z] 
+$ cd /home/jarred/code/erdos-1094 && cat .tm/memory.md 2>/dev/null
+[2026-02-08T07:48:10.857Z] 
+$ cd /home/jarred/code/erdos-1094 && tm list 2>/dev/null || true
+[2026-02-08T07:48:17.880Z] 
+$ tm update erdos1094-sac --status "Writing main theorem proof combining the two bounds"
+[2026-02-08T07:48:48.233Z] 
+🛠️  Executing tool: write...
+[2026-02-08T07:48:50.678Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:49:10.287Z] 
+$ tm update erdos1094-sac --status "Proof written to proofs/main-theorem.md, verifying completeness"
+[2026-02-08T07:49:15.087Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "erdos_1094" $(find . -name "*.lean" | head -5) 2>/dev/null || echo "No lean files found with erdos_1094"
+[2026-02-08T07:49:17.523Z] 
+🛠️  Executing tool: read...
+[2026-02-08T07:49:21.879Z] 
+$ tm close erdos1094-sac
+[2026-02-08T07:49:29.151Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T07:49:29.152Z] 📄 Log saved to .tm/logs/worker-erdos1094-sac.md
+[2026-02-08T07:49:29.152Z] 
+📊 Task erdos1094-sac completed:
+[2026-02-08T07:49:29.152Z]    Summary: Proved: The set {(n,k) : 0 < k, 2k ≤ n, minFac(C(n,k)) > max(n/k, k)} is finite. Published to proofs/main-theorem.md
+[2026-02-08T07:49:29.152Z]    Details: Confidence: Certain (given the two dependencies). The proof combines two results via a simple set-containment argument: (1) Result A (no-exceptions-k-ge-29.md) gives k ≤ 28 for any exception, (2) Result B (bound-n-for-small-k.md) gives n ≤ 284 for any exception with k ≤ 28. Therefore the exceptional set E is contained in {(n,k) : k ≤ 28 ∧ n ≤ 284}, which has 8265 elements and is finite. By Set.Finite.subset, E is finite. The proof exactly matches the Lean theorem statement in Erdos/Basic.lean:13 and includes formalization notes for the downstream formalize task.
