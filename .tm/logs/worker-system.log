@@ -4937,3 +4937,202 @@ Key helper lemmas (all private, no sorry):
 - kummer_criterion_core: the core induction in terms of n / p^i % p
 
 The main theorem then applies Nat.getD_digits to convert to the Nat.digits representation.
+[2026-02-08T10:00:14.552Z] ✅ Successfully merged task/erdos1094-419 into main
+[2026-02-08T10:00:14.553Z] 🗑️  Deleting branch task/erdos1094-419...
+[2026-02-08T10:00:14.561Z] ✓ Deleted local branch task/erdos1094-419
+[2026-02-08T10:00:14.567Z] 🚀 Pushing main to remote...
+[2026-02-08T10:00:15.492Z] ✓ Pushed to remote
+[2026-02-08T10:00:16.495Z] 
+================================================================================
+[2026-02-08T10:00:16.495Z] 📌 Processing task: erdos1094-41t - Formalize large prime divisibility criterion
+[2026-02-08T10:00:16.495Z]    Role: formalize | Priority: 2 | Size: medium
+[2026-02-08T10:00:16.495Z] ================================================================================
+
+[2026-02-08T10:00:16.498Z] ✓ Claimed task erdos1094-41t
+
+[2026-02-08T10:00:16.498Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T10:00:16.498Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T10:00:16.514Z] 📸 Capturing file state before agent execution...
+[2026-02-08T10:00:16.528Z] 🌿 Creating branch: task/erdos1094-41t
+[2026-02-08T10:00:16.528Z] ✓ Captured state: 43 tracked, 1 untracked files
+
+[2026-02-08T10:00:16.536Z] ✓ Working on branch task/erdos1094-41t
+
+[2026-02-08T10:00:20.190Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-41t --status "Reading NL proof and exploring project structure"
+[2026-02-08T10:00:24.122Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:00:24.129Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.lean" | head -20
+[2026-02-08T10:00:24.138Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.lean
+[2026-02-08T10:00:27.485Z] 
+$ cd /home/jarred/code/erdos-1094 && ls lakefile* lean-toolchain 2>/dev/null
+[2026-02-08T10:00:27.488Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:00:27.489Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:00:27.490Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:00:36.050Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lakefile.toml
+[2026-02-08T10:00:36.057Z] 
+$ cd /home/jarred/code/erdos-1094 && cat lean-toolchain
+[2026-02-08T10:00:38.516Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-41t --status "Exploring Mathlib API for needed lemmas"
+[2026-02-08T10:01:00.512Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -r "choose_modEq_choose_mod_mul_choose_div" .lake/packages/mathlib/Mathlib/ --include="*.lean" -l | head -5
+[2026-02-08T10:01:00.593Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -r "factorization_choose_eq_zero_of_lt" .lake/packages/mathlib/Mathlib/ --include="*.lean" -l | head -5
+[2026-02-08T10:01:00.677Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -rn "choose_modEq_choose_mod_mul_choose_div" .lake/packages/mathlib/Mathlib/ --include="*.lean" | head -10
+[2026-02-08T10:01:03.946Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:01:14.431Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check.lean << 'EOF'
+import Mathlib
+
+-- Check key lemmas
+#check @Choose.choose_modEq_choose_mod_mul_choose_div_nat
+#check Nat.factorization_choose_eq_zero_of_lt
+#check Nat.choose_eq_zero_of_lt
+#check Nat.choose_pos
+#check Nat.Prime.dvd_iff_one_le_factorization
+#check Nat.Modeq.dvd_iff
+#check Nat.ModEq
+#check Nat.choose_self
+#check Nat.choose_zero_right
+#check Nat.div_eq_of_lt
+#check Nat.mod_eq_of_lt
+
+variable (n p k : ℕ) (hp : p.Prime) (hpk : k < p)
+#check @Nat.mod_eq_of_lt k p hpk
+#check @Nat.div_eq_of_lt k p hpk
+EOF
+lake env lean /tmp/api_check.lean 2>&1 | head -30
+[2026-02-08T10:01:24.920Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check2.lean << 'EOF'
+import Mathlib
+
+-- Check ModEq dvd interaction
+#check Nat.ModEq.dvd_iff'
+#check @Nat.modEq_iff_dvd'
+
+-- Check how to go from modEq to dvd
+example (a b p : ℕ) (h : a ≡ b [MOD p]) (hb : p ∣ b) : p ∣ a := by
+  exact?
+EOF
+lake env lean /tmp/api_check2.lean 2>&1 | head -20
+[2026-02-08T10:01:58.984Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -rn "ModEq.*dvd" .lake/packages/mathlib/Mathlib/Data/Nat/Defs.lean --include="*.lean" 2>/dev/null | head -10
+grep -rn "def.*ModEq" .lake/packages/mathlib/Mathlib/Data/Nat/Mods/ --include="*.lean" 2>/dev/null | head -10
+[2026-02-08T10:02:08.522Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check3.lean << 'EOF'
+import Mathlib
+
+-- The modEq_nat approach
+example (a b p : ℕ) (h : a ≡ b [MOD p]) : p ∣ a ↔ p ∣ b := by
+  exact (Nat.ModEq.comm.mp h).dvd_iff
+
+-- Key fact: since k < p, choose (n%p) k is what matters
+-- We need: for a < p prime, p ∣ choose a k ↔ a < k
+-- When a < k: choose a k = 0 which is divisible
+-- When k ≤ a < p: choose a k > 0 and factorization = 0
+
+example (p n k : ℕ) (hp : p.Prime) (hpk : k < p) (hn : n % p < k) :
+    p ∣ (n % p).choose k := by
+  rw [Nat.choose_eq_zero_of_lt hn]
+
+example (p n k : ℕ) (hp : p.Prime) (hpk : k < p) (hn : ¬ n % p < k) (hkn : k ≤ n) :
+    ¬ p ∣ (n % p).choose k := by
+  push_neg at hn
+  have hpos : 0 < (n % p).choose k := Nat.choose_pos hn
+  have hfact : ((n % p).choose k).factorization p = 0 :=
+    Nat.factorization_choose_eq_zero_of_lt (Nat.mod_lt n hp.pos)
+  intro hdvd
+  have := (hp.dvd_iff_one_le_factorization hpos.ne').mp hdvd
+  omega
+EOF
+lake env lean /tmp/api_check3.lean 2>&1 | head -20
+[2026-02-08T10:02:20.206Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check4.lean << 'EOF'
+import Mathlib
+
+-- Fix the dvd_zero and modEq.dvd approach
+example (a b p : ℕ) (h : a ≡ b [MOD p]) : p ∣ a ↔ p ∣ b := by
+  unfold Nat.ModEq at h
+  constructor <;> intro hd
+  · rwa [← Nat.mod_eq_zero_iff_dvd, ← h, Nat.mod_eq_zero_iff_dvd]
+  · rwa [← Nat.mod_eq_zero_iff_dvd, h, Nat.mod_eq_zero_iff_dvd]
+
+#check @Nat.ModEq
+-- Nat.ModEq n a b = (a % n = b % n)
+EOF
+lake env lean /tmp/api_check4.lean 2>&1 | head -20
+[2026-02-08T10:02:36.133Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/api_check5.lean << 'EOF'
+import Mathlib
+
+-- ModEq is a % n = b % n
+-- dvd: n ∣ a ↔ a % n = 0
+
+example (a b p : ℕ) (hp : 0 < p) (h : a ≡ b [MOD p]) : p ∣ a ↔ p ∣ b := by
+  rw [Nat.dvd_iff_mod_eq_zero, Nat.dvd_iff_mod_eq_zero]
+  unfold Nat.ModEq at h
+  rw [h]
+
+-- Good! Now let's figure out the full approach
+-- Lucas: choose n k ≡ choose (n%p) (k%p) * choose (n/p) (k/p) [MOD p]
+-- k < p  →  k%p = k, k/p = 0
+-- choose (n/p) 0 = 1
+-- So choose n k ≡ choose (n%p) k * 1 = choose (n%p) k [MOD p]
+-- Then p ∣ choose n k ↔ p ∣ choose (n%p) k
+-- And n%p < p, so:
+--   If n%p < k: choose (n%p) k = 0, so p ∣ 0  ✓
+--   If k ≤ n%p: choose (n%p) k has factorization p = 0, so p ∤ choose (n%p) k
+
+-- Let's also check dvd_zero
+example (p : ℕ) : p ∣ 0 := dvd_zero p
+EOF
+lake env lean /tmp/api_check5.lean 2>&1 | head -20
+[2026-02-08T10:02:46.227Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-41t --status "Writing LargePrime.lean proof"
+[2026-02-08T10:03:08.201Z] 
+🛠️  Executing tool: write...
+[2026-02-08T10:03:11.853Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/LargePrime.lean 2>&1
+[2026-02-08T10:03:32.615Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:03:36.900Z] 
+$ cd /home/jarred/code/erdos-1094 && lake env lean Erdos/LargePrime.lean 2>&1
+[2026-02-08T10:03:47.395Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T10:03:49.849Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build 2>&1
+[2026-02-08T10:04:10.928Z] 
+🛠️  Executing tool: read...
+[2026-02-08T10:04:15.096Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-41t --status "Complete - lake build succeeds, no sorry"
+[2026-02-08T10:04:19.035Z] 
+$ cd /home/jarred/code/erdos-1094 && tm close erdos1094-41t
+[2026-02-08T10:04:30.198Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T10:04:30.199Z] 📄 Log saved to .tm/logs/worker-erdos1094-41t.md
+[2026-02-08T10:04:30.199Z] 
+📊 Task erdos1094-41t completed:
+[2026-02-08T10:04:30.199Z]    Summary: Closed all goals in large_prime_dvd_choose. lake build succeeds with no sorry in LargePrime.lean.
+[2026-02-08T10:04:30.199Z]    Details: Created Erdos/LargePrime.lean with the theorem:
+
+  theorem large_prime_dvd_choose (p n k : ℕ) (hp : p.Prime) (hpk : k < p) (_hkn : k ≤ n) :
+    p ∣ n.choose k ↔ n % p < k
+
+Proof approach (following the verified NL proof's alternative method via Lucas):
+1. Applied Mathlib's `Choose.choose_modEq_choose_mod_mul_choose_div_nat` (Lucas' theorem): C(n,k) ≡ C(n%p, k%p) * C(n/p, k/p) [MOD p]
+2. Since k < p: simplified k%p = k, k/p = 0, giving C(n,k) ≡ C(n%p, k) [MOD p]
+3. Transferred divisibility across the ModEq
+4. Resolved using a helper lemma `prime_dvd_choose_of_lt`: for a < p prime, p ∣ C(a,b) ↔ a < b, proved via `Nat.factorization_choose_eq_zero_of_lt` (for the ← direction) and `Nat.choose_eq_zero_of_lt` (for the → direction)
+
+No new sorry holes introduced. Total proof is ~25 lines of tactic code across 3 lemmas.
