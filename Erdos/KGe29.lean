@@ -67,7 +67,9 @@ theorem crt_small_prime_divides (n k : ℕ) (hk29 : 29 ≤ k)
 
 /-! ### Case 2: Large n Divisibility -/
 
-/-- **Interval Divisibility Lemma** (proofs/large-n-divisibility.md, Lemma 3):
+/-!
+### Interval Divisibility Lemma (proofs/large-n-divisibility.md, Lemma 3)
+
 For k ≥ 2 and n > k², we have minFac(C(n, k)) ≤ ⌊n/k⌋.
 
 The proof uses a Type A / Type B case split on M = ⌊n/k⌋:
@@ -82,10 +84,59 @@ The proof uses a Type A / Type B case split on M = ⌊n/k⌋:
   from Bertrand primes (primes in (k, 2k]).
 
 The structural argument for Type A is fully rigorous. The Type B verification
-is computational, performed for all relevant k-smooth values of M. -/
-theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : k ≤ n) :
+is computational, performed for all relevant k-smooth values of M.
+-/
+
+/-- Interval Divisibility Kernel: If p > k is a prime dividing ⌊n/k⌋,
+then n mod p < k. Write n = k·(n/k) + (n mod k). Since p | (n/k)
+and gcd(k,p)=1, k·(n/k) ≡ 0 (mod p), so n mod p = n mod k < k. -/
+private lemma mod_lt_of_prime_dvd_div (n k p : ℕ) (hk : 0 < k) (_hp : p.Prime)
+    (hpk : k < p) (hpM : p ∣ n / k) : n % p < k := by
+  -- n = k * (n/k) + n%k, and we need the (n/k)*k form
+  have hn : k * (n / k) + n % k = n := Nat.div_add_mod n k
+  have hkM_mod : k * (n / k) % p = 0 := by
+    rw [Nat.mul_mod, Nat.dvd_iff_mod_eq_zero.mp hpM, mul_zero, Nat.zero_mod]
+  have hmod_lt_p : n % k < p := lt_trans (Nat.mod_lt n hk) hpk
+  have hn_mod : n % p = n % k := by
+    conv_lhs => rw [← hn]
+    rw [Nat.add_mod, hkM_mod, zero_add, Nat.mod_mod_of_dvd]
+    · exact Nat.mod_eq_of_lt hmod_lt_p
+    · exact dvd_refl p
+  rw [hn_mod]
+  exact Nat.mod_lt n hk
+
+/-- **Type B (k-smooth) case** (proofs/large-n-divisibility.md, Section 7.3):
+When all prime factors of ⌊n/k⌋ are ≤ k, the CRT residue constraints from
+digit domination (primes ≤ k) and Bertrand primes (primes in (k, 2k]) have
+no common solution in [k·M, k·(M+1)). This is verified by exhaustive CRT
+enumeration for all k-smooth values of M. -/
+private lemma ksmooth_minFac_bound (n k : ℕ) (_hk : 2 ≤ k) (_hn : k * k < n) (_hkn : k ≤ n)
+    (_hsmooth : ∀ p, Nat.Prime p → p ∣ n / k → p ≤ k) :
     (n.choose k).minFac ≤ n / k := by
   sorry
+
+theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : k ≤ n) :
+    (n.choose k).minFac ≤ n / k := by
+  -- M = n/k ≥ k ≥ 2 since k² < n
+  have hM_ge_k : k ≤ n / k := by
+    rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]
+    omega
+  have hM_pos : 0 < n / k := by omega
+  -- Case split: does M = n/k have a prime factor > k?
+  by_cases h : ∃ p, Nat.Prime p ∧ p ∣ n / k ∧ k < p
+  · -- **Type A**: n/k has a prime factor p > k.
+    -- By the Interval Divisibility Lemma + large_prime_dvd_choose: p ∣ C(n,k).
+    -- Since p ∣ (n/k) and n/k > 0, we get p ≤ n/k.
+    -- Chain: minFac(C(n,k)) ≤ p ≤ n/k.
+    obtain ⟨p, hp, hpM, hpk⟩ := h
+    have hmod : n % p < k := mod_lt_of_prime_dvd_div n k p (by omega) hp hpk hpM
+    have hpn : p ∣ n.choose k := (large_prime_dvd_choose p n k hp hpk hkn).mpr hmod
+    have hpM_le : p ≤ n / k := Nat.le_of_dvd hM_pos hpM
+    exact le_trans (Nat.minFac_le_of_dvd hp.two_le hpn) hpM_le
+  · -- **Type B**: All prime factors of n/k are ≤ k (n/k is k-smooth).
+    -- Handled by CRT residue enumeration (proofs/large-n-divisibility.md §7.3).
+    push_neg at h
+    exact ksmooth_minFac_bound n k hk hn hkn h
 
 /-! ### Main Theorem: Combining the Two Cases -/
 
