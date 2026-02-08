@@ -183,3 +183,26 @@ is shown to be finite by containment in {(n,k) : n < 285 ∧ k < 29}:
 
 Remaining sorrys are in KGe29.lean (crt_small_prime_divides, large_n_minFac_bound)."
 ```
+
+```bash
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-n3e --status "Proof compiled and committed. Main theorem sorry is closed."
+```
+```json
+{
+  "status": "completed",
+  "summary": "Closed sorry in erdos_1094 (Basic.lean:15). lake build succeeds.",
+  "details": "The main theorem `erdos_1094` is now proved by showing the exceptional set E ⊆ {(n,k) : n < 285 ∧ k < 29}, which is finite (via `Set.Finite.prod (Set.finite_Iio 285) (Set.finite_Iio 29)`). The subset proof uses contrapositives of `no_exception_k_ge_29` (k ≥ 29 → not exceptional) and `bound_n_for_small_k` (k ≤ 28 ∧ n > 284 → not exceptional). No new sorry holes introduced in Basic.lean. Two existing sorrys remain in KGe29.lean for the sub-lemmas `crt_small_prime_divides` and `large_n_minFac_bound`."
+}
+```
+
+## Final Result
+
+```json
+{
+  "status": "completed",
+  "summary": "Closed sorry in erdos_1094 (Basic.lean:15). lake build succeeds.",
+  "details": "The main theorem `erdos_1094` is now proved by showing the exceptional set E ⊆ {(n,k) : n < 285 ∧ k < 29}, which is finite (via `Set.Finite.prod (Set.finite_Iio 285) (Set.finite_Iio 29)`). The subset proof uses contrapositives of `no_exception_k_ge_29` (k ≥ 29 → not exceptional) and `bound_n_for_small_k` (k ≤ 28 ∧ n > 284 → not exceptional). No new sorry holes introduced in Basic.lean. Two existing sorrys remain in KGe29.lean for the sub-lemmas `crt_small_prime_divides` and `large_n_minFac_bound`."
+}
+```
+
+End Time: 2026-02-08T10:54:39.963Z
