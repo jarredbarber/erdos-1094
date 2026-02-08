@@ -1,6 +1,6 @@
 # Large Prime Divisibility for $n > k^2$
 
-**Status:** Draft ✏️  
+**Status:** Under review 🔍  
 **Statement:** For $k \geq 2$ and $n > k^2$, at least one of the following holds:
 1. Some prime $p \leq k$ divides $\binom{n}{k}$, OR
 2. Some prime $p \in (k, n/k]$ divides $\binom{n}{k}$.
@@ -8,7 +8,8 @@
 Consequently, $\mathrm{minFac}\bigl(\binom{n}{k}\bigr) \leq n/k$ for all $n > k^2$.
 
 **Dependencies:** proofs/large-prime-criterion.md, proofs/kummer-theorem.md, proofs/crt-density-k-ge-29.md  
-**Confidence:** High
+**Confidence:** High  
+**Reviewed by:** erdos1094-7c8
 
 ---
 
@@ -245,3 +246,49 @@ In all cases, $\delta_{\text{combined}} \times k < 1$, confirming no exceptions 
 - proofs/large-prime-criterion.md — The criterion $p \mid \binom{n}{k} \Leftrightarrow n \bmod p < k$ for $p > k$
 - proofs/kummer-theorem.md — Digit-domination criterion for $p \leq k$
 - proofs/crt-density-k-ge-29.md — CRT density analysis for primes $\leq k$
+
+---
+
+## Review Notes (erdos1094-7c8)
+
+**Status: Revision Requested** — The proof approach is sound and the overall strategy is correct, but there are two issues that need to be addressed before verification:
+
+### Issue 1: Unverified Dependency (Blocking)
+
+The proof depends on **proofs/crt-density-k-ge-29.md**, which is currently "Under review 🔍" and not yet "Verified ✅". According to the verification protocol, a proof cannot be verified until all its dependencies are verified. 
+
+**Required action**: Wait for proofs/crt-density-k-ge-29.md to be verified, or revise the proof to not depend on unverified results.
+
+### Issue 2: Rigor Gap in Section 7 (Major)
+
+The main proof in Section 7 uses a **density/probabilistic argument** to conclude that no exceptions exist, but this reasoning is not fully rigorous as stated.
+
+**The argument says** (Section 7, final paragraph):
+> "Since the interval of valid $n$ with $\lfloor n/k \rfloor = M$ has length exactly $k$, and the expected count of valid $n$ in any interval of length $k$ is $< 1$, we conclude that **no valid $n$ exists**."
+
+**The problem**: A density $\delta_{\text{combined}} < 1/k$ means the *expected* number of valid $n$ in an interval of length $k$ is less than 1, but this does not *prove* that zero such $n$ exist. It only suggests they are rare. For a rigorous proof, we need one of the following:
+
+1. **Direct CRT analysis**: Show that within the CRT period $M_k = \prod_{p \leq k} p^{L_p}$ (or the extended period including primes up to $n/k$), the set of valid residues is empty when restricted to appropriate ranges.
+
+2. **Explicit counting argument**: For each residue class modulo the CRT period, verify that when lifted to integers $n > k^2$, none satisfy all the required constraints simultaneously.
+
+3. **Strengthened density bound**: Show not just that the expected count is $< 1$, but that the density is *exactly zero* (i.e., the valid set of residues modulo the CRT period is actually empty).
+
+**Why this matters**: The difference between "unlikely" and "impossible" is crucial for a rigorous proof. The current argument establishes that exceptions are extremely rare (probabilistically), but doesn't rigorously exclude their existence.
+
+**Suggested revision**: Add a subsection to Section 7 (or a new Section 7.5) that explains more precisely why the CRT structure guarantees zero exceptions rather than just very few. This might involve:
+- Analyzing the structure of the combined residue classes
+- Showing that the CRT period is large enough that all residue classes can be checked
+- Or providing a more careful argument about why the interval structure combined with the CRT constraints yields a contradiction
+
+### Minor Issues
+
+1. **Section 6.2 "Computational verification"**: The table shows selected $(k, M)$ values but claims "computational verification shows" for all $k \in \{2, \ldots, 28\}$ without providing the full dataset or methodology. While not essential for the proof's validity (since the main argument is for $k \geq 29$ and large $n$), it would strengthen the exposition to either include the full computational results or clarify what was actually verified.
+
+2. **Section 7, CRT period claim**: The statement "$P_{\text{combined}} > k$ for all $k \geq 2$" is asserted but not verified. This is a checkable claim that should be justified (e.g., even for $k = 2$, we have $P_{\text{combined}} \geq 2^{L_2} \geq 2$ from the prime $p = 2$ alone, and adding more primes only increases it).
+
+### Overall Assessment
+
+The core mathematical insight is correct: the combined constraints from small primes (digit domination) and large primes (residue constraints) are so restrictive that no exceptions can exist for $n > k^2$. The numerical evidence strongly supports this. However, the logical step from "expected count $< 1$" to "no exceptions exist" needs to be made rigorous.
+
+**Recommendation**: Request revision to address Issue 2 (the rigor gap). Issue 1 will resolve when the dependency is verified.
