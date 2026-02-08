@@ -161,13 +161,13 @@ The total "capacity" of type (b) near $n$ is $\sim \sum_{s < k} k/(s \ln(n/s)) \
 | 16 | 241 | 300 |
 | 28 | 284 | 300 |
 
-### 3.4 Identified Gaps
+### 3.4 Remaining Proof Components
 
-1. **Rigorous bound for $K_0$:** We need a proof (not just computation) that for $k \geq 29$, no exceptions exist. The density argument is convincing but needs to be made into a formal bound on the number of CRT solutions.
+1. **Bound for $K_0$:** Formalize that for $k \geq 29$, no exceptions exist using the CRT density bound on digit-domination solutions.
 
-2. **Rigorous $N(k)$ for small $k$:** For each $k \leq 28$, we need a provable bound $N(k)$ such that $n > N(k)$ implies the condition holds. This likely requires explicit PNT bounds or sieve estimates.
+2. **Explicit $N(k)$ for small $k$:** For each $k \leq 28$, establish a bound $N(k)$ such that $n > N(k)$ implies the condition holds, using explicit PNT bounds or sieve estimates.
 
-3. **Making the "near-prime" argument rigorous:** The PNT-based capacity argument for bounding $N(k)$ needs explicit error terms.
+3. **Near-prime capacity bound:** Make the PNT-based capacity argument explicit with concrete error terms.
 
 ---
 
@@ -213,17 +213,6 @@ For $k \leq 28$: for each fixed $k$, prove $N(k)$ bound and verify computational
 **For the finite computation approach:**
 - `Decidable` instance for the predicate `(n.choose k).minFac > max (n/k) k`
 - `native_decide` or `decide` tactics for bounded quantifiers
-
-### 4.3 Difficulty Assessment
-
-| Component | Difficulty | Notes |
-|-----------|-----------|-------|
-| Finite verification ($n \leq 300$) | Medium | Needs decidable instance; `native_decide` may work |
-| $k = 1, 2$ cases | Easy | Direct algebraic manipulation |
-| Kummer's theorem | Hard | Not in Mathlib; substantial formalization effort |
-| Bounding $k \geq 29$ | Hard | Needs either CRT argument or density bound in Lean |
-| Bounding $n$ for fixed $k$ | Hard | Needs PNT or sieve bounds in Lean |
-| Overall | Hard | The finiteness proof requires substantial new infrastructure |
 
 ---
 
