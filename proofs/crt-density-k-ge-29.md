@@ -1,9 +1,10 @@
 # CRT Density Bound: No Valid $n$ in $[2k, k^2]$ for $k \geq 29$
 
-**Status:** Draft ✏️  
+**Status:** Under review 🔍  
 **Statement:** For every integer $k \geq 29$, there is no integer $n \in [2k, k^2]$ such that $k$ is digit-dominated by $n$ in base $p$ for all primes $p \leq 29$.  
 **Dependencies:** proofs/kummer-theorem.md (Corollary 5: digit-domination criterion)  
-**Confidence:** High
+**Confidence:** High  
+**Reviewed by:** erdos1094-2gy
 
 ---
 
@@ -250,6 +251,89 @@ For $k > 10^7$: the density bound asymptotically tends to $0$ (Proposition 4), b
 2. **Using effective multi-base digit sum estimates** (Baker-Stewart theory) to rigorously establish $(\star\star)$ for all $k > K_1$ with $K_1$ explicit.
 
 Option (1) is the most practical path. The density computation costs $O(\sum_p \log_p k)$ per $k$ and can be extended arbitrarily far.
+
+---
+
+## Review Notes
+
+**Reviewer:** erdos1094-2gy  
+**Date:** 2026-02-08  
+**Decision:** Revision requested
+
+### Strengths
+
+1. **Excellent structure and clarity**: The proof is very well-organized with clear sections, comprehensive examples, and explicit computations.
+
+2. **Dependency verified**: The critical dependency on Corollary 5 from proofs/kummer-theorem.md is correctly cited and applied. That result is verified ✅.
+
+3. **Sound mathematical framework**: The CRT density approach is mathematically solid. All formulas for $|S_p(k)|$, $\delta_p(k)$, and the combined density $\delta_k$ are correct.
+
+4. **Rigorous for $k \in [29, 10000]$**: Proposition 2's exhaustive CRT verification provides a complete proof for this range.
+
+5. **Good mathematical intuition**: Section 7's discussion of non-monotonicity and the asymptotic analysis in Part C show strong understanding.
+
+6. **Honest about limitations**: Section 8 explicitly acknowledges where the proof is incomplete.
+
+### Critical Gaps
+
+**Gap 1: Incomplete proof for $k \in [10001, 10^7]$**
+
+Proposition 3 computes the density bound $\delta_k \times (k^2 - 2k) < 0.42$ but does NOT rigorously establish that this implies zero solutions. The argument in Section 6 claims:
+
+> "The valid residues modulo $M_k$ are spaced at average distance $1/\delta_k > k^2 - 2k$ apart, meaning the expected count in $[2k, k^2]$ is $< 1$. Combined with the CRT product structure (which ensures the residues are well-distributed, not clustered), no solution exists."
+
+This reasoning is **not rigorous**:
+- Average spacing $> $ interval length does not prove zero or one solution.
+- Even if we know the count is either 0 or 1, "expected count $< 1$" doesn't tell us which.
+- The phrase "well-distributed, not clustered" needs precise justification.
+
+**Resolution needed:** Either:
+- (a) Extend the exhaustive verification (Proposition 2 style) to cover $k \in [10001, K]$ for some larger $K$, or
+- (b) Provide a rigorous argument that the CRT structure + density bound $< 1/(k^2-2k)$ implies exactly zero residues in the interval.
+
+**Gap 2: Incomplete proof for $k > 10^7$**
+
+The proof explicitly acknowledges this in Section 8. Part C (Proposition 4) is labeled a "Proof sketch" and outlines two approaches:
+1. Extending the computation arbitrarily far
+2. Using effective Baker-Stewart bounds
+
+Neither is executed. The proof states: "For practical purposes: the density computation has been verified through $k = 10^7$..." but the theorem statement claims to cover ALL $k \geq 29$.
+
+**Resolution needed:** Either:
+- (a) Weaken the theorem statement to "$k \in [29, K]$ for some explicit $K \geq 10^7$", or
+- (b) Complete one of the two outlined approaches.
+
+### Minor Issues
+
+1. **Base representation verification**: The spot checks in Section 3.1 are correct (I verified several), but a machine-checkable format would strengthen confidence.
+
+2. **Density computation reproducibility**: The claimed maximum density at $k = 178416$ cannot be independently verified from the proof text alone. Including the computation code or pseudocode would help.
+
+3. **Lemma 1 presentation**: The proof of $M_k > k^2$ is correct but could be clearer. The initial approach via $\prod_{p \leq 29} (k+1)$ is abandoned mid-proof for the simpler $2^{L_2} \times 3^{L_3}$ argument.
+
+### Recommendation
+
+**Request revision** to address Gap 1 and either address or clearly scope Gap 2.
+
+**Specific revision paths:**
+
+**Option A (Computational):** Extend Proposition 2's exhaustive verification to $k \in [29, 10^6]$ or $k \in [29, 10^7]$. This would make the proof rigorous for a substantial range. Then either:
+- Clearly state the theorem applies to this verified range, OR
+- Provide the asymptotic argument for $k$ beyond the verified range.
+
+**Option B (Analytical):** For $k > 10000$, rigorously prove that when $\delta_k \cdot (k^2 - 2k) < 1$, the number of valid CRT residues in $[2k, k^2]$ is exactly zero. This requires understanding the distribution of residues more carefully than the current "well-distributed" handwave.
+
+**Option C (Hybrid):** State the theorem as verified for $k \in [29, K]$ with $K$ as large as practically feasible (e.g., $K = 10^7$), and add a separate lemma for the asymptotic behavior with complete references to the literature results needed.
+
+### What Works Well
+
+Despite the gaps, this is high-quality mathematical writing:
+- Clear definitions and notation
+- Explicit worked examples (k=29, k=30)
+- Honest discussion of limitations
+- Good motivation and context (Section 1, Section 8)
+
+With the identified gaps addressed, this will be a strong contribution to the project.
 
 ---
 
