@@ -78,3 +78,64 @@
 - Watch for the CRT density task (`erdos1094-6fs`) and large-n task (`erdos1094-5y9`) — these are the mathematical core. If they fail, may need framing escalation.
 - Monitor for the k≤28 bound task (`erdos1094-w0p`) — this might be the hardest explore task. May need to break into per-k cases if it fails.
 - Strategic framing level: 1 (all first attempts, no failures yet).
+
+## Heartbeat — 2026-02-08T08:07:44Z (Heartbeat #5)
+
+**Metrics**: 1 sorry | 2 verified proofs | 13 open | 1 in_progress | 7 closed | 0 failed
+**Status**: ✅ System healthy. Strong forward progress. Pipeline flowing.
+**Observations**:
+- 4 tasks closed since HB#4: Kummer explore+verify, large-prime-criterion explore+verify. Both proofs Verified ✅.
+- 2 verified proofs in literature: proofs/kummer-theorem.md, proofs/large-prime-criterion.md. These are foundational — needed by formalize tasks.
+- `erdos1094-6fs` (CRT density for k≥29) in_progress, 871 log lines, ~20 min runtime. Agent is deep in mathematical reasoning. Finding that pure density argument may not suffice for a rigorous proof — exploring computational verification + asymptotic hybrid approach. Not stuck, not surrendering, actively reasoning.
+- Remaining unblocked explore tasks: `erdos1094-5y9` (n>k²), `erdos1094-w0p` (k≤28 bound), `erdos1094-liv` (combine k≥29). Worker will process sequentially after CRT density.
+- Formalize tasks `erdos1094-419` (Kummer) and `erdos1094-41t` (large prime) are now unblocked since their verify deps closed! These are the first formalize tasks that can run.
+- DAG is healthy. Pipeline is: explore → verify → formalize, with proper deps.
+**Actions**: None — system progressing well.
+**Watch next**:
+- Does `erdos1094-6fs` (CRT density) complete or fail? If it fails, the density argument approach may need to be replaced with direct computation or a structural argument. Potential fallback: break into "compute for k ∈ [29, 200]" + "asymptotic for k > 200."
+- Watch for formalize tasks starting (Kummer and large-prime are unblocked now).
+- The k≤28 bound task (`erdos1094-w0p`) is still a risk — may be hard to prove rigorously.
+- Strike count: CRT density = 0/3, n>k² = 0/3, k≤28 bound = 0/3.
+- Strategic framing level: 1 (still first attempts on all sub-problems).
+
+## Heartbeat — 2026-02-08T08:24:22Z (Heartbeat #6)
+
+**Metrics**: 1 sorry | 2 verified proofs | 13 open | 1 in_progress | 7 closed | 0 failed
+**Status**: ✅ System healthy but bottlenecked. CRT density task consuming worker for ~35 min.
+**Observations**:
+- No new task closures since HB#5. Same 7 closed, same 13 open.
+- `erdos1094-6fs` (CRT density) still in_progress: 1517 log lines, ~35 min runtime. NOT stale (updated 08:20). Agent running Python verification for k∈[29, 10000].
+- Agent's theoretical approach: pure density argument gives δ_k × k² ≤ 0.42 (< 1 but not tight enough for formal proof). Pivoting to hybrid: direct CRT enumeration for k∈[29, K₁] + theoretical bound for k > K₁.
+- Key finding: the max δ_k × k² across k∈[29, 10^7] is ~0.42 at k=178416. Stays well below 1 everywhere tested, but rigorous proof for all k > 10^7 is proving elusive (digit-sum lower bounds are hard).
+- No defeatist language. Agent actively reasoning and computing. Approach is evolving sensibly.
+- Other unblocked tasks waiting: `erdos1094-5y9` (n>k²), `erdos1094-w0p` (k≤28 bound), `erdos1094-419` (formalize Kummer), `erdos1094-41t` (formalize large-prime). Worker bottlenecked on CRT task.
+**Actions**: None — agent actively working, approach reasonable.
+**Watch next**:
+- If CRT task completes: check whether proof has a gap for large k. Verify task will catch this.
+- If CRT task fails: create replacement with narrower scope. Fallback plan:
+  (a) Split into "direct CRT verification for k∈[29, K₁]" + "asymptotic bound for k > K₁"
+  (b) Or: replace the k≥29 approach entirely — instead of CRT density for [2k, k²], use a different bound (e.g., Bertrand + iterated primes for large n, direct computation for small n)
+- If still running at HB#7 (~45+ min), may need to consider whether it's looping.
+- Strike count: CRT density = 0/3 (first attempt, still running).
+
+## Heartbeat — 2026-02-08T08:40:55Z (Heartbeat #7)
+
+**Metrics**: 1 sorry | 2 verified proofs | 13 open | 1 in_progress | 7 closed | 0 failed
+**Status**: ⚠️ Bottleneck continues. CRT density task at ~50 min, blocking all other work.
+**Observations**:
+- No new task closures. Still 7 closed, 13 open, same as HB#5 and HB#6.
+- `erdos1094-6fs` (CRT density): 1851 log lines (up from 1517), ~50 min runtime. Agent running two Python CRT verifications: submask-based for k∈[29,2000], CRT-based for k∈[2000,10000]. Approach: computational verification for finite range + theoretical argument for large k.
+- Agent has NOT started writing proof file (proofs/crt-density-k-ge-29.md doesn't exist).
+- Agent is still in computation phase — results not yet returned from Python execution.
+- No defeatist language. Agent actively computing. But extended runtime is a concern — 13 tasks waiting.
+- Last task status update: 08:20 (20 min ago). But log has grown 334 lines since HB#6, so agent is active.
+**Actions**: None — agent making forward progress, not looping. But setting hard deadline.
+**Watch next**:
+- **HARD DEADLINE**: If CRT task still running at HB#8 (~65+ min total), check if it's producing a proof file. If not, may need to recover the task and restructure.
+- Key risk: agent may produce a proof that only covers k up to some finite bound, without a theoretical argument for all k ≥ 29. The verify task will catch this.
+- If CRT task completes: check proof quality immediately. Look for gaps in large-k coverage.
+- If CRT task fails: close it and create two replacement tasks:
+  (1) "Prove: for k ∈ [29, K], verify computationally that no n ∈ [2k,k²] satisfies digit domination for all primes ≤ k" (with K chosen appropriately)
+  (2) "Prove: for k > K, the density δ_k · k² < 1 using digit-sum bounds"
+- Other blocked work: 3 explore tasks, 2 formalize tasks, 5 verify tasks all waiting.
+- Strike count: CRT density = 0/3 (first attempt, still running).
