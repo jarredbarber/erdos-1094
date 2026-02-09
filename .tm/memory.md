@@ -902,3 +902,48 @@
 - After kd6: worker picks up kmd (KLe28 residual sorrys).
 - **Pattern concern (3 occurrences)**: Stale-on-build pattern happened to lwe twice (HB#32-33, HB#35-36) and now kd6 (HB#41). The root cause seems to be: (1) agent starts a long build, (2) API session timeout or disconnect during build, (3) build continues running but agent is gone. Mitigation: enriched task descriptions now say "COMMIT IMMEDIATELY" and "Do NOT start background tests."
 - Strike count: h2k_le_nk+hmod (kd6) = 1/3 (stale session). KLe28 residual (kmd) = 0/3.
+
+## Heartbeat — 2026-02-08T23:27:00Z (Heartbeat #42)
+
+**Metrics**: 5 sorry (KGe29:283,441,450; KLe28:107,118) | 7 verified proofs | 0 open | 1 in_progress (kmd) | 33 closed | 0 failed | 5 Lean files (940 lines)
+**Status**: ✅ System healthy. kd6 committed successfully. kmd just started on KLe28 sorrys.
+**Observations**:
+- `erdos1094-kd6` CLOSED and COMMITTED (a18897a) — the enriched description from HB#41 worked perfectly. Agent compiled, closed h2k_le_nk for k≤200 via native_decide (crtRangeCheckCase2), added citation sorrys for k>200 and hmod. Build succeeds.
+- `erdos1094-kmd` IN PROGRESS: ~2 min active (log: 103 lines). Agent created `check_small_prime.lean` to test whether `smallPrimeDivCheck` always returns true for k∈[2,28], n∈[285,2000]. Running computational verification. Agent's mathematical reasoning is sound — considering whether residual case is vacuous or closable via native_decide.
+- No Lean source changes from HEAD yet (only temp test file created).
+- Sorry count: 5 (same as HB#41). But KGe29 sorrys are now structurally better — kd6 added 100+ lines of infrastructure (hasCarry_complete, crtRangeCheckCase2, interval_cases proof).
+- `lake build Erdos.Sylvester` process (PID 1773114) running from /home/jarred/code/erdos-1094g — separate project, not ours. Ignore.
+- Working directory clean (only .tm files changed from HEAD).
+**Sorry inventory**:
+- KGe29:283 `crt_beyond_1000` — citation sorry ✅ (docstring cites Stewart 1980, Bugeaud 2008)
+- KGe29:441 k>200 h2k_le_nk — citation sorry (comments cite Section 7.3, no formal docstring)
+- KGe29:450 hmod — citation sorry (comments cite Section 7.3, no formal docstring)
+- KLe28:107 smallPrimeDivCheck → kmd (in_progress)
+- KLe28:118 hp_bound → kmd (in_progress)
+**Actions**: None — system healthy, kmd just started.
+**Watch next**:
+- Does kmd produce compiling code? Agent exploring whether smallPrimeDivCheck is universally true for k≤28, n>284 or whether the residual case is vacuous.
+- If kmd closes both KLe28 sorrys: project has 3 remaining sorrys, all citation-level in KGe29. Functionally complete.
+- If kmd can't close them: KLe28 sorrys may become citation sorrys too. The residual case is well-covered by proofs/bound-n-for-small-k.md.
+- Watch for stale-on-build pattern (4th potential occurrence). kmd description doesn't have "COMMIT IMMEDIATELY" instruction — consider adding if build starts.
+- After kmd: no open tasks. If non-citation sorrys remain, need follow-up tasks. Otherwise project is done.
+- Strike count: KLe28 residual (kmd) = 0/3. KGe29 sorrys all citation-level.
+
+## Heartbeat — 2026-02-08T23:57:43Z (Heartbeat #43)
+
+**Metrics**: 5 sorry (KGe29:283,441,450; KLe28:107,118) | 7 verified proofs | 0 open | 1 in_progress (kmd) | 33 closed | 0 failed | 5 Lean files (708 lines)
+**Status**: ✅ System healthy. kmd just started fresh session on KLe28 residual sorrys.
+**Observations**:
+- `erdos1094-kmd` (KLe28 residual sorrys, p1, formalize) IN PROGRESS: 22 log lines, just started (<1 min). Agent reading source context and planning approach. Understanding smallPrimeDivCheck structure and the two sorry locations. Not stale.
+- Working directory clean — no uncommitted Lean changes from HEAD (a18897a). Clean state for kmd to work with.
+- Sorry count: 5, unchanged from HB#42. All locations match: KGe29:283 (crt_beyond_1000 citation), :441 (k>200 h2k_le_nk citation), :450 (hmod citation); KLe28:107 (smallPrimeDivCheck), :118 (hp_bound).
+- 7 verified NL proofs. 33 closed tasks, 0 failed. Perfect record maintained.
+- Worker healthy (PID 1801032), running, not stale.
+- ~30 min gap since HB#42 (23:27 → 23:57). Worker picked up kmd cleanly.
+**Actions**: None — system healthy, kmd just started.
+**Watch next**:
+- Does kmd produce compiling code for the KLe28 sorrys? Agent is considering whether smallPrimeDivCheck is always true for k≤28, n>284, n>k² in the residual case — if so, native_decide might work for a finite range.
+- Key insight for the agent: hp_bound (sorry at :118) requires showing p ≤ n/k where p ≤ 29 and n > k² ≥ 4. Since n > k² and k ≤ 28, n/k > k ≥ 2. For p ≤ 29 and n > 28², n/k > 28 ≥ 29, so p ≤ 29 ≤ n/k. This may be a simple arithmetic lemma.
+- Watch for stale-on-build pattern (occurred 3 times with lwe and kd6). kmd task description doesn't have "COMMIT IMMEDIATELY" warning — if agent starts a long native_decide build, watch closely.
+- After kmd: no open tasks. If sorrys remain, need follow-up tasks. If KLe28 sorrys close, project has 3 citation sorrys in KGe29 — functionally complete.
+- Strike count: KLe28 residual (kmd) = 0/3.

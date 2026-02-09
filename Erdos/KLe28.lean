@@ -57,6 +57,57 @@ private lemma case_b_finite :
     ∀ k ∈ Finset.Icc 17 28, ∀ n ∈ Finset.Icc 285 (k * k),
     (n.choose k).minFac ≤ max (n / k) k := by native_decide
 
+
+/-- Check if n is k-smooth (all prime factors ≤ k). -/
+def isKSmooth (n k : ℕ) : Bool :=
+  if n == 0 then false else
+  if n == 1 then true else
+  if n <= k then true else
+  let p := n.minFac
+  if p > k then false else
+  isKSmooth (n / p) k
+
+/-- Check if the residual case conditions apply. -/
+def residualCheck (n k : ℕ) : Bool :=
+  let m := n / k
+  if m == 0 then false else
+  let d := n / n.gcd k
+  -- Type A failed: m is k-smooth
+  if !isKSmooth m k then false else
+  -- Residual conditions: d prime, d > m
+  d.Prime && d > m
+
+/-- Find the first prime p ≤ 29 that has a carry (i.e., divides C(n,k)). -/
+def getFirstPrimeWithCarry (n k : ℕ) : Option ℕ :=
+  if hasCarry 2 k n then some 2 else
+  if hasCarry 3 k n then some 3 else
+  if hasCarry 5 k n then some 5 else
+  if hasCarry 7 k n then some 7 else
+  if hasCarry 11 k n then some 11 else
+  if hasCarry 13 k n then some 13 else
+  if hasCarry 17 k n then some 17 else
+  if hasCarry 19 k n then some 19 else
+  if hasCarry 23 k n then some 23 else
+  if hasCarry 29 k n then some 29 else
+  none
+
+/-- Verify the residual case conditions for a bounded range.
+    Returns true if for all n in range, residualCheck implies smallPrimeDivCheck is true
+    and the found prime satisfies p <= n/k. -/
+def verifyResidualRange (k limit : ℕ) : Bool :=
+  (List.range (limit - 285)).all fun i =>
+    let n := 285 + i
+    if n > k * k && residualCheck n k then
+      match getFirstPrimeWithCarry n k with
+      | some p => p <= n / k
+      | none => false
+    else true
+
+/-- Verified range for k ≤ 28. Limit chosen to cover n/k < 29 cases.
+    For k=28, 29*28 = 812. We verify up to 1000 to be safe. -/
+lemma residual_verified_1000 : ∀ k ∈ Finset.Icc 2 28, verifyResidualRange k 1000 = true := by
+  native_decide
+
 /-- For k ≤ 28 and n > k², if n > 284, then minFac(C(n,k)) ≤ n/k.
     Note: For k < 29 and small n (e.g., (62,6)), this may fail.
     The constraint n > 284 excludes the problematic cases.
@@ -92,32 +143,55 @@ private lemma large_n_minFac_bound_small_k (n k : ℕ) (hk : 2 ≤ k) (hk28 : k 
       by_cases hle : d ≤ n / k
       · exact le_trans (Nat.minFac_le_of_dvd hprime.two_le hd_dvd) hle
       · -- d is prime and d > n/k: residual case
-        -- For k ≤ 28 and n > 284, the Bertrand prime approach works.
-        -- By Bertrand's postulate, there's a prime p* ∈ (k, 2k].
-        -- If n mod p* < k, then p* | C(n, k) by large prime criterion.
-        -- For n > k², n/k > k, so if n ≥ 2k² we have n/k ≥ 2k ≥ p*.
-        -- For n ∈ (k², 2k²), computational verification shows minFac ≤ n/k.
         push_neg at hle
-        -- For k ≤ 28 and n > 284, digit domination finds a prime p ≤ k ≤ n/k.
         have h_nk_bound : k ≤ n / k := by
           rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
-        have hspc : smallPrimeDivCheck n k = true := by
-          -- Verified computationally: for k ≤ 28, n > 284, in residual case,
-          -- smallPrimeDivCheck always returns true.
-          sorry
-        obtain ⟨p, hp, hp29, hpdvd⟩ := smallPrimeDivCheck_sound hkn hspc
-        -- The key: for k ≤ 28 in residual case, the prime p from smallPrimeDivCheck
-        -- is typically 2 or 3, which is ≤ k ≤ n/k.
-        -- We need: p ≤ n/k. Since p ≤ 29 and n/k ≥ k, this holds if p ≤ k.
-        -- If p > k, we need n/k ≥ p, i.e., n ≥ pk.
-        -- For n > 284 and k ≤ 28, if p ≤ 10 then p ≤ 284/28 ≈ 10 ≤ n/k.
-        -- Computational verification confirms p ≤ n/k in all residual cases.
-        have hp_bound : p ≤ n / k := by
-          -- This requires computational verification for the specific range.
-          -- For k ≤ 28 and n > 284, the residual case always has a prime p ≤ k.
-          sorry
-        calc (n.choose k).minFac ≤ p := Nat.minFac_le_of_dvd hp.two_le hpdvd
-          _ ≤ n / k := hp_bound
+        
+        -- Use verified range for small n
+        by_cases hn1000 : n < 1000
+        · have hver : verifyResidualRange k 1000 = true := residual_verified_1000 k (Finset.mem_Icc.mpr ⟨hk, hk28⟩)
+          -- Need to show residualCheck n k = true.
+          -- We know d is prime, d > n/k, and Type A failed (so n/k is k-smooth)
+          have hres : residualCheck n k = true := by
+            -- The conditions match residualCheck exactly
+            -- Assuming isKSmooth matches Type A failure
+            sorry 
+          
+          unfold verifyResidualRange at hver
+          rw [List.all_eq_true] at hver
+          have hn_idx : n - 285 ∈ List.range (1000 - 285) := List.mem_range.mpr (by omega)
+          specialize hver (n - 285) hn_idx
+          simp only [add_tsub_cancel_right] at hver
+          rw [if_pos (by simp [hn, hres])] at hver
+          
+          generalize hopt : getFirstPrimeWithCarry n k = p_opt
+          rw [hopt] at hver
+          match p_opt with
+          | some p =>
+            have hp_le : p ≤ n / k := hver
+            have hp_prime : Nat.Prime p := by
+              -- p comes from getFirstPrimeWithCarry
+              sorry
+            have hp_dvd : p ∣ n.choose k := by
+              -- p comes from getFirstPrimeWithCarry -> hasCarry -> divides
+              sorry
+            exact le_trans (Nat.minFac_le_of_dvd hp_prime.two_le hp_dvd) hp_le
+          | none => contradiction
+          
+        · -- n >= 1000
+          -- Assume smallPrimeDivCheck is true (proven for n <= k^2 in other proofs, assumed for large n here)
+          have hspc : smallPrimeDivCheck n k = true := sorry
+          obtain ⟨p, hp, hp29, hpdvd⟩ := smallPrimeDivCheck_sound hkn hspc
+          have hp_bound : p ≤ n / k := by
+            -- p <= 29. We show 29 <= n/k.
+            -- n >= 1000, k <= 28. n/k >= 1000/28 = 35.
+            apply le_trans hp29
+            rw [le_div_iff_mul_le (by omega)]
+            calc 29 * k ≤ 29 * 28 := Nat.mul_le_mul_left 29 hk28
+               _ = 812 := by norm_num
+               _ ≤ 1000 := by norm_num
+               _ ≤ n := le_of_not_lt hn1000
+          exact le_trans (Nat.minFac_le_of_dvd hp.two_le hpdvd) hp_bound
     · -- d is composite: minFac(d)² ≤ d ≤ n, and minFac(d) * k ≤ n, so minFac(d) ≤ n/k
       have hmf_sq : d.minFac ^ 2 ≤ d := Nat.minFac_sq_le_self hd_gt_one.le hprime
       have hd_le_n : d ≤ n := Nat.div_le_self n (n.gcd k)
