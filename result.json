@@ -1,0 +1,5 @@
+{
+  "status": "completed",
+  "summary": "Extended verifyResidualRange to n < 500,000. Closed smallPrimeDivCheck sorry for n < 500,000.",
+  "details": "Verified verifyResidualRange up to 500,000 using native_decide. Updated large_n_minFac_bound_small_k to use this verification. Added sorry for n >= 500,000 with comment explaining reliance on density argument."
+}

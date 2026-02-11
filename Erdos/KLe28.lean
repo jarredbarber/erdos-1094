@@ -160,9 +160,9 @@ def verifyResidualRange (k limit : ℕ) : Bool :=
     else true
 
 /-- Verified range for k ≤ 28. Limit chosen to cover n/k < 29 cases.
-    For k=28, 29*28 = 812. We verify up to 1000 to be safe. -/
-lemma residual_verified_1000 :
-    ∀ k ∈ Finset.Icc 2 28, verifyResidualRange k 1000 = true := by
+    For k=28, 29*28 = 812. We verify up to 500,000 to cover the residual case thoroughly. -/
+lemma residual_verified_500000 :
+    ∀ k ∈ Finset.Icc 2 28, verifyResidualRange k 500000 = true := by
   native_decide
 
 -- Direct verification: for k ∈ [2, 28] and n ∈ [285, 999] with n > k²,
@@ -185,6 +185,7 @@ private lemma residual_case_small_n_direct :
 private lemma large_n_minFac_bound_small_k (n k : ℕ) (hk : 2 ≤ k) (hk28 : k ≤ 28)
     (hn : k * k < n) (hn284 : 284 < n) (hkn : k ≤ n) :
     (n.choose k).minFac ≤ n / k := by
+  set_option maxRecDepth 5000 in
   have hM_pos : 0 < n / k := by
     have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
     omega
@@ -228,20 +229,39 @@ private lemma large_n_minFac_bound_small_k (n k : ℕ) (hk : 2 ≤ k) (hk28 : k 
           -- (c) d.Prime and (d) d > n/k
           exact ⟨hprime, hle⟩
         -- === Step 2: Show minFac(C(n,k)) ≤ n/k directly ===
-        by_cases hn1000 : n < 1000
-        · -- For n < 1000: use direct native_decide verification
-          have hcheck := residual_case_small_n_direct k
-            (Finset.mem_Icc.mpr ⟨hk, hk28⟩)
-            n (Finset.mem_Icc.mpr ⟨by omega, by omega⟩)
-          rcases hcheck with habs | hgoal
-          · exact absurd hn habs
-          · exact hgoal
-        · -- For n ≥ 1000: n/k ≥ 1000/28 ≥ 35 > 29, so any prime ≤ 29
-          -- dividing C(n,k) gives minFac ≤ 29 ≤ n/k.
+        by_cases hn500k : n < 500000
+        · -- For n < 500000: use verifyResidualRange verification
+          have hcheck := residual_verified_500000 k (Finset.mem_Icc.mpr ⟨hk, hk28⟩)
+          unfold verifyResidualRange at hcheck
+          rw [List.all_eq_true] at hcheck
+          have hn_ge : 285 ≤ n := by omega -- n > 284
+          have hn_idx : n - 285 < 500000 - 285 := by omega
+          have hn_mem : n - 285 ∈ List.range (500000 - 285) := List.mem_range.mpr hn_idx
+          specialize hcheck (n - 285) hn_mem
+          simp only at hcheck
+          rw [show 285 + (n - 285) = n from by omega] at hcheck
+          -- Reduce the condition (n > k*k && residualCheck n k) to true
+          have h_cond : (decide (n > k * k) && residualCheck n k) = true := by
+            rw [Bool.and_eq_true]
+            constructor
+            · rw [decide_eq_true_iff]; exact hn
+            · exact hres
+          rw [h_cond] at hcheck
+          simp only [if_true] at hcheck
+          split at hcheck
+          · -- Case: getFirstPrimeWithCarry n k = some p
+            rename_i p hcheck_some
+            rw [decide_eq_true_iff] at hcheck
+            obtain ⟨hp_prime, hp_dvd⟩ := getFirstPrimeWithCarry_sound n k hkn p hcheck_some
+            exact le_trans (Nat.minFac_le_of_dvd hp_prime.two_le hp_dvd) hcheck
+          · -- Case: getFirstPrimeWithCarry n k = none
+            cases hcheck
+        · -- For n ≥ 500,000: n/k ≥ 500,000/28 ≥ 17,857 >> 29.
+          -- Any prime p ≤ 29 dividing C(n,k) satisfies p ≤ n/k.
           -- STUCK: Need to show smallPrimeDivCheck n k = true in the
           -- residual case (d prime, d > n/k, n/k is 28-smooth) for
-          -- ALL n ≥ 1000 with k ≤ 28.
-          -- Computationally verified true for n up to k² + 500000.
+          -- ALL n ≥ 500,000 with k ≤ 28.
+          -- Computationally verified true for n up to 500,000.
           -- The residual case occurs for infinitely many n (whenever
           -- n/k is 28-smooth and n/gcd(n,k) is prime), so native_decide
           -- alone cannot close this. Needs a CRT density argument showing
