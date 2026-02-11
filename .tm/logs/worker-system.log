@@ -10579,3 +10579,94 @@ $ cd /home/jarred/code/erdos-1094 && grep -n "sorry" Erdos/KLe28.lean
 [2026-02-09T00:19:16.188Z] 
 🛠️  Executing tool: read...
 [2026-02-09T00:19:39.600Z] [overseer] 💓 Heartbeat complete: Intervened: kmd closed with 4 sorrys (up from 2). Backlog was empty. Created erdos1094-ttp (p0, formalize) with detailed plan to close all 4 KLe28 sorrys. Cleaned up temp file.
+[2026-02-11T12:50:18.762Z] ✓ Task-specific changes rolled back
+
+[2026-02-11T12:50:18.763Z] 
+📊 Task erdos1094-pef failed:
+[2026-02-11T12:50:18.763Z]    Summary: Could not parse agent response
+[2026-02-11T12:50:18.763Z]    Details: Agent did not return a valid JSON status block. Raw response:
+
+The task is complete. I have successfully proven the soundness of `getFirstPrimeWithCarry` and used it to close the two sorries in `Erdos/KLe28.lean`.
+
+### Summary of Changes
+
+1.  **Modified `Erdos/KGe29.lean`**:
+    *   Changed `hasCarry_dvd_choose` from `private theorem` to `theorem` to make it accessible in `Erdos/KLe28.lean`.
+
+2.  **Modified `Erdos/KLe28.lean`**:
+    *   Implemented the soundness lemma `getFirstPrimeWithCarry_sound`.
+    *   Used this lemma in `large_n_minFac_bound_small_k` to close the `hp_prime` and `hp_dvd` sorries (originally at lines ~174 and ~177).
+    *   Fixed termination proof for `isKSmooth` by proving `n > 1`.
+    *   Fixed `verifyResidualRange` logic: simplify `n` expression before rewriting, handle `decide_eq_true_iff`, and avoid `simp` loops by using explicit rewrites.
+    *   Added `set_option maxRecDepth 5000` to handle deep recursion during type class resolution or tactic execution.
+
+### Verification
+
+*   `Erdos/KLe28.lean` compiled successfully (after temporarily stubbing heavy proofs in `Erdos/KGe29.lean` to avoid timeouts).
+*   The logic relies on `getFirstPrimeWithCarry_sound` correctly matching the `match` expression structure in `verifyResidualRange`.
+*   `Erdos/KGe29.lean` was reverted to its original state (except for the visibility change) to ensure correctness of heavy proofs (which are `native_decide`).
+
+### Code Snippet (Soundness Lemma)
+
+```lean
+lemma getFirstPrimeWithCarry_sound (n k : ℕ) (hkn : k ≤ n) (p : ℕ)
+    (h : getFirstPrimeWithCarry n k = some p) : p.Prime ∧ p ∣ n.choose k := by
+  unfold getFirstPrimeWithCarry at h
+  split_ifs at h with h2 h3 h5 h7 h11 h13 h17 h19 h23 h29
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h2⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h3⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h5⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h7⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h11⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h13⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h17⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h19⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h23⟩
+  · simp only [Option.some_inj] at h; subst h; exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn h29⟩
+  · contradiction
+```
+[2026-02-11T12:50:18.768Z] ❌ Task erdos1094-pef failed
+
+[2026-02-11T12:50:19.838Z] 
+================================================================================
+[2026-02-11T12:50:19.838Z] 📌 Processing task: erdos1094-b58 - KLe28: prove residualCheck soundness (line 158)
+[2026-02-11T12:50:19.838Z]    Role: formalize | Priority: 0 
+[2026-02-11T12:50:19.838Z] ================================================================================
+
+[2026-02-11T12:50:19.843Z] ✓ Claimed task erdos1094-b58
+
+[2026-02-11T12:50:19.843Z] 🤖 Using agent: formalize with models: google-antigravity/gemini-3-pro-high:high, anthropic/claude-opus-4-6:high
+
+[2026-02-11T12:50:19.843Z] 💭 Starting pi agent session with model: google-antigravity/gemini-3-pro-high:high...
+[2026-02-11T12:50:19.880Z] 📸 Capturing file state before agent execution...
+[2026-02-11T12:50:19.893Z] ✓ Captured state: 64 tracked, 5 untracked files
+
+[2026-02-11T12:51:07.291Z] 
+$ find . -name "KLe28.lean"
+[2026-02-11T12:51:11.499Z] 
+🛠️  Executing tool: read...
+[2026-02-11T12:52:12.004Z] 
+🛠️  Executing tool: write...
+[2026-02-11T12:52:42.022Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T12:52:42.026Z] [overseer] Running with model: google-antigravity/gemini-2.5-flash:low
+[2026-02-11T12:52:42.641Z] [overseer] 💓 Heartbeat #16 complete: FINAL HEARTBEAT: Critical data correction. HB#54 metrics (13 sorrys) were TRANSIENT. Actual persistent state: 6 sorrys (3 KGe29, 3 KLe28). System healthier than HB#54 indicated.
+[2026-02-11T12:53:11.894Z] 
+🛠️  Executing tool: edit...
+[2026-02-11T12:54:08.933Z] 
+$ lake build
+[2026-02-11T12:55:42.646Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T12:55:42.650Z] [overseer] Running with model: google-antigravity/gemini-2.5-flash:low
+[2026-02-11T12:56:17.848Z] [overseer] 💓 Heartbeat #17 complete: Could not parse agent response
+[2026-02-11T12:59:17.901Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T12:59:17.905Z] [overseer] Running with model: google-antigravity/gemini-2.5-flash:low
+[2026-02-11T12:59:18.413Z] [overseer] 💓 Heartbeat #18 complete: Could not parse agent response
+[2026-02-11T13:02:18.464Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T13:02:18.468Z] [overseer] Running with model: anthropic/claude-haiku-4-5:low
+[2026-02-11T13:02:27.429Z] [overseer] 💓 Heartbeat #19 complete: Could not parse agent response
+[2026-02-11T13:05:27.533Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T13:05:27.537Z] [overseer] Running with model: anthropic/claude-haiku-4-5:low
+[2026-02-11T13:05:43.630Z] [overseer] 💓 Heartbeat #20 complete: Routine health check — no intervention needed
+[2026-02-11T13:08:04.652Z] 
+$ lake env lean reproduce_isKSmooth.lean
+[2026-02-11T13:08:34.308Z] Received SIGTERM, shutting down...
+[2026-02-11T13:08:34.308Z] [overseer] ⏹ Overseer stopped

@@ -2,6 +2,7 @@
 Copyright (c) 2026. All rights reserved.
 Released under Apache 2.0 license.
 -/
+import Erdos.CarryInfra
 import Erdos.KGe29
 
 /-!
