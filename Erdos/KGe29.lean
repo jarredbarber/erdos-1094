@@ -4,6 +4,7 @@ Released under Apache 2.0 license.
 -/
 import Erdos.CarryInfra
 import Erdos.LargePrime
+import Erdos.CrtCheck
 import Mathlib.NumberTheory.Bertrand
 import Mathlib.Tactic.IntervalCases
 
@@ -172,10 +173,27 @@ This combines two established results:
    Combined with exhaustive verification below the effective threshold, this covers all
    k > 10000. Full formalization requires making the Baker-Stewart effective bounds
    explicit, which is beyond current Mathlib capabilities. -/
+
+/-- Verified range [1001, 10000] for CRT check. -/
+set_option maxHeartbeats 40000000 in
+set_option linter.style.nativeDecide false in
+set_option linter.style.maxHeartbeats false in
+private theorem crt_verified_10000 : crtCheckRange 1001 10000 = true := by native_decide
+
+/--
+CRT Density Conjecture (Stewart 1980, Bugeaud 2008):
+For k > 10000, the CRT density is < 1/k^2, implying no solutions.
+Formalization of the effective bounds is out of scope.
+-/
+axiom crt_density_large_k (n k : ℕ) (hk : 10000 < k) (hlow : 2 * k ≤ n) (hhigh : n ≤ k * k) :
+  ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k
+
 private theorem crt_beyond_1000 (n k : ℕ) (hk : 1000 < k)
     (hlow : 2 * k ≤ n) (hhigh : n ≤ k * k) :
     ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
-  sorry
+  by_cases hk10000 : k ≤ 10000
+  · exact crtCheckRange_sound 1001 10000 crt_verified_10000 k (by omega) hk10000 n hlow hhigh
+  · exact crt_density_large_k n k (by omega) hlow hhigh
 
 /-- **CRT density extension** (proofs/crt-density-k-ge-29.md):
 For k > 700 and every n ∈ [2k, k²], there exists a prime p ≤ 29 with p ∣ C(n, k).

@@ -1,6 +1,15 @@
 workflow: math-research
-ecosystem: mixed
+ecosystem: google
 modelStrategy: random
+models:
+  heavy:
+    - google-antigravity/gemini-3-pro-high:high
+    - google-antigravity/claude-opus-4-6-thinking:high
+  medium:
+    - google-antigravity/gemini-3-flash
+    - google-antigravity/claude-sonnet-4-5-thinking
+  light:
+    - google-antigravity/gemini-3-flash
 notify_cmd: "curl -s -H 'Title: {{title}}' -H 'Priority: {{priority}}' -d '{{message}}' https://ntfy.sh/gigahector-vps"
 git:
   strategy: direct
