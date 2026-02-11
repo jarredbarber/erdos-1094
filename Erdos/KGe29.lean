@@ -109,7 +109,7 @@ def crtRangeCheckCase2 (B : ℕ) : Bool :=
 private theorem crtRangeCheckCase2_sound (B : ℕ) (hB : crtRangeCheckCase2 B = true)
     (n k : ℕ) (hk29 : 29 ≤ k) (hkB : k ≤ B) (hlow : k * k < n) (hhigh : n < 2 * k * k) :
     ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
-  apply smallPrimeDivCheck_sound (by omega)
+  apply smallPrimeDivCheck_sound (by nlinarith [hk29])
   unfold crtRangeCheckCase2 at hB
   rw [List.all_eq_true] at hB
   have hB_ge : 29 ≤ B := le_trans hk29 hkB
@@ -122,7 +122,9 @@ private theorem crtRangeCheckCase2_sound (B : ℕ) (hB : crtRangeCheckCase2 B = 
   have hk_sq_gt_one : 1 < k * k := by
     have : 29 * 29 ≤ k * k := Nat.mul_le_mul hk29 hk29
     omega
-  have hn_sub : n - (k * k + 1) < k * k - 1 := by omega
+  have hn_sub : n - (k * k + 1) < k * k - 1 := by
+    have : 2 * k * k = 2 * (k * k) := by ring
+    omega
   have hn_mem : n - (k * k + 1) ∈ List.range (k * k - 1) :=
     List.mem_range.mpr hn_sub
   specialize hB (n - (k * k + 1)) hn_mem
@@ -303,29 +305,16 @@ private lemma prime_large_divisor_case (n k : ℕ) (hk : 2 ≤ k)
       -- For k > 200, we rely on the density argument from proofs/large-n-divisibility.md.
       by_cases hk200 : k ≤ 200
       · by_contra! h
+        have hk_pos : 0 < k := by omega
         have hn_lt : n < 2 * k * k := by
-          have hk_pos : 0 < k := by omega
-          rw [Nat.lt_iff_le_and_ne]
-          constructor
-          · rw [← Nat.lt_div_iff_mul_lt hk_pos]
-            exact h
-          · intro contra
-            rw [contra] at h
-            have : 2 * k ≤ 2 * k * k / k := by
-               rw [Nat.mul_div_cancel_left _ hk_pos]
-               exact le_refl _
-            omega
+          rwa [Nat.div_lt_iff_lt_mul hk_pos] at h
         obtain ⟨p, hp, hp29, hpdvd⟩ := crtRangeCheckCase2_sound 200 crt_case2_verified_200 n k hk29 hk200 hn hn_lt
+        -- STUCK: Need smallPrimeDivCheck_complete — showing p ∣ C(n,k) for prime p ≤ 29
+        -- implies smallPrimeDivCheck n k = true. The forward direction (hasCarry → dvd)
+        -- is proven; this is the reverse (dvd → hasCarry for specific primes).
+        -- Blocked on: interval_cases generating non-prime cases that need special handling.
         have h_true : smallPrimeDivCheck n k = true := by
-           haveI : Fact p.Prime := ⟨hp⟩
-           rw [kummer_criterion p n k hkn] at hpdvd
-           simp_rw [Nat.getD_digits _ _ hp.two_le] at hpdvd
-           have hc := hasCarry_complete hp.two_le k n hpdvd
-           unfold smallPrimeDivCheck
-           simp only [Bool.or_eq_true]
-           interval_cases p
-           all_goals (try { simp only [hc, Bool.or_true, Bool.true_or] })
-           all_goals (try { have : ¬Nat.Prime p := by decide; contradiction })
+          sorry
         rw [h_true] at hspc
         contradiction
       · -- Case k > 200

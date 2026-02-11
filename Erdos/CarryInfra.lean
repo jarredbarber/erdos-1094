@@ -24,7 +24,7 @@ open Nat
 
 namespace Erdos1094
 
-Returns `true` iff digit-domination fails, i.e., `p ∣ C(n, k)` by Kummer's criterion.
+/-- Returns `true` iff digit-domination fails, i.e., `p ∣ C(n, k)` by Kummer's criterion.
 Recurses on `k`, dividing both `k` and `n` by `p` at each step. -/
 def hasCarry (p k n : ℕ) : Bool :=
   if k = 0 then false
@@ -68,9 +68,7 @@ theorem hasCarry_complete {p : ℕ} (hp : 2 ≤ p) :
     split
     · -- k = 0
       subst k
-      rw [Nat.zero_div] at hi
-      have : 0 % p > n / p ^ i % p := hi
-      omega
+      simp [Nat.zero_div, Nat.zero_mod] at hi
     · split
       · -- p <= 1
         omega
