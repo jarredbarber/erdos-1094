@@ -947,3 +947,38 @@
 - Watch for stale-on-build pattern (occurred 3 times with lwe and kd6). kmd task description doesn't have "COMMIT IMMEDIATELY" warning — if agent starts a long native_decide build, watch closely.
 - After kmd: no open tasks. If sorrys remain, need follow-up tasks. If KLe28 sorrys close, project has 3 citation sorrys in KGe29 — functionally complete.
 - Strike count: KLe28 residual (kmd) = 0/3.
+
+## Heartbeat — 2026-02-09T00:18:59Z (Heartbeat #44)
+
+**Metrics**: 7 sorry (KGe29:283,441,450; KLe28:158,174,177,183) | 7 verified proofs | 1 open | 0 in_progress | 34 closed | 0 failed | 5 Lean files (1014 lines)
+**Status**: ⚠️ Intervened. kmd closed with MORE sorrys. Created follow-up task. Cleaned up temp file.
+**Observations**:
+- `erdos1094-kmd` CLOSED and COMMITTED (9d136be). KLe28.lean grew from 169 to 243 lines. Added `isKSmooth`, `residualCheck`, `getFirstPrimeWithCarry`, `verifyResidualRange`, `residual_verified_1000` (native_decide). Good infrastructure but didn't close the glue sorrys.
+- **Sorry count INCREASED from 5 to 7**: KLe28 went from 2 sorrys to 4. The original 2 sorrys were decomposed into 4 more specific ones — correct decomposition pattern, but agent closed the task without finishing the glue work.
+- **KLe28 sorry inventory**:
+  - :158 `residualCheck n k = true` — needs isKSmooth soundness lemma
+  - :174 `Nat.Prime p` — needs getFirstPrimeWithCarry soundness (p is from fixed prime list)
+  - :177 `p ∣ n.choose k` — needs hasCarry_dvd_choose (PRIVATE in KGe29!)
+  - :183 `smallPrimeDivCheck n k = true` — n ≥ 1000, k ≤ 28 residual case
+- **Infrastructure blocker identified**: `hasCarry_dvd_choose` is private in KGe29.lean. KLe28 imports KGe29 but can't access private theorems. Must make it public.
+- **Backlog was EMPTY** after kmd closed. Worker had nothing to do.
+- Cleaned up `check_small_prime.lean` temp file left by kmd.
+**Actions**:
+1. Created `erdos1094-ttp` (p0, formalize): Close all 4 KLe28 sorrys. Detailed description includes:
+   - Exact fix for each sorry (soundness lemmas needed)
+   - Instruction to make hasCarry_dvd_choose public
+   - Approach hints for line 183 (enumerate 28-smooth numbers or citation sorry)
+   - COMMIT IMMEDIATELY instruction (lesson from stale-on-build pattern)
+2. Cleaned up temp file, committed.
+**Sorry inventory (all covered)**:
+- KGe29:283 `crt_beyond_1000` — citation sorry ✅ (acceptable)
+- KGe29:441 `h2k_le_nk` k>200 — citation sorry (acceptable)
+- KGe29:450 `hmod` — citation sorry (acceptable)
+- KLe28:158,174,177,183 → `erdos1094-ttp` (p0, open)
+**Watch next**:
+- Does ttp pick up and follow the detailed plan?
+- Does making hasCarry_dvd_choose public break anything? (Unlikely — adding visibility doesn't break downstream.)
+- Can the agent close line 183? The 28-smooth enumeration approach should work — 28-smooth numbers thin out fast, so the residual case may be vacuous for n ≥ 1000. If not, citation sorry is acceptable.
+- Watch for stale-on-build pattern (5th potential occurrence). Task description includes "COMMIT IMMEDIATELY" and "Do NOT start background tests."
+- If ttp closes all 4 KLe28 sorrys: project has 3 citation sorrys in KGe29 — functionally COMPLETE.
+- Strike count: KLe28 sorrys (ttp) = 0/3.

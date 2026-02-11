@@ -1,10 +1,14 @@
 workflow: math-research
+ecosystem: mixed
+modelStrategy: random
 notify_cmd: "curl -s -H 'Title: {{title}}' -H 'Priority: {{priority}}' -d '{{message}}' https://ntfy.sh/gigahector-vps"
 git:
   strategy: direct
 overseer:
   enabled: true
+  interval: 3
+  model: light
+context_files:
+  - PROBLEM.md
 defaults:
   priority: 2
-  size: medium
-  type: task
