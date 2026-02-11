@@ -137,6 +137,16 @@ def getFirstPrimeWithCarry (n k : ℕ) : Option ℕ :=
   if hasCarry 29 k n then some 29 else
   none
 
+/-- Soundness: if `getFirstPrimeWithCarry n k = some p`, then `p` is prime
+    and `p ∣ n.choose k`. Proof: unfold, split on which `hasCarry` returned true,
+    apply `hasCarry_dvd_choose` with primality by `norm_num`. -/
+lemma getFirstPrimeWithCarry_sound (n k : ℕ) (hkn : k ≤ n) (p : ℕ)
+    (h : getFirstPrimeWithCarry n k = some p) : p.Prime ∧ p ∣ n.choose k := by
+  unfold getFirstPrimeWithCarry at h
+  split_ifs at h with h2 h3 h5 h7 h11 h13 h17 h19 h23 h29 <;>
+    (simp only [Option.some.injEq] at h; subst h;
+     exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn ‹_›⟩)
+
 /-- Verify the residual case conditions for a bounded range.
     Returns true if for all n in range, residualCheck implies smallPrimeDivCheck is true
     and the found prime satisfies p <= n/k. -/

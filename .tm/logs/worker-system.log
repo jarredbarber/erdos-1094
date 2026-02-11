@@ -11082,3 +11082,185 @@ $ cd /home/jarred/code/erdos-1094 && tm update erdos1094-b58 --status "DONE: res
 4. **Fixed compilation errors**: CarryInfra.lean (missing docstring opener + omega failure on 0%p), KGe29.lean (3 errors: nonlinear omega, docstring on have, interval_cases in smallPrimeDivCheck_complete).
 
 **Remaining sorry in KLe28.lean (line 241)**: The n ≥ 1000 sub-case of the residual branch. Needs a CRT density argument showing that for k ≤ 28, the 10 primes {2,...,29} together cover all digit-domination patterns. Computationally verified true for n up to 500000+ but the residual case occurs for infinitely many n, so native_decide alone cannot close it. This is a separate task requiring the density formalization from proofs/large-n-divisibility.md Section 7.
+[2026-02-11T15:30:54.868Z] ✅ Closed task erdos1094-b58
+
+[2026-02-11T15:30:55.046Z] 🔄 Checking git status...
+[2026-02-11T15:30:55.065Z] 📝 Committing changes...
+[2026-02-11T15:30:55.113Z] 🚀 Pushing to remote...
+[2026-02-11T15:30:56.926Z] 
+================================================================================
+[2026-02-11T15:30:56.926Z] 📌 Processing task: erdos1094-ilj - KLe28: prove getFirstPrimeWithCarry soundness (v2)
+[2026-02-11T15:30:56.926Z]    Role: formalize | Priority: 0 
+[2026-02-11T15:30:56.926Z] ================================================================================
+
+[2026-02-11T15:30:56.932Z] ✓ Claimed task erdos1094-ilj
+
+[2026-02-11T15:30:56.932Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, google-antigravity/gemini-3-pro-high:high
+
+[2026-02-11T15:30:56.932Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-11T15:30:56.969Z] 📸 Capturing file state before agent execution...
+[2026-02-11T15:30:56.984Z] ✓ Captured state: 98 tracked, 1 untracked files
+
+[2026-02-11T15:31:01.070Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-ilj --status "Reading KLe28.lean and CarryInfra.lean to understand the task"
+[2026-02-11T15:31:04.368Z] 
+🛠️  Executing tool: read...
+[2026-02-11T15:31:04.375Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "hasCarry_dvd_choose" Erdos/CarryInfra.lean
+[2026-02-11T15:31:20.577Z] 
+🛠️  Executing tool: read...
+[2026-02-11T15:32:18.989Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T15:32:18.993Z] [overseer] Running with model: anthropic/claude-haiku-4-5:low
+[2026-02-11T15:32:21.225Z] 
+🛠️  Executing tool: read...
+[2026-02-11T15:32:21.231Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "sorry" Erdos/KLe28.lean
+[2026-02-11T15:32:25.238Z] [overseer] 💓 Heartbeat #28 complete: Could not parse agent response
+[2026-02-11T15:32:42.674Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_carry.lean << 'EOF'
+import Erdos.CarryInfra
+
+open Nat
+namespace Erdos1094
+
+-- Reproduce the definition locally for testing
+-- getFirstPrimeWithCarry is already in KLe28 but we can't import that easily
+-- Let me just check the approach on a simplified version
+
+-- Test: can we prove primality of specific numbers via norm_num?
+example : Nat.Prime 2 := by norm_num
+example : Nat.Prime 29 := by norm_num
+
+-- Test: can we use hasCarry_dvd_choose?
+#check @hasCarry_dvd_choose
+
+end Erdos1094
+EOF
+lake env lean /tmp/test_carry.lean 2>&1
+[2026-02-11T15:32:57.395Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_sound.lean << 'EOF'
+import Erdos.CarryInfra
+
+open Nat
+namespace Erdos1094
+
+-- Copy the definition from KLe28 so we can test the proof
+def getFirstPrimeWithCarry' (n k : ℕ) : Option ℕ :=
+  if hasCarry 2 k n then some 2 else
+  if hasCarry 3 k n then some 3 else
+  if hasCarry 5 k n then some 5 else
+  if hasCarry 7 k n then some 7 else
+  if hasCarry 11 k n then some 11 else
+  if hasCarry 13 k n then some 13 else
+  if hasCarry 17 k n then some 17 else
+  if hasCarry 19 k n then some 19 else
+  if hasCarry 23 k n then some 23 else
+  if hasCarry 29 k n then some 29 else
+  none
+
+lemma getFirstPrimeWithCarry_sound' (n k : ℕ) (hkn : k ≤ n) (p : ℕ)
+    (h : getFirstPrimeWithCarry' n k = some p) : p.Prime ∧ p ∣ n.choose k := by
+  unfold getFirstPrimeWithCarry' at h
+  split_ifs at h with h2 h3 h5 h7 h11 h13 h17 h19 h23 h29 <;>
+    simp_all only [Option.some.injEq, reduceCtorEq] <;>
+    exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn ‹_›⟩
+
+end Erdos1094
+EOF
+lake env lean /tmp/test_sound.lean 2>&1
+[2026-02-11T15:33:49.308Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_sound2.lean << 'EOF'
+import Erdos.CarryInfra
+
+open Nat
+namespace Erdos1094
+
+def getFirstPrimeWithCarry' (n k : ℕ) : Option ℕ :=
+  if hasCarry 2 k n then some 2 else
+  if hasCarry 3 k n then some 3 else
+  if hasCarry 5 k n then some 5 else
+  if hasCarry 7 k n then some 7 else
+  if hasCarry 11 k n then some 11 else
+  if hasCarry 13 k n then some 13 else
+  if hasCarry 17 k n then some 17 else
+  if hasCarry 19 k n then some 19 else
+  if hasCarry 23 k n then some 23 else
+  if hasCarry 29 k n then some 29 else
+  none
+
+lemma getFirstPrimeWithCarry_sound' (n k : ℕ) (hkn : k ≤ n) (p : ℕ)
+    (h : getFirstPrimeWithCarry' n k = some p) : p.Prime ∧ p ∣ n.choose k := by
+  unfold getFirstPrimeWithCarry' at h
+  split_ifs at h with h2 h3 h5 h7 h11 h13 h17 h19 h23 h29
+  all_goals first
+    | exact absurd h nofun
+    | (simp only [Option.some.injEq] at h; subst h;
+       exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn ‹_›⟩)
+
+end Erdos1094
+EOF
+lake env lean /tmp/test_sound2.lean 2>&1
+[2026-02-11T15:34:28.592Z] 
+$ cd /home/jarred/code/erdos-1094 && cat > /tmp/test_sound3.lean << 'EOF'
+import Erdos.CarryInfra
+
+open Nat
+namespace Erdos1094
+
+def getFirstPrimeWithCarry' (n k : ℕ) : Option ℕ :=
+  if hasCarry 2 k n then some 2 else
+  if hasCarry 3 k n then some 3 else
+  if hasCarry 5 k n then some 5 else
+  if hasCarry 7 k n then some 7 else
+  if hasCarry 11 k n then some 11 else
+  if hasCarry 13 k n then some 13 else
+  if hasCarry 17 k n then some 17 else
+  if hasCarry 19 k n then some 19 else
+  if hasCarry 23 k n then some 23 else
+  if hasCarry 29 k n then some 29 else
+  none
+
+lemma getFirstPrimeWithCarry_sound' (n k : ℕ) (hkn : k ≤ n) (p : ℕ)
+    (h : getFirstPrimeWithCarry' n k = some p) : p.Prime ∧ p ∣ n.choose k := by
+  unfold getFirstPrimeWithCarry' at h
+  split_ifs at h with h2 h3 h5 h7 h11 h13 h17 h19 h23 h29
+  all_goals first
+    | (simp only [Option.some.injEq] at h; subst h;
+       exact ⟨by norm_num, hasCarry_dvd_choose (by norm_num) hkn ‹_›⟩)
+    | simp at h
+
+end Erdos1094
+EOF
+lake env lean /tmp/test_sound3.lean 2>&1
+[2026-02-11T15:35:12.838Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-ilj --status "Adding getFirstPrimeWithCarry_sound to KLe28.lean"
+[2026-02-11T15:35:20.213Z] 
+🛠️  Executing tool: edit...
+[2026-02-11T15:35:23.178Z] 
+🛠️  Executing tool: read...
+[2026-02-11T15:35:25.241Z] [overseer] 💓 Heartbeat starting...
+[2026-02-11T15:35:25.248Z] [overseer] Running with model: google-antigravity/gemini-2.5-flash:low
+[2026-02-11T15:35:25.899Z] 
+🛠️  Executing tool: read...
+[2026-02-11T15:35:28.446Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "getFirstPrimeWithCarry" Erdos/KLe28.lean
+[2026-02-11T15:35:32.467Z] 
+$ cd /home/jarred/code/erdos-1094 && lake build Erdos.KLe28 2>&1 | tail -30
+[2026-02-11T15:36:08.069Z] [overseer] 💓 Heartbeat #29 complete: b58 COMPLETED successfully. ilj transitioned to IN_PROGRESS. Pipeline advancing normally.
+[2026-02-11T15:36:11.798Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "sorry" Erdos/KLe28.lean
+[2026-02-11T15:36:16.934Z] 
+🛠️  Executing tool: read...
+[2026-02-11T15:36:20.223Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-ilj --status "Completed - getFirstPrimeWithCarry_sound proved, lake build succeeds"
+[2026-02-11T15:36:22.909Z] 
+$ cd /home/jarred/code/erdos-1094 && tm close erdos1094-ilj
+[2026-02-11T15:36:29.938Z] 
+
+📝 Agent response complete.
+
+[2026-02-11T15:36:29.938Z] 📄 Log saved to .tm/logs/worker-erdos1094-ilj.md
+[2026-02-11T15:36:29.939Z] 
+📊 Task erdos1094-ilj completed:
+[2026-02-11T15:36:29.939Z]    Summary: Proved getFirstPrimeWithCarry_sound in KLe28.lean. lake build succeeds.
+[2026-02-11T15:36:29.939Z]    Details: Added lemma `getFirstPrimeWithCarry_sound` at KLe28.lean lines 139-148. The proof unfolds `getFirstPrimeWithCarry`, uses `split_ifs` to case-split on which `hasCarry` check returned true (creating 10 branches for primes 2,3,5,7,11,13,17,19,23,29 plus the `none` contradiction case), then for each branch: (1) `simp only [Option.some.injEq]` extracts the equality `q = p`, (2) `subst h` substitutes the specific prime value, (3) `norm_num` proves primality, and (4) `hasCarry_dvd_choose` proves divisibility. No new sorry holes introduced. The only remaining sorry in KLe28.lean is the pre-existing one at line 251 in `large_n_minFac_bound_small_k` (the residual case for n ≥ 1000), which is a separate task.

@@ -29,3 +29,33 @@
 **Watch next**:
 - Monitor `b58` for completion or further decomposition.
 - Transitions to `ilj` (v2 of `getFirstPrimeWithCarry` soundness).
+
+## Heartbeat — 2026-02-11T15:35:31Z (Heartbeat #28) — b58 COMPLETED, ilj TRANSITIONED
+
+**Metrics**: 5 sorrys | 9 verified proofs | 4 open (b58 closed) | 0 stale | 35 closed | 1 failed
+**Status**: ✅ **MAJOR PROGRESS: b58 successfully closed target sorry and committed**
+**Observations**:
+- **b58 TASK CLOSED**: Commit `298bf9c` shows successful completion:
+  - Closed target sorry `residualCheck` at KLe28.lean:158 (originally line 159)
+  - Fixed 3 pre-existing compilation errors (CarryInfra.lean, KGe29.lean)
+  - lake build succeeds
+  - Introduced new intermediate helper lemma (new sorry at KLe28.lean:251, from decomposition)
+- **ilj TRANSITIONED**: Now IN_PROGRESS (picked up from queue after b58 completion)
+- **Sorry Composition Changed**: 
+    - Before: KLe28.lean:235 
+    - Now: KLe28.lean:251 (new line due to file structure changes from b58 refactoring)
+  - KGe29.lean sorrys unchanged (178, 317, 323, 332)
+- **Pipeline Working**: b58 completion triggered ilj activation (planned dependency satisfied)
+**Actions**:
+1. No intervention needed. System performing as designed.
+2. Monitor ilj progress on `getFirstPrimeWithCarry` soundness.
+3. p1 queue (u5p, 64v, m36) ready to activate once p0 completes.
+**Watch next**:
+- ilj in_progress → completion (estimated next heartbeat or two)
+- New sorry at KLe28.lean:251: Is it a proper decomposition or introducing complexity?
+
+---
+
+# Workflow-Specific Context
+
+[... rest of context unchanged ...]
