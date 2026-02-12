@@ -1,9 +1,9 @@
 # Overseer Heartbeat 13
 
-**Time:** 2026-02-11T22:22:07.055Z
+**Time:** 2026-02-12T02:16:00.041Z
 **Summary:** {
 **Details:** {
-  "details": "Metrics: 5 sorrys | 7 verified proofs | 1 axiom. erdos1094-64v is actively running lake build to verify CRT density. Backlog: m36, ej8, i01. redundant processes cleaned up.",
   "status": "completed",
-  "summary": "Heartbeat complete. System healthy. Terminated redundant build process for 64v to prevent resource contention. Pipeline is advancing."
+  "summary": "KGe29 refactored. Leaked processes killed. kgp active.",
+  "details": "Metrics: 2 sorrys | 3 axioms | 10 verified proofs. Advisor x3y finished refactoring KGe29.lean to remove the false residual_case_vacuous axiom and extend computational range to k=700. Stubborn process leaks were cleared with kill -9. kgp is now in progress investigating analytic proofs for the large-k heuristic gap."
 }

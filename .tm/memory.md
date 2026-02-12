@@ -24,11 +24,12 @@ These are your standing notes — important patterns, decisions, and things to w
 - **$k \le 28$ Pipeline MOVING**: The `tbc → uz7 → g43` pipeline for the $k \le 28$ residual case remains valid and unblocked.
 **Actions**: Closed `m36` and `ej8`. Terminated redundant librarian tasks (`5xn`, `g5j`, `d32`, `5mh`). Monitoring `x3y` and `kgp`.
 
-## Heartbeat — 2026-02-12T02:08:00Z — BACKLOG STALLED
-**Metrics**: 2 sorrys | 3 axioms | 7 verified proofs | 0 in_progress | 8 open | 48 closed | 0 failed
-**Status**: ✅ **System idle. Backlog ready.**
+## Heartbeat — 2026-02-12T02:15:00Z — STRATEGIC RECOVERY & ANALYTIC SEARCH
+**Metrics**: 2 sorrys | 3 axioms | 10 verified proofs | 1 in_progress | 6 open | 50 closed | 0 failed
+**Status**: ✅ **System healthy. Strategic search active.**
 **Observations**:
-- **Processes Cleaned**: Killed orphaned processes from `x3y` again. 
-- **Backlog**: `x3y` (advisor), `kgp` (explore), `0zv` (librarian), `kf2` (librarian) are all P0 and open.
-- **Worker Status**: No active workers detected in `in_progress` state. Backlog is unblocked.
-**Actions**: No further intervention. Monitoring for worker pickup.
+- **Task kgp ACTIVE**: Explorer is performing a deep analytic dive into CRT density to replace heuristic axioms. Finding: δ_k·k² < 1 holds, but exact elimination is needed for a full proof.
+- **Formalization Ready**: Backlog (`tbc`, `uz7`, `g43`, `335`) is waiting for worker availability.
+- **Axiom Audit Ready**: Librarian tasks `0zv` and `kf2` are open to verify the new KGe29 axioms.
+- **Sorry Status**: Sorrys are stable at 2 (CrtCheck soundness and KLe28 residual case).
+**Actions**: No intervention needed. Monitoring `kgp` progress.

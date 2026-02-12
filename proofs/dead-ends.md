@@ -32,7 +32,23 @@ This document records approaches that have been considered and why they don't im
 
 Also: we need p ≤ max(n/k, k). The Bertrand prime p ≤ 2k satisfies p ≤ max(n/k, k) only when n/k ≥ 2k, i.e., n ≥ 2k². For n < 2k², the Bertrand prime might exceed the threshold.
 
-## 5. Trying to avoid Kummer's theorem
+## 5. Stewart/Bugeaud bounds for CRT density threshold
+
+**Idea:** Use Stewart (1980) and Bugeaud (2008) to prove that the CRT density $\delta_k < 1/k^2$ for all $k > K_0$ with an explicit $K_0$ (e.g., $K_0 = 10000$).
+
+**Why it fails:** Stewart proves $s_a(n) + s_b(n) \to \infty$ for multiplicatively independent $a, b$, with effective bound $\geq C \cdot \log n / (\log \log n)^2$. This grows **sublinearly** in $\log n$, but we need $-\ln(\delta_k) > 2 \ln k$, which requires the weighted sum $\sum_{p \leq 29} s_p(k)/p$ to exceed $2 \ln k$. Stewart's bound is too weak by a factor of $(\log \log k)^2$. Bugeaud gives asymptotic distribution results but no explicit thresholds.
+
+**Empirical status:** The worst-case ratio $-\ln(\delta_k) / (2\ln k)$ is **1.036** at $k = 178416$, barely above 1. No known analytical technique provides a bound this tight. See proofs/crt-density-large-k.md for full analysis.
+
+**Conclusion:** The Stewart/Bugeaud approach CANNOT provide the explicit threshold needed for the axioms. The gap between their bounds and what we need is fundamental, not just a matter of making constants explicit.
+
+## 6. Using primes 2 and 3 alone for large k
+
+**Idea:** Since $M_{2,3} = 2^{L_2} \cdot 3^{L_3} > k^2$ (Lemma 1), perhaps the density from just primes 2 and 3 is small enough that $\delta_{2,3} \cdot k^2 < 1$.
+
+**Why it fails spectacularly:** For $k = 178416$, $\delta_{2,3} \cdot k^2 \approx 3{,}070{,}242$. The density from primes 2 and 3 alone leaves MILLIONS of candidate $n$ values in $[2k, k^2]$. All 10 primes are needed to eliminate them. The 8 additional primes $\{5, 7, 11, 13, 17, 19, 23, 29\}$ provide the crucial filtering.
+
+## 7. Trying to avoid Kummer's theorem
 
 **Idea:** Prove the result using only elementary divisibility, without the digit-representation machinery.
 
