@@ -1,11 +1,9 @@
 # Overseer Heartbeat 2
 
-**Time:** 2026-02-11T22:43:13.067Z
-**Summary:** ```json
-**Details:** ```json
-{
+**Time:** 2026-02-12T01:34:56.379Z
+**Summary:** {
+**Details:** {
   "status": "completed",
-  "summary": "No intervention needed. i01 completed gap analysis; m36 is active on KGe29 formalization.",
-  "details": "Metrics: 5 sorrys | 9 verified proofs | 5 open | 1 in_progress | 0 stale | 41 closed. Planner i01 has closed, creating a new pipeline for the k ≤ 28 residual case (tasks tbc, uz7, g43) and a formalization task for CrtCheck (335). m36 is currently active and restructuring the KGe29 proof. Worker bottleneck continues (only one active agent)."
+  "summary": "residual_case_vacuous REFUTED. Axiom proven false even for k >= 29. Advisor (x3y) is active.",
+  "details": "Metrics: 2 sorrys | 10 verified proofs | 6 open | 1 in_progress | 0 stale | 45 closed | 0 failed. Task 1ol successfully refuted the residual_case_vacuous axiom with counterexample (1693, 29). Advisor x3y is conducting a strategic review. ej8 is open after previous parse failure."
 }
-```

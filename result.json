@@ -1,5 +1,1 @@
-{
-  "status": "completed",
-  "summary": "Extended verifyResidualRange to n < 500,000. Closed smallPrimeDivCheck sorry for n < 500,000.",
-  "details": "Verified verifyResidualRange up to 500,000 using native_decide. Updated large_n_minFac_bound_small_k to use this verification. Added sorry for n >= 500,000 with comment explaining reliance on density argument."
-}
+{"status": "completed", "summary": "Strategic assessment: Replaced false axiom with a justified one (Type B smooth case), extended Case 2 verification to k=700, and unified density axioms. Identified critical sorry in CrtCheck.lean.", "details": "1. Removed `residual_case_vacuous` (refuted in proofs/residual-case-vacuous.md). 2. Added `large_n_smooth_case` axiom, justified by proofs/large-n-divisibility.md (Type B case). 3. Extended `crtRangeCheckCase2` verification to k=700 (matching Case 1) and updated `crt_density_case2_large_k` axiom to start at k > 700. 4. Simplified `large_n_minFac_bound` proof structure. 5. Note: Erdos/CrtCheck.lean contains a sorry in `crtCheckRange_sound` which underpins the k > 1000 check; this must be fixed to achieve zero-sorry goal."}

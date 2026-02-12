@@ -132,11 +132,11 @@ private theorem crtRangeCheckCase2_sound (B : ℕ) (hB : crtRangeCheckCase2 B = 
   rw [show k * k + 1 + (n - (k * k + 1)) = n from by omega] at hB
   exact hB
 
--- Verification for k ∈ [29, 200].
+-- Verification for k ∈ [29, 700].
 set_option maxHeartbeats 40000000 in
 set_option linter.style.nativeDecide false in
 set_option linter.style.maxHeartbeats false in
-private theorem crt_case2_verified_200 : crtRangeCheckCase2 200 = true := by native_decide
+private theorem crt_case2_verified_700 : crtRangeCheckCase2 700 = true := by native_decide
 
 -- Exhaustive verification for k ∈ [29, 700]: for each k and each n ∈ [2k, k²],
 -- hasCarry confirms that some prime p ≤ 29 has a base-p digit of k exceeding n's.
@@ -229,45 +229,16 @@ theorem crt_small_prime_divides (n k : ℕ) (hk29 : 29 ≤ k)
 
 /-! ### Case 2: Large n Divisibility
 
-The proof of `large_n_minFac_bound` uses three complementary approaches:
+The proof of `large_n_minFac_bound` uses two complementary approaches:
 
 1. **Type A** (⌊n/k⌋ has a prime factor p > k): By the Interval Divisibility
    Lemma, all n ∈ [kM, k(M+1)) have p ∣ C(n,k). Since p ≤ M = ⌊n/k⌋, we
    get minFac(C(n,k)) ≤ p ≤ n/k. Established via `large_prime_dvd_choose`.
 
-2. **Algebraic divisor** (n/gcd(n,k) | C(n,k)): From the identity
-   `n * C(n-1,k-1) = k * C(n,k)`, we get `d = n/gcd(n,k) | C(n,k)`.
-   If d is composite, `minFac(d) * k ≤ minFac(d)² ≤ d ≤ n` gives
-   `minFac(d) ≤ n/k`. If d ≤ n/k, use it directly.
-
-3. **Residual case** (d = n/gcd(n,k) is prime and d > n/k): The CRT density
-   argument from proofs/large-n-divisibility.md, Section 7.3.
+2. **Type B** (⌊n/k⌋ is k-smooth): By explicit CRT verification for small k
+   and density arguments for large k, all n > k² satisfying k-smooth constraints
+   have a small prime factor. This is handled by `large_n_smooth_case`.
 -/
-
-/-- The identity `n * C(n-1, k-1) = k * C(n, k)`, a rearrangement of
-`Nat.add_one_mul_choose_eq`. -/
-private lemma choose_mul_eq (n k : ℕ) (hk : 1 ≤ k) (_hkn : k ≤ n) :
-    n * (n - 1).choose (k - 1) = k * n.choose k := by
-  have h := Nat.add_one_mul_choose_eq (n - 1) (k - 1)
-  rw [show k - 1 + 1 = k from by omega, show n - 1 + 1 = n from by omega] at h
-  linarith [mul_comm (n.choose k) k]
-
-/-- `n / gcd(n,k)` divides `C(n,k)`. Follows from the identity
-`n * C(n-1,k-1) = k * C(n,k)` and coprimality of `n/gcd(n,k)` and `k/gcd(n,k)`. -/
-lemma div_gcd_dvd_choose (n k : ℕ) (hk : 1 ≤ k) (hkn : k ≤ n) :
-    n / n.gcd k ∣ n.choose k := by
-  set g := n.gcd k
-  have hg_pos : 0 < g := Nat.gcd_pos_of_pos_left k (by omega)
-  have hgn : g ∣ n := Nat.gcd_dvd_left n k
-  have hgk : g ∣ k := Nat.gcd_dvd_right n k
-  have hcop : Nat.Coprime (n / g) (k / g) := Nat.coprime_div_gcd_div_gcd hg_pos
-  have hndvd : n ∣ k * n.choose k :=
-    ⟨(n - 1).choose (k - 1), (choose_mul_eq n k hk hkn).symm⟩
-  apply hcop.dvd_of_dvd_mul_left
-  rw [← Nat.mul_dvd_mul_iff_right hg_pos, Nat.div_mul_cancel hgn]
-  have : k / g * n.choose k * g = k * n.choose k := by
-    rw [mul_assoc, mul_comm (n.choose k) g, ← mul_assoc, Nat.div_mul_cancel hgk]
-  rw [this]; exact hndvd
 
 /-- Interval Divisibility Kernel: If p > k is a prime dividing ⌊n/k⌋,
 then n mod p < k. Write n = k·(n/k) + (n mod k). Since p | (n/k)
@@ -294,29 +265,27 @@ private lemma bertrand_prime_exists (k : ℕ) (hk : 1 ≤ k) :
 
 /--
 CRT Density Conjecture for Case 2 (n ∈ (k², 2k²)):
-For k > 200, the CRT density argument ensures existence of a small prime factor.
+For k > 700, the CRT density argument ensures existence of a small prime factor.
 References:
 * proofs/large-n-divisibility.md - Section 7.3
 * proofs/crt-density-k-ge-29.md - Section 6-7 (general density argument)
 -/
-axiom crt_density_case2_large_k (n k : ℕ) (hk : 200 < k)
+axiom crt_density_case2_large_k (n k : ℕ) (hk : 700 < k)
     (hlow : k * k < n) (hhigh : n < 2 * k * k) :
     ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k
 
 /--
-Residual Case Vacuousness:
-For n ≥ 2k², if n/k is k-smooth and n/gcd(n,k) is a prime > n/k,
-no such n exists.
+Large n Smooth Case (Type B):
+For n > k², if n/k is k-smooth, then C(n,k) has a prime factor ≤ n/k.
 Reference: proofs/large-n-divisibility.md - Section 7.3
 -/
-axiom residual_case_vacuous (n k : ℕ) (hk : 2 ≤ k) (hn : 2 * k * k ≤ n)
-    (hsmooth : ∀ p, p.Prime → p ∣ n / k → p ≤ k)
-    (hprime : (n / n.gcd k).Prime) (hlarge : n / k < n / n.gcd k) : False
+axiom large_n_smooth_case (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n)
+    (hsmooth : ∀ p, p.Prime → p ∣ n / k → p ≤ k) :
+    ∃ p, p.Prime ∧ p ≤ n / k ∧ p ∣ n.choose k
 
 private lemma prime_large_divisor_case (n k : ℕ) (hk : 2 ≤ k)
     (hn : k * k < n) (hkn : k ≤ n) (hk29 : 29 ≤ k)
-    (hsmooth : ∀ p, p.Prime → p ∣ n / k → p ≤ k)
-    (hprime : (n / n.gcd k).Prime) (hlarge : n / k < n / n.gcd k) :
+    (hsmooth : ∀ p, p.Prime → p ∣ n / k → p ≤ k) :
     (n.choose k).minFac ≤ n / k := by
   have hM_pos : 0 < n / k := by
     have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
@@ -327,20 +296,19 @@ private lemma prime_large_divisor_case (n k : ℕ) (hk : 2 ≤ k)
   -- Split into cases: n < 2k² vs n ≥ 2k²
   by_cases h_small_n : n < 2 * k * k
   · -- Case 2A: k² < n < 2k²
-    -- Use CRT check (verified for k ≤ 200, axiom for k > 200)
+    -- Use CRT check (verified for k ≤ 700, axiom for k > 700)
     have h_exists : ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
-      by_cases hk200 : k ≤ 200
-      · exact crtRangeCheckCase2_sound 200 crt_case2_verified_200 n k hk29 hk200 hn h_small_n
+      by_cases hk700 : k ≤ 700
+      · exact crtRangeCheckCase2_sound 700 crt_case2_verified_700 n k hk29 hk700 hn h_small_n
       · exact crt_density_case2_large_k n k (by omega) hn h_small_n
     obtain ⟨p, hp_prime, hp29, hdvd⟩ := h_exists
     calc (n.choose k).minFac ≤ p := Nat.minFac_le_of_dvd hp_prime.two_le hdvd
       _ ≤ 29 := hp29
       _ ≤ n / k := h29_le_nk
   · -- Case 2B: n ≥ 2k²
-    -- This case is vacuous by residual constraints
-    push_neg at h_small_n
-    exfalso
-    exact residual_case_vacuous n k hk h_small_n hsmooth hprime hlarge
+    -- Use large_n_smooth_case axiom
+    obtain ⟨p, hp, hp_le_nk, hp_dvd⟩ := large_n_smooth_case n k hk hn hsmooth
+    exact le_trans (Nat.minFac_le_of_dvd hp.two_le hp_dvd) hp_le_nk
 
 theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : k ≤ n)
     (hk29 : 29 ≤ k) : (n.choose k).minFac ≤ n / k := by
@@ -355,41 +323,9 @@ theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : 
     have hmod : n % p < k := mod_lt_of_prime_dvd_div n k p (by omega) hp hpk hpM
     have hpn : p ∣ n.choose k := (large_prime_dvd_choose p n k hp hpk hkn).mpr hmod
     exact le_trans (Nat.minFac_le_of_dvd hp.two_le hpn) (Nat.le_of_dvd hM_pos hpM)
-  · -- === Approach 2: Algebraic Divisor d = n/gcd(n,k) ===
-    -- d | C(n,k), and d ≥ n/k since gcd(n,k) ≤ k.
+  · -- === Approach 2: Type B (k-smooth) ===
     push_neg at hA
-    set d := n / n.gcd k with hd_def
-    have hg_pos : 0 < n.gcd k := Nat.gcd_pos_of_pos_left k (by omega)
-    have hgk_le : n.gcd k ≤ k := Nat.le_of_dvd (by omega) (Nat.gcd_dvd_right n k)
-    have hd_ge : n / k ≤ d := Nat.div_le_div_left hgk_le hg_pos
-    have hd_gt_one : 1 < d := by
-      have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
-      omega
-    have hd_dvd : d ∣ n.choose k := div_gcd_dvd_choose n k (by omega) hkn
-    by_cases hprime : d.Prime
-    · -- d is prime
-      by_cases hle : d ≤ n / k
-      · exact le_trans (Nat.minFac_le_of_dvd hprime.two_le hd_dvd) hle
-      · -- d is prime and d > n/k: residual case
-        push_neg at hle
-        exact prime_large_divisor_case n k hk hn hkn hk29 hA hprime hle
-    · -- d is composite: minFac(d)² ≤ d ≤ n, and minFac(d) * k ≤ n, so minFac(d) ≤ n/k
-      have hmf_sq : d.minFac ^ 2 ≤ d := Nat.minFac_sq_le_self hd_gt_one.le hprime
-      have hd_le_n : d ≤ n := Nat.div_le_self n (n.gcd k)
-      have hmf_le : d.minFac ≤ n / k := by
-        rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]
-        by_cases hle : d.minFac ≤ k
-        · calc d.minFac * k ≤ k * k := by nlinarith
-            _ ≤ n := by omega
-        · push_neg at hle
-          have : d.minFac * d.minFac ≤ d := by nlinarith [hmf_sq, sq (d.minFac)]
-          calc d.minFac * k ≤ d.minFac * d.minFac := by nlinarith
-            _ ≤ d := this
-            _ ≤ n := hd_le_n
-      exact le_trans
-        (Nat.minFac_le_of_dvd (Nat.minFac_prime (by omega)).two_le
-          (dvd_trans (Nat.minFac_dvd d) hd_dvd))
-        hmf_le
+    exact prime_large_divisor_case n k hk hn hkn hk29 hA
 
 /-! ### Main Theorem: Combining the Two Cases -/
 

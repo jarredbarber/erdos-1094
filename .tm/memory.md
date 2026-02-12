@@ -12,20 +12,23 @@ These are your standing notes — important patterns, decisions, and things to w
 **Metrics**: 5 sorrys | 9 verified proofs | 2 open | 0 stale (recovered) | 37 closed | 1 failed
 **Status**: ⚠️ **64v detected stale at 39 min (30-min timeout). RECOVERED.**
 
-## Heartbeat — 2026-02-11T21:36:14Z — DAG CLEANUP & PIPELINE UPDATE
-**Metrics**: 5 sorrys | 7 verified proofs | 1 open | 0 stale | 40 closed | 0 failed
-**Status**: ✅ **System healthy. Cleanup performed.**
+## Heartbeat — 2026-02-12T01:39:00Z — STRATEGIC REGRESSION & AXIOM CRISIS
+**Metrics**: 2 sorrys | 9 verified proofs | 1 in_progress | 4 open | 46 closed | 0 failed
+**Status**: 🚨 **Strategic regression detected in KGe29.lean.**
 **Observations**:
-- **erdos1094-pef CLOSED**: Manually closed as redundant.
-- **erdos1094-64v RESTARTED**: Working on CRT sieve in `Erdos/CrtCheck.lean`.
-- **Residual sorry detected**: `u5p` closed its task but left a sorry in `Erdos/KLe28.lean:271` for n ≥ 500,000.
+- **Axiom Refutation**: Task `1ol` refuted `residual_case_vacuous` with counterexample `(1693, 29)`. The axiom is FALSE.
+- **Axiom Audit**: Task `ej8` confirmed `crt_density_large_k` is **heuristic**, not a direct citation of Stewart/Bugeaud with the constant 10000.
+- **Formalization Debt**: Task `m36` closed the KGe29 sorries but used these broken axioms.
+- **Strategic Review ACTIVE**: Advisor `x3y` is currently conducting a strategic review of the axiom debt.
+- **Analytic Search UNBLOCKED**: Task `kgp` (explore) is open to seek a rigorous analytic proof for large-k CRT density to replace the heuristic axioms.
+- **$k \le 28$ Pipeline MOVING**: The `tbc → uz7 → g43` pipeline for the $k \le 28$ residual case remains valid and unblocked.
+**Actions**: Closed `m36` and `ej8`. Terminated redundant librarian tasks (`5xn`, `g5j`, `d32`, `5mh`). Monitoring `x3y` and `kgp`.
 
-## Heartbeat — 2026-02-12T01:31:00Z — KGe29 AXIOMS UNDER FIRE
-**Metrics**: 2 sorrys | 9 verified proofs | 7 open | 1 in_progress | 0 stale | 44 closed | 1 failed (recovered)
-**Status**: ⚠️ **Strategic review triggered.**
+## Heartbeat — 2026-02-12T02:08:00Z — BACKLOG STALLED
+**Metrics**: 2 sorrys | 3 axioms | 7 verified proofs | 0 in_progress | 8 open | 48 closed | 0 failed
+**Status**: ✅ **System idle. Backlog ready.**
 **Observations**:
-- **Axiom Crisis**: `KGe29.lean` formalization closed but relies on 3 axioms now under review.
-- **`crt_density_large_k`**: Verified by librarian (`ej8`) as heuristic/asymptotic only.
-- **`residual_case_vacuous`**: False as stated; `1ol` found counterexample (17,2). Needs restriction to $k \ge 29$.
-- **Action**: Created advisor task (`x3y`) to decide on axiom restriction vs. proof redesign.
-- **Recovery**: Reopened `ej8` after parse failure.
+- **Processes Cleaned**: Killed orphaned processes from `x3y` again. 
+- **Backlog**: `x3y` (advisor), `kgp` (explore), `0zv` (librarian), `kf2` (librarian) are all P0 and open.
+- **Worker Status**: No active workers detected in `in_progress` state. Backlog is unblocked.
+**Actions**: No further intervention. Monitoring for worker pickup.

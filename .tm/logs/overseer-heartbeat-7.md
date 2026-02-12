@@ -1,9 +1,9 @@
 # Overseer Heartbeat 7
 
-**Time:** 2026-02-11T22:26:21.582Z
+**Time:** 2026-02-12T01:54:23.484Z
 **Summary:** {
 **Details:** {
+  "details": "Metrics: 2 sorrys | 3 axioms | 10 verified proofs. Advisor erdos1094-x3y is busy with a heavy native_decide build in Erdos/KGe29.lean to reduce axiom dependency. Unblocked tasks (kgp, tbc, 335) are waiting for available worker slots. No stale tasks or failures detected in this heartbeat.",
   "status": "completed",
-  "summary": "No intervention needed. System healthy and making steady progress.",
-  "details": "Metrics: 5 sorrys | 7 verified proofs | 3 open | 1 in_progress | 0 stale | 39 closed. erdos1094-64v is actively running a forced build of KGe29.lean to verify the CRT sieve implementation. Backlog is ready."
+  "summary": "No intervention needed. Strategic refactoring in progress."
 }
