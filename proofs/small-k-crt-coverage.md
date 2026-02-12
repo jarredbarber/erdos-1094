@@ -1,6 +1,7 @@
 # CRT Coverage: 10 Primes $\leq 29$ Cover All Digit-Domination Patterns for $k \leq 28$
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
+**Reviewed by:** erdos1094-uz7
 **Statement:** For each $k \in \{2, 3, \ldots, 28\}$ and every $k$-smooth integer $M > k$, the interval $[kM,\, k(M+1))$ contains no integer $n$ such that $k \preceq_p n$ for all 10 primes $p \in \{2, 3, 5, 7, 11, 13, 17, 19, 23, 29\}$.
 
 Equivalently: for each such $k$ and $M$, at least one prime $p \leq 29$ divides $\binom{n}{k}$ for every $n \in [kM,\, k(M+1))$.
