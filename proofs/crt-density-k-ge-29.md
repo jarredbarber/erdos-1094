@@ -328,4 +328,4 @@ The core theorem is rigorously established for $k \in [29, 10000]$. Extension to
 - proofs/kummer-theorem.md — Digit-domination criterion (Corollary 5)
 - proofs/exploration.md — Computational exploration and density analysis
 - Stewart, C.L. (1980). "On the representation of an integer in two different bases." *J. reine angew. Math.*, 319, 63–72.
-- Bugeaud, Y. (2008). "On the digital representation of integers with bounded prime factors." *Osaka J. Math.*, 45, 219–230.
+- Bugeaud, Y. (2018). "On the digital representation of integers with bounded prime factors." *Osaka J. Math.*, 55, 315–324.

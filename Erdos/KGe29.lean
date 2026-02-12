@@ -167,8 +167,8 @@ This combines two established results:
 2. **k > 10000** (Section 7.4): By effective bounds on simultaneous digit sums from
    Stewart (C.L. Stewart, "On the representation of an integer in two different bases",
    J. reine angew. Math. 319, 63–72, 1980) and Bugeaud (Y. Bugeaud, "On the digital
-   representation of integers with bounded prime factors", Osaka J. Math. 45, 219–230,
-   2008), the CRT density δ_k = R_k/M_k satisfies δ_k < 1/k² for sufficiently large k
+   representation of integers with bounded prime factors", Osaka J. Math. 55, 315–324,
+   2018), the CRT density δ_k = R_k/M_k satisfies δ_k < 1/k² for sufficiently large k
    (with effective threshold), giving δ_k · (k² - 2k) < 1 and hence zero solutions.
    Combined with exhaustive verification below the effective threshold, this covers all
    k > 10000. Full formalization requires making the Baker-Stewart effective bounds
@@ -181,7 +181,7 @@ set_option linter.style.maxHeartbeats false in
 private theorem crt_verified_10000 : crtCheckRange 1001 10000 = true := by native_decide
 
 /--
-CRT Density Conjecture (Stewart 1980, Bugeaud 2008):
+CRT Density Conjecture (Stewart 1980, Bugeaud 2018):
 For k > 10000, the CRT density is < 1/k^2, implying no solutions.
 Formalization of the effective bounds is out of scope.
 -/
@@ -201,7 +201,7 @@ For k > 700 and every n ∈ [2k, k²], there exists a prime p ≤ 29 with p ∣ 
 Proved by combining:
 * **k ∈ [701, 1000]**: Exhaustive native_decide verification via `crt_verified_1000`.
 * **k > 1000**: CRT density analysis from the NL proof (Sections 6–7), citing
-  Stewart (1980) and Bugeaud (2008) for the asymptotic range. -/
+  Stewart (1980) and Bugeaud (2018) for the asymptotic range. -/
 private theorem crt_large_k (n k : ℕ) (hk : 700 < k)
     (hlow : 2 * k ≤ n) (hhigh : n ≤ k * k) :
     ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
