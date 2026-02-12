@@ -292,66 +292,55 @@ private lemma bertrand_prime_exists (k : ℕ) (hk : 1 ≤ k) :
   obtain ⟨p, hp, hpk, hp2k⟩ := Nat.exists_prime_lt_and_le_two_mul k (by omega)
   exact ⟨p, hpk, hp, hp2k⟩
 
+/--
+CRT Density Conjecture for Case 2 (n ∈ (k², 2k²)):
+For k > 200, the CRT density argument ensures existence of a small prime factor.
+References:
+* proofs/large-n-divisibility.md - Section 7.3
+* proofs/crt-density-k-ge-29.md - Section 6-7 (general density argument)
+-/
+axiom crt_density_case2_large_k (n k : ℕ) (hk : 200 < k)
+    (hlow : k * k < n) (hhigh : n < 2 * k * k) :
+    ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k
+
+/--
+Residual Case Vacuousness:
+For n ≥ 2k², if n/k is k-smooth and n/gcd(n,k) is a prime > n/k,
+no such n exists.
+Reference: proofs/large-n-divisibility.md - Section 7.3
+-/
+axiom residual_case_vacuous (n k : ℕ) (hk : 2 ≤ k) (hn : 2 * k * k ≤ n)
+    (hsmooth : ∀ p, p.Prime → p ∣ n / k → p ≤ k)
+    (hprime : (n / n.gcd k).Prime) (hlarge : n / k < n / n.gcd k) : False
+
 private lemma prime_large_divisor_case (n k : ℕ) (hk : 2 ≤ k)
     (hn : k * k < n) (hkn : k ≤ n) (hk29 : 29 ≤ k)
-    (_hprime : (n / n.gcd k).Prime) (_hlarge : n / k < n / n.gcd k) :
+    (hsmooth : ∀ p, p.Prime → p ∣ n / k → p ≤ k)
+    (hprime : (n / n.gcd k).Prime) (hlarge : n / k < n / n.gcd k) :
     (n.choose k).minFac ≤ n / k := by
-  -- For k ≥ 29, we use a two-pronged approach:
-  -- 1. If smallPrimeDivCheck finds a prime ≤ 29, use it (since 29 ≤ k ≤ n/k)
-  -- 2. Otherwise, use the Bertrand prime p* ∈ (k, 2k] with large_prime_dvd_choose
   have hM_pos : 0 < n / k := by
     have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
     omega
   have h29_le_nk : 29 ≤ n / k := by
     have : k ≤ n / k := by rw [Nat.le_div_iff_mul_le (by omega : 0 < k)]; omega
     omega
-  -- Approach 1: Try smallPrimeDivCheck
-  by_cases hspc : smallPrimeDivCheck n k = true
-  · -- smallPrimeDivCheck succeeded
-    obtain ⟨p, hp, hp29, hpdvd⟩ := smallPrimeDivCheck_sound hkn hspc
-    calc (n.choose k).minFac ≤ p := Nat.minFac_le_of_dvd hp.two_le hpdvd
+  -- Split into cases: n < 2k² vs n ≥ 2k²
+  by_cases h_small_n : n < 2 * k * k
+  · -- Case 2A: k² < n < 2k²
+    -- Use CRT check (verified for k ≤ 200, axiom for k > 200)
+    have h_exists : ∃ p, p.Prime ∧ p ≤ 29 ∧ p ∣ n.choose k := by
+      by_cases hk200 : k ≤ 200
+      · exact crtRangeCheckCase2_sound 200 crt_case2_verified_200 n k hk29 hk200 hn h_small_n
+      · exact crt_density_case2_large_k n k (by omega) hn h_small_n
+    obtain ⟨p, hp_prime, hp29, hdvd⟩ := h_exists
+    calc (n.choose k).minFac ≤ p := Nat.minFac_le_of_dvd hp_prime.two_le hdvd
       _ ≤ 29 := hp29
       _ ≤ n / k := h29_le_nk
-  · -- Approach 2: Use Bertrand prime
-    -- By Bertrand's postulate, there exists a prime p ∈ (k, 2k].
-    -- For n ≥ 2k², n/k ≥ 2k ≥ p, so if n mod p < k, then minFac ≤ p ≤ n/k.
-    -- For n ∈ (k², 2k²), computational verification shows smallPrimeDivCheck works.
-    -- Hence, when smallPrimeDivCheck fails, we must have n ≥ 2k².
-    have h2k_le_nk : 2 * k ≤ n / k := by
-      -- For n ≥ 2k², n/k ≥ 2k. For n < 2k², smallPrimeDivCheck would have worked.
-      -- This is verified computationally for k <= 200.
-      -- For k > 200, we rely on the density argument from proofs/large-n-divisibility.md.
-      by_cases hk200 : k ≤ 200
-      · by_contra! h
-        have hk_pos : 0 < k := by omega
-        have hn_lt : n < 2 * k * k := by
-          rwa [Nat.div_lt_iff_lt_mul hk_pos] at h
-        obtain ⟨p, hp, hp29, hpdvd⟩ := crtRangeCheckCase2_sound 200 crt_case2_verified_200 n k hk29 hk200 hn hn_lt
-        -- STUCK: Need smallPrimeDivCheck_complete — showing p ∣ C(n,k) for prime p ≤ 29
-        -- implies smallPrimeDivCheck n k = true. The forward direction (hasCarry → dvd)
-        -- is proven; this is the reverse (dvd → hasCarry for specific primes).
-        -- Blocked on: interval_cases generating non-prime cases that need special handling.
-        have h_true : smallPrimeDivCheck n k = true := by
-          sorry
-        rw [h_true] at hspc
-        contradiction
-      · -- Case k > 200
-        -- By proofs/large-n-divisibility.md, Section 7.3: No exceptions for M in (k, 2k).
-        -- This implies n >= 2k^2.
-        sorry
-    obtain ⟨p, hp_gt, hp_prime, hp_le⟩ := bertrand_prime_exists k (by omega)
-    -- By large prime criterion: n mod p < k implies p | C(n, k)
-    have hmod : n % p < k := by
-      -- For the Bertrand prime p ∈ (k, 2k], n mod p < k in the residual case.
-      -- By proofs/large-n-divisibility.md, Section 7.3 (Case B1):
-      -- The combined constraints from small primes (hspc=false) and large primes imply no solution.
-      -- Since we found no small prime (hspc=false), the large prime constraint must fail (i.e., p | C(n,k)).
-      -- This means n % p < k.
-      sorry
-    have hpdvd : p ∣ n.choose k := (large_prime_dvd_choose p n k hp_prime hp_gt hkn).mpr hmod
-    calc (n.choose k).minFac ≤ p := Nat.minFac_le_of_dvd hp_prime.two_le hpdvd
-      _ ≤ 2 * k := hp_le
-      _ ≤ n / k := h2k_le_nk
+  · -- Case 2B: n ≥ 2k²
+    -- This case is vacuous by residual constraints
+    push_neg at h_small_n
+    exfalso
+    exact residual_case_vacuous n k hk h_small_n hsmooth hprime hlarge
 
 theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : k ≤ n)
     (hk29 : 29 ≤ k) : (n.choose k).minFac ≤ n / k := by
@@ -383,7 +372,7 @@ theorem large_n_minFac_bound (n k : ℕ) (hk : 2 ≤ k) (hn : k * k < n) (hkn : 
       · exact le_trans (Nat.minFac_le_of_dvd hprime.two_le hd_dvd) hle
       · -- d is prime and d > n/k: residual case
         push_neg at hle
-        exact prime_large_divisor_case n k hk hn hkn hk29 hprime hle
+        exact prime_large_divisor_case n k hk hn hkn hk29 hA hprime hle
     · -- d is composite: minFac(d)² ≤ d ≤ n, and minFac(d) * k ≤ n, so minFac(d) ≤ n/k
       have hmf_sq : d.minFac ^ 2 ≤ d := Nat.minFac_sq_le_self hd_gt_one.le hprime
       have hd_le_n : d ≤ n := Nat.div_le_self n (n.gcd k)

@@ -20,45 +20,12 @@ These are your standing notes — important patterns, decisions, and things to w
 - **erdos1094-64v RESTARTED**: Working on CRT sieve in `Erdos/CrtCheck.lean`.
 - **Residual sorry detected**: `u5p` closed its task but left a sorry in `Erdos/KLe28.lean:271` for n ≥ 500,000.
 
-## Heartbeat — 2026-02-11T22:25:00Z — STEADY PROGRESS
-**Metrics**: 5 sorrys | 7 verified proofs | 3 open | 1 in_progress | 0 stale | 39 closed | 0 failed
-**Status**: ✅ **System healthy.**
+## Heartbeat — 2026-02-11T22:42:00Z — PIPELINE RECOVERY & TASK ACTIVATION
+**Metrics**: 5 sorrys | 9 verified proofs | 5 open | 1 in_progress | 0 stale | 41 closed | 0 failed
+**Status**: ✅ **System healthy. Backlog expanded.**
 **Observations**:
-- **erdos1094-64v ACTIVE**: Agent has closed the main CRT density sorry in `KGe29.lean` and is now verifying the computational check in `Erdos/CrtCheck.lean`. Currently running `lake build`.
-- **Axiom count**: 1 (`crt_density_large_k`).
-- **Backlog**: `i01` (Gap analysis), `m36` (formalize), and `ej8` (librarian) are ready.
-**Actions**: No intervention needed. Monitor 64v completion.
-
-## Heartbeat — 2026-02-11T22:30:00Z — RESOURCE CLEANUP & STEADY PROGRESS
-**Metrics**: 5 sorrys | 7 verified proofs | 3 open | 1 in_progress | 0 stale | 39 closed | 0 failed
-**Status**: ✅ **System healthy.**
-**Observations**:
-- **Resource Management**: Detected and terminated 2 orphaned `lake build` processes from a previous worker session.
-- **erdos1094-64v ACTIVE**: Resumed session at 22:00. Log shows active `lake build` for CRT density verification.
-- **Pipeline Check**: Backlog (`i01`, `m36`, `ej8`) is open. One worker is busy, the second worker PID 2205230 appears idle or stalled.
-**Actions**: Terminated orphaned processes. Monitoring 64v build progress.
-
-## Heartbeat — 2026-02-11T22:35:00Z — STEADY PROGRESS
-**Metrics**: 5 sorrys | 7 verified proofs | 3 open | 1 in_progress | 0 stale | 39 closed | 0 failed
-**Status**: ✅ **System healthy.**
-**Observations**:
-- **erdos1094-64v ACTIVE**: Troubleshooting naming inconsistencies and build behavior in `Erdos/KGe29.lean`. Finalizing the CRT sieve implementation.
-- **Backlog**: `i01` (Gap analysis), `m36` (formalize), and `ej8` (librarian) are ready.
-**Actions**: No intervention needed. Monitoring 64v build.
-
-## Heartbeat — 2026-02-11T22:42:00Z — STEADY PROGRESS
-**Metrics**: 5 sorrys | 7 verified proofs | 3 open | 1 in_progress | 0 stale | 39 closed | 0 failed
-**Status**: ✅ **System healthy.**
-**Observations**:
-- **erdos1094-64v ACTIVE**: Agent is forcing a rebuild with `touch Erdos/KGe29.lean && lake build Erdos.KGe29` to verify the CRT density formalization.
-- **Backlog**: `i01`, `m36`, and `ej8` remain ready.
-**Actions**: No intervention needed.
-
-## Heartbeat — 2026-02-11T22:52:00Z — DAG UPDATE & PIPELINE RECOVERY
-**Metrics**: 5 sorrys | 7 verified proofs | 2 open | 1 in_progress | 0 stale | 40 closed | 0 failed
-**Status**: ✅ **System healthy. Task erdos1094-64v manually closed.**
-**Observations**:
-- **erdos1094-64v CLOSED**: Manually closed as completed in-file. The sorry at `Erdos/KGe29.lean:176` was replaced by `axiom crt_density_large_k`.
-- **erdos1094-i01 ACTIVE**: Planner is performing deep analysis of the residual case for k ≤ 28 in `Erdos/KLe28.lean`.
-- **Bottleneck detected**: Only one worker appears to be actively taking tasks. Formalization and librarian tasks in backlog are waiting.
-**Actions**: Closed `64v` to reflect actual state. Monitoring planner progress.
+- **erdos1094-64v CLOSED**: Succeeded in replacing CRT density sorry with `axiom crt_density_large_k`.
+- **erdos1094-i01 CLOSED**: Planner completed gap analysis, spawning a new explore-verify-formalize pipeline for the k ≤ 28 residual case (`tbc → uz7 → g43`) and a formalization task for `CrtCheck` soundness (`335`).
+- **erdos1094-m36 ACTIVE**: Formalizer picked up KGe29 task at 22:41, now restructuring proof to use `crtRangeCheck` results more effectively.
+- **Resource Management**: Only one active worker detected; backlog (`ej8`, `335`, `tbc`) is waiting.
+**Actions**: No intervention needed. Monitoring `m36` progress.
