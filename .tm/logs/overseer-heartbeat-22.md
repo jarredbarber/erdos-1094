@@ -1,5 +1,9 @@
 # Overseer Heartbeat 22
 
-**Time:** 2026-02-11T15:11:34.818Z
-**Summary:** 🟢 PROGRESS HEARTBEAT: b58 actively closing sorrys. 8→5 (3 closed). No new commit yet (in-flight work). Stale-on-build recovery successful—no stale tasks detected. System healthy.
-**Details:** Closed sorrys: KGe29:334, KGe29:343, KLe28:159 (b58 target). New sorry at KLe28:235 suggests decomposition/refactoring. Agent likely using intermediate checkpoints post-recovery. 30-min stale timeout not triggered. Ready for next heartbeat.
+**Time:** 2026-02-12T02:48:44.607Z
+**Summary:** {
+**Details:** {
+  "details": "Metrics: 2 sorrys | 3 axioms | 7 verified proofs | 1 in_progress | 4 open. Task erdos1094-tbc is nearing completion with a proof written in proofs/small-k-crt-coverage.md. Task erdos1094-kf2 remains open and ready for a worker to retry the axiom audit. The DAG is flowing correctly.",
+  "status": "completed",
+  "summary": "No intervention needed. System healthy and pipeline steady."
+}

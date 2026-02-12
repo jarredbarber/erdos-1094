@@ -24,12 +24,11 @@ These are your standing notes — important patterns, decisions, and things to w
 - **$k \le 28$ Pipeline MOVING**: The `tbc → uz7 → g43` pipeline for the $k \le 28$ residual case remains valid and unblocked.
 **Actions**: Closed `m36` and `ej8`. Terminated redundant librarian tasks (`5xn`, `g5j`, `d32`, `5mh`). Monitoring `x3y` and `kgp`.
 
-## Heartbeat — 2026-02-12T02:32:00Z — ANALYTIC ANALYSIS COMPLETE
-**Metrics**: 2 sorrys | 3 axioms | 10 verified proofs | 1 in_progress | 5 open | 51 closed | 0 failed
-**Status**: ✅ **Axiom debt analyzed. Computational path recommended.**
+## Heartbeat — 2026-02-12T02:40:00Z — PIPELINE STEADY
+**Metrics**: 2 sorrys | 3 axioms | 11 verified proofs | 1 in_progress | 4 open | 53 closed | 0 failed
+**Status**: ✅ **System healthy. Pipeline steady.**
 **Observations**:
-- **Task kgp CLOSED**: Published `proofs/crt-density-large-k.md`. Findings: (1) Stewart/Bugeaud references provide only asymptotic/sublinear bounds, not the explicit k > 10000 threshold. (2) Empirical search up to k = 500,000 found zero counterexamples. (3) Worst-case density peaks at k = 178416 with expected count 0.417.
-- **Strategic Impact**: The formalization gap is confirmed to be computational/heuristic, not yet closed by existing literature. Advisor/Planner should consider extending `native_decide` ranges.
-- **Worker Active**: `0zv` (librarian) is auditing `crt_density_case2_large_k`.
-- **Backlog**: `kf2` (P0 librarian), `335` (P3 formalizer), `tbc` (P3 explorer) are open.
+- **Axiom Audit**: `kf2` (Verify axiom: large_n_smooth_case) is open and ready for worker pickup (recovered from previous parse failure). `ej8` and `0zv` successfully verified the other KGe29 axioms.
+- **Small-k Exploration**: `tbc` (k ≤ 28 residual case) is active and making progress on structural arguments to complement computational verification.
+- **Sorry Count**: Stable at 2 (CrtCheck soundness and KLe28 residual case).
 **Actions**: No intervention needed. DAG is flowing.
