@@ -13747,3 +13747,290 @@ $ lake build
 $ touch Erdos/KGe29.lean && lake build
 [2026-02-12T01:20:08.487Z] 
 $ lake build Erdos.KGe29
+[2026-02-12T01:29:28.825Z] ✓ Task-specific changes rolled back
+
+[2026-02-12T01:29:28.825Z] 
+📊 Task erdos1094-ej8 failed:
+[2026-02-12T01:29:28.825Z]    Summary: Could not parse agent response
+[2026-02-12T01:29:28.825Z]    Details: Agent did not return a valid JSON status block. Raw response:
+
+The axiom `crt_density_large_k` introduced in `Erdos/KGe29.lean` has been verified.
+
+**Findings:**
+1.  **Literature Match:** The statement does **not** match published results exactly.
+    *   **Published Results:** Stewart (1980) and Bugeaud (2008) prove asymptotic results that imply the non-existence of simultaneous digit domination (equivalent to no small prime factors) for *sufficiently large* integers. They do not provide the specific threshold $k > 10000$.
+    *   **Formalizer's Claim:** The threshold $k > 10000$ is derived from a "CRT density" heuristic argument detailed in `proofs/crt-density-k-ge-29.md`. The proof document admits this argument provides "strong heuristic evidence but not rigorous proof" for the gap between 10000 and the true effective bound.
+2.  **Mathlib Existence:** The result does **not** exist in Mathlib, nor do the effective bounds from Baker-Stewart theory required to prove it rigorously.
+
+**Conclusion:**
+The axiom is a **heuristic bridge**. It assumes that the asymptotic behavior (proven by Stewart/Bugeaud) becomes effective at or below $k=10000$. While mathematically plausible based on density arguments, it is not a direct citation of a theorem with that specific constant.
+
+**Audit Artifact:**
+The detailed verification has been written to `artifacts/citation-audit.md`.
+
+```json
+{
+  "verified": false,
+  "status": "partial_match",
+  "discrepancy": "The constant k > 10000 is heuristic; literature only provides asymptotic results for 'sufficiently large' k.",
+  "mathlib_presence": false,
+  "notes": "The axiom bridges the gap between exhaustive verification (k <= 10000) and asymptotic theory. This is explicitly documented as a heuristic step in proofs/crt-density-k-ge-29.md."
+}
+```
+[2026-02-12T01:29:28.831Z] ❌ Task erdos1094-ej8 failed
+
+[2026-02-12T01:29:29.905Z] 
+================================================================================
+[2026-02-12T01:29:29.905Z] 📌 Processing task: erdos1094-1ol - Prove or refute residual_case_vacuous axiom
+[2026-02-12T01:29:29.905Z]    Role: explore | Priority: 0 
+[2026-02-12T01:29:29.905Z] ================================================================================
+
+[2026-02-12T01:29:29.913Z] ✓ Claimed task erdos1094-1ol
+
+[2026-02-12T01:29:29.913Z] 🤖 Using agent: explore with models: google-antigravity/claude-opus-4-6-thinking:high, google-antigravity/gemini-3-pro-high:high
+
+[2026-02-12T01:29:29.913Z] 💭 Starting pi agent session with model: google-antigravity/claude-opus-4-6-thinking:high...
+[2026-02-12T01:29:30.007Z] 📸 Capturing file state before agent execution...
+[2026-02-12T01:29:30.020Z] ✓ Captured state: 214 tracked, 3 untracked files
+
+[2026-02-12T01:29:33.945Z] 
+$ cd /home/jarred/code/erdos-1094 && cat -n KGe29.lean | sed -n '300,330p'
+[2026-02-12T01:29:33.956Z] 
+$ cd /home/jarred/code/erdos-1094 && ls proofs/ 2>/dev/null
+[2026-02-12T01:29:36.210Z] 
+$ cd /home/jarred/code/erdos-1094 && find . -name "*.lean" | head -20
+[2026-02-12T01:29:36.221Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/dead-ends.md
+[2026-02-12T01:29:38.865Z] 
+$ cd /home/jarred/code/erdos-1094 && cat -n Erdos/KGe29.lean | sed -n '295,340p'
+[2026-02-12T01:29:42.712Z] 
+$ cd /home/jarred/code/erdos-1094 && cat -n Erdos/KGe29.lean | sed -n '340,360p'
+[2026-02-12T01:29:42.720Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-1ol --status "Reading axiom and understanding constraints"
+[2026-02-12T01:29:46.525Z] 
+$ cd /home/jarred/code/erdos-1094 && cat -n Erdos/KGe29.lean | sed -n '358,400p'
+[2026-02-12T01:29:46.536Z] 
+$ cd /home/jarred/code/erdos-1094 && cat proofs/large-n-divisibility.md
+[2026-02-12T01:29:51.015Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-1ol --status "Analyzing the mathematical constraints of residual_case_vacuous"
+[2026-02-12T01:29:54.292Z] 
+$ cd /home/jarred/code/erdos-1094 && cat -n Erdos/KGe29.lean | sed -n '310,315p'
+[2026-02-12T01:30:38.945Z] 
+$ cd /home/jarred/code/erdos-1094 && grep -n "residual_case_vacuous" Erdos/KGe29.lean
+[2026-02-12T01:30:41.858Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-1ol --status "Found counterexample (17,2) to axiom. Writing up proof."
+[2026-02-12T01:30:43.690Z] [overseer] 💓 Heartbeat starting...
+[2026-02-12T01:30:43.695Z] [overseer] Running with model: google-antigravity/gemini-3-flash
+[2026-02-12T01:30:47.411Z] 
+$ cd /home/jarred/code/erdos-1094 && cat -n Erdos/KGe29.lean | sed -n '316,344p'
+[2026-02-12T01:31:10.679Z] 
+$ python3 -c "
+from sympy import isprime, factorint
+
+# k=29 (prime, so g=1, q=29)
+k = 29
+for a in range(58, 200):
+    # Check if a is 29-smooth
+    factors = factorint(a)
+    if all(p <= 29 for p in factors):
+        for r in range(29):
+            m = 29 * a + r
+            if isprime(m) and m >= 2*k*k:
+                print(f'n={m}, k={k}, n/k={m//k}={a}, gcd={1}, n/gcd={m}, COUNTEREXAMPLE')
+                break
+        else:
+            continue
+" 2>/dev/null | head -20
+[2026-02-12T01:31:14.556Z] 
+$ python3 -c "
+from sympy import isprime, factorint
+
+# k=29 (prime, so g=1, q=29)
+k = 29
+count = 0
+for a in range(58, 500):
+    # Check if a is 29-smooth
+    factors = factorint(a)
+    if all(p <= 29 for p in factors):
+        for r in range(29):
+            m = 29 * a + r
+            if isprime(m) and m >= 2*k*k:
+                print(f'n={m}, k={k}, floor(n/k)={m//k}, gcd(n,k)=1, n/gcd(n,k)={m} (prime)')
+                count += 1
+                if count >= 10:
+                    break
+        if count >= 10:
+            break
+" 2>/dev/null
+[2026-02-12T01:31:19.210Z] 
+$ python3 << 'EOF'
+from sympy import isprime, factorint
+
+k = 29
+count = 0
+for a in range(58, 500):
+    factors = factorint(a)
+    smooth = all(p <= 29 for p in factors)
+    if smooth:
+        for r in range(29):
+            m = 29 * a + r
+            if isprime(m) and m >= 2*k*k:
+                print(f"n={m}, k={k}, floor(n/k)={m//k}, gcd=1, n/gcd={m} (prime)")
+                count += 1
+                break
+    if count >= 10:
+        break
+
+if count == 0:
+    print("No counterexamples found for k=29 in range")
+EOF
+[2026-02-12T01:31:26.325Z] 
+$ python3 << 'EOF'
+import math
+
+def is_prime(n):
+    if n < 2: return False
+    if n < 4: return True
+    if n % 2 == 0 or n % 3 == 0: return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i+2) == 0: return False
+        i += 6
+    return True
+
+def is_k_smooth(n, k):
+    if n <= 1: return True
+    for p in range(2, k+1):
+        if not is_prime(p): continue
+        while n % p == 0:
+            n //= p
+    return n == 1
+
+def prime_factors(n):
+    factors = set()
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.add(d)
+            n //= d
+        d += 1
+    if n > 1: factors.add(n)
+    return factors
+
+# k=29 (prime, so g must be 1)
+k = 29
+count = 0
+for a in range(58, 2000):
+    if not is_k_smooth(a, k):
+        continue
+    for r in range(29):
+        m = 29 * a + r
+        if m < 2 * k * k:
+            continue
+        if is_prime(m):
+            g = math.gcd(m, k)
+            d = m // g
+            if is_prime(d) and m // k < d:
+                pf = prime_factors(m // k)
+                if all(p <= k for p in pf):
+                    print(f"COUNTEREXAMPLE: n={m}, k={k}, n/k={m//k}, gcd(n,k)={g}, n/gcd(n,k)={d}")
+                    count += 1
+                    break
+    if count >= 5:
+        break
+
+if count == 0:
+    print("No counterexamples found for k=29 in range a=58..1999")
+else:
+    print(f"Found {count} counterexamples for k=29")
+EOF
+[2026-02-12T01:31:36.613Z] [overseer] 💓 Heartbeat #1 complete: {
+[2026-02-12T01:31:40.309Z] 
+$ python3 << 'EOF'
+import math
+
+def is_prime(n):
+    if n < 2: return False
+    if n < 4: return True
+    if n % 2 == 0 or n % 3 == 0: return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i+2) == 0: return False
+        i += 6
+    return True
+
+# Verify n=1693, k=29
+n, k = 1693, 29
+print(f"n = {n}, k = {k}")
+print(f"hk: 2 <= {k}? {2 <= k}")
+print(f"hn: 2*{k}*{k} = {2*k*k} <= {n}? {2*k*k <= n}")
+print(f"n / k = {n // k}")
+
+# Check smoothness of n/k
+nk = n // k
+print(f"n / k = {nk}")
+print(f"  58 = 2 * 29. Prime factors: 2, 29. All <= {k}? True")
+print(f"  is 2 <= 29? True. is 29 <= 29? True.")
+
+g = math.gcd(n, k)
+print(f"gcd(n, k) = {g}")
+d = n // g
+print(f"n / gcd(n,k) = {d}")
+print(f"Is {d} prime? {is_prime(d)}")
+print(f"hlarge: n/k < n/gcd(n,k)? {nk} < {d}? {nk < d}")
+print()
+print(f"All conditions satisfied → axiom claims False, but we have a valid (n,k).")
+print(f"The axiom residual_case_vacuous is REFUTED.")
+print()
+
+# Now let's also check: does C(1693,29) actually have a small prime factor?
+# This is relevant to understanding whether the overall proof strategy is broken
+from functools import reduce
+def choose(n, k):
+    if k < 0 or k > n: return 0
+    if k == 0 or k == n: return 1
+    k = min(k, n - k)
+    result = 1
+    for i in range(k):
+        result = result * (n - i) // (i + 1)
+    return result
+
+c = choose(1693, 29)
+# Find smallest prime factor
+p = 2
+while p * p <= c:
+    if c % p == 0:
+        break
+    if p == 2:
+        p = 3
+    else:
+        p += 2
+else:
+    p = c  # c itself is prime
+
+print(f"C({n},{k}) smallest prime factor: {p}")
+print(f"max(n/k, k) = max({n//k}, {k}) = {max(n//k, k)}")
+print(f"Is minFac(C(n,k)) <= max(n/k,k)? {p <= max(n//k, k)}")
+EOF
+[2026-02-12T01:32:47.499Z] 
+🛠️  Executing tool: write...
+[2026-02-12T01:32:50.780Z] 
+$ cd /home/jarred/code/erdos-1094 && tm update erdos1094-1ol --status "Proof written to proofs/residual-case-vacuous.md. Axiom REFUTED with counterexamples."
+[2026-02-12T01:33:01.427Z] 
+
+📝 Agent response complete.
+
+[2026-02-12T01:33:01.428Z] 📄 Log saved to .tm/logs/worker-erdos1094-1ol.md
+[2026-02-12T01:33:01.429Z] 
+📊 Task erdos1094-1ol completed:
+[2026-02-12T01:33:01.429Z]    Summary: Refuted residual_case_vacuous axiom. Published to proofs/residual-case-vacuous.md
+[2026-02-12T01:33:01.429Z]    Details: Confidence: Certain. The axiom is FALSE — counterexamples exist for all k ≥ 2, including k ≥ 29 where it's actually used.
+
+Key counterexamples:
+- (n=17, k=2): ⌊17/2⌋=8=2³ (2-smooth), gcd(17,2)=1, 17/1=17 (prime), 8<17
+- (n=19, k=3): ⌊19/3⌋=6=2·3 (3-smooth), gcd(19,3)=1, 19/1=19 (prime), 6<19  
+- (n=1693, k=29): ⌊1693/29⌋=58=2·29 (29-smooth), gcd(1693,29)=1, 1693 (prime), 58<1693
+
+The axiom claims these conditions are contradictory, but they're easily satisfiable: take any prime n>2k² coprime to k such that ⌊n/k⌋ is k-smooth. Such primes are abundant.
+
+Critically, the overall theorem (minFac(C(n,k)) ≤ n/k) is still TRUE at these counterexamples — e.g., minFac(C(1693,29))=3 ≤ 58. The axiom's proof strategy (using d=n/gcd(n,k) as witness) fails when d is prime and large, but other primes ≤ k still divide C(n,k). The proof needs restructuring, not the theorem.

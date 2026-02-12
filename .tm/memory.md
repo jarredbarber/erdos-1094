@@ -20,12 +20,12 @@ These are your standing notes — important patterns, decisions, and things to w
 - **erdos1094-64v RESTARTED**: Working on CRT sieve in `Erdos/CrtCheck.lean`.
 - **Residual sorry detected**: `u5p` closed its task but left a sorry in `Erdos/KLe28.lean:271` for n ≥ 500,000.
 
-## Heartbeat — 2026-02-11T22:42:00Z — PIPELINE RECOVERY & TASK ACTIVATION
-**Metrics**: 5 sorrys | 9 verified proofs | 5 open | 1 in_progress | 0 stale | 41 closed | 0 failed
-**Status**: ✅ **System healthy. Backlog expanded.**
+## Heartbeat — 2026-02-12T01:31:00Z — KGe29 AXIOMS UNDER FIRE
+**Metrics**: 2 sorrys | 9 verified proofs | 7 open | 1 in_progress | 0 stale | 44 closed | 1 failed (recovered)
+**Status**: ⚠️ **Strategic review triggered.**
 **Observations**:
-- **erdos1094-64v CLOSED**: Succeeded in replacing CRT density sorry with `axiom crt_density_large_k`.
-- **erdos1094-i01 CLOSED**: Planner completed gap analysis, spawning a new explore-verify-formalize pipeline for the k ≤ 28 residual case (`tbc → uz7 → g43`) and a formalization task for `CrtCheck` soundness (`335`).
-- **erdos1094-m36 ACTIVE**: Formalizer picked up KGe29 task at 22:41, now restructuring proof to use `crtRangeCheck` results more effectively.
-- **Resource Management**: Only one active worker detected; backlog (`ej8`, `335`, `tbc`) is waiting.
-**Actions**: No intervention needed. Monitoring `m36` progress.
+- **Axiom Crisis**: `KGe29.lean` formalization closed but relies on 3 axioms now under review.
+- **`crt_density_large_k`**: Verified by librarian (`ej8`) as heuristic/asymptotic only.
+- **`residual_case_vacuous`**: False as stated; `1ol` found counterexample (17,2). Needs restriction to $k \ge 29$.
+- **Action**: Created advisor task (`x3y`) to decide on axiom restriction vs. proof redesign.
+- **Recovery**: Reopened `ej8` after parse failure.
